@@ -15,7 +15,7 @@ jobs:
 
       - name: Set Up Git user
         run: |
-          git config --local user.name "meiostdio@gmail.com"
+          git config --local user.email "meiostdio@gmail.com"
           git config --local user.name "meiostdio"
 
       - name: Deploy 🚀
