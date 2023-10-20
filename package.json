@@ -1,0 +1,13 @@
+{
+  "dependencies": {
+    "axios": "^1.5.1",
+    "dotenv": "^16.3.1"
+  },
+  "devDependencies": {
+    "gh-pages": "^6.0.0"
+  },
+  "homepage": "http://meiostdio.github.io/HPv2",
+  "scripts": {
+    "deploy": "gh-pages -d ."
+  }
+}
