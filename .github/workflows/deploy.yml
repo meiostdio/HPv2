@@ -1,0 +1,27 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main # main ブランチにプッシュされたら実行
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Configure Git
+        run: |
+          git config user.name "meiostdio"
+          git config user.email "meiostdio@gmail.com"
+
+      - name: Deploy
+        run: |
+          git checkout -b gh-pages
+          git rm -rf .  # ルートディレクトリをクリア
+          cp -r HP/* .  # HP/ の内容をルートにコピー
+          git add .
+          git commit -m "Deploy to GitHub Pages"
+          git push --force origin gh-pages
