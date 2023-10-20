@@ -16,7 +16,7 @@ jobs:
       - name: Deploy 🚀
         run: |
           git checkout -b gh-pages
-          cp -R HPv2/HP/* .
+          cp -R HP/* .
           git add .
           git commit -m "Automated GitHub Pages deployment"
           git push origin gh-pages --force
