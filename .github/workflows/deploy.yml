@@ -18,10 +18,11 @@ jobs:
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
 
-      - name: Temporarily save files
-        run: |
-          mkdir temp_directory
-          cp -R HP/* temp_directory/
+          - name: Temporarily save files
+          run: |
+            mkdir temp_directory
+            cp -R HP/* temp_directory/
+            ls -al temp_directory  # Debugging line
 
       - name: Deploy 🚀
         env:
@@ -29,12 +30,14 @@ jobs:
         run: |
           git fetch origin gh-pages
           git checkout gh-pages
+          ls -al  # Debugging line
           rm -rf *
           cp -R temp_directory/* .
+          ls -al  # Debugging line
           git add .
           git commit -m "Automated GitHub Pages deployment" || true
           if [[ -n "$GITHUB_TOKEN" ]]; then
-            git push https://${GITHUB_TOKEN}@github.com/meiostdio/HPv2.git gh-pages --force
+            git push https://${GITHUB_TOKEN}@github.com/meiostudio/HPv2.git gh-pages --force
           else
             echo "GITHUB_TOKEN is not set. Skipping push."
           fi
