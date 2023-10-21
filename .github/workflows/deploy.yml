@@ -18,18 +18,23 @@ jobs:
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
 
+      - name: Temporarily save files
+        run: |
+          mkdir temp_directory
+          cp -R HP/* temp_directory/
+
       - name: Deploy 🚀
         env:
           GITHUB_TOKEN: ${{ secrets.GH_PAT }}
         run: |
           git fetch origin gh-pages
           git checkout gh-pages
-          rm -rf *  # Remove all files in current directory, except for the .git directory
-          cp -R HP/* .  # Copy new files from HP directory
+          rm -rf *
+          cp -R temp_directory/* .
           git add .
-          git commit -m "Automated GitHub Pages deployment" || true  # true ensures the script continues even if commit fails (nothing to commit)
+          git commit -m "Automated GitHub Pages deployment" || true
           if [[ -n "$GITHUB_TOKEN" ]]; then
-            git push https://${GITHUB_TOKEN}@github.com/meiostdio/HPv2.git gh-pages
+            git push https://${GITHUB_TOKEN}@github.com/meiostdio/HPv2.git gh-pages --force
           else
             echo "GITHUB_TOKEN is not set. Skipping push."
           fi
