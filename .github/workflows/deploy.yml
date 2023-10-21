@@ -20,7 +20,7 @@ jobs:
 
       - name: Delete temporary directory
         run: |
-          rm *
+          rm -rf temp_directory
 
       # HP フォルダを一時ディレクトリにコピー
       - name: Copy HP directory to temporary directory
