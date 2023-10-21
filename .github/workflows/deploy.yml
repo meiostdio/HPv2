@@ -26,4 +26,4 @@ jobs:
           cp -R HP/* .
           git add .
           git commit -m "Automated GitHub Pages deployment"
-          git push https://${GITHUB_TOKEN}@github.com/meiostdio/HPv2.git gh-pages --force
+          git push https://${GITHUB_TOKEN}@github.com/meiostdio/HPv2.git gh-pages
