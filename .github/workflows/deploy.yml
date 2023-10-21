@@ -26,4 +26,8 @@ jobs:
           cp -R HP/* .
           git add .
           git commit -m "Automated GitHub Pages deployment"
-          git push https://${GITHUB_TOKEN}@github.com/meiostdio/HPv2.git gh-pages
+          if [[ -n "$GITHUB_TOKEN" ]]; then
+            git push https://${GITHUB_TOKEN}@github.com/meiostdio/HPv2.git gh-pages
+          else
+            echo "GITHUB_TOKEN is not set. Skipping push."
+          fi
