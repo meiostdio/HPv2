@@ -11,32 +11,35 @@ jobs:
 
     steps:
       - name: Checkout 🛎️
-        uses: actions/checkout@v2 # This is a pre-made GitHub Action for checking out a repo
+        uses: actions/checkout@v2
 
       - name: Set Up Git user
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
 
-      - name: Temporarily save files
+      # HP フォルダを一時ディレクトリにコピー
+      - name: Copy HP directory to temporary directory
         run: |
-          mkdir -p $GITHUB_WORKSPACE/temp_directory
-          cp -R $GITHUB_WORKSPACE/HP/* $GITHUB_WORKSPACE/temp_directory/
-          ls -la $GITHUB_WORKSPACE/temp_directory  # デバッグ情報
+          mkdir temp_directory
+          cp -R HP/* temp_directory/
 
-      - name: Deploy 🚀
+      # gh-pages ブランチに切り替え
+      - name: Checkout gh-pages branch
+        run: |
+          git fetch origin gh-pages
+          git checkout -b gh-pages --track origin/gh-pages
+
+      # 一時ディレクトリからコピー
+      - name: Copy files to gh-pages branch
+        run: |
+          cp -R temp_directory/* .
+          git add .
+          git commit -m "Automated GitHub Pages deployment"
+
+      # Push
+      - name: Push to gh-pages
         env:
           GITHUB_TOKEN: ${{ secrets.GH_PAT }}
         run: |
-          cd $GITHUB_WORKSPACE
-          git fetch origin gh-pages
-          git checkout gh-pages
-          rm -rf *
-          cp -R $GITHUB_WORKSPACE/temp_directory/* $GITHUB_WORKSPACE/
-          git add .
-          git commit -m "Automated GitHub Pages deployment" || true  # || true ensures that the action doesn't fail if there's nothing to commit
-          if [[ -n "$GITHUB_TOKEN" ]]; then
-            git push https://${GITHUB_TOKEN}@github.com/meiostudio/HPv2.git gh-pages --force
-          else
-            echo "GITHUB_TOKEN is not set. Skipping push."
-          fi
+          git push https://${GITHUB_TOKEN}@github.com/meiostudio/HPv2.git gh-pages --force
