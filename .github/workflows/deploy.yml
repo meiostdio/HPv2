@@ -22,10 +22,12 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GH_PAT }}
         run: |
-          git checkout -b gh-pages
-          cp -R HP/* .
+          git fetch origin gh-pages
+          git checkout gh-pages
+          git rm -rf .  # Remove all files in current directory
+          cp -R ../HP/* .  # Copy new files from HP directory
           git add .
-          git commit -m "Automated GitHub Pages deployment"
+          git commit -m "Automated GitHub Pages deployment" || true  # true ensures the script continues even if commit fails (nothing to commit)
           if [[ -n "$GITHUB_TOKEN" ]]; then
             git push https://${GITHUB_TOKEN}@github.com/meiostdio/HPv2.git gh-pages
           else
