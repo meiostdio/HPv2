@@ -1,8 +1,8 @@
-async function fetchImageFromGithub() {
+async function fetchImageFromGithub(TOKEN) {
     const owner = 'meiostdio';
     const repo = 'HPv2';
 
-    const token = '';
+    const token = TOKEN;
     const path = 'images/stdio.png';
 
     const url = `https://api.github.com/repos/${owner}/${repo}/contents/${path}`;
@@ -35,15 +35,24 @@ async function fetchImageFromGithub() {
   }
 
   async function getGithubToken() {
-    const response = await fetch('/api/getGithubToken');
-    const data = await response.json();
-    return data.token;
+    try {
+      const response = await fetch('/api/getGithubToken');
+      const data = await response.json();
+      return data.token
+    } catch (error) {
+      console.error('Error:', error);
+    }
   }
+  
 
 
-  function buttonCliked() {
-    const API_TOKEN = getGithubToken();
-    console.log("API TOKEN : ", API_TOKEN);
-    fetchImageFromGithub();
+  async function buttonCliked() {
+    try{
+      const API_TOKEN = await getGithubToken();
+      fetchImageFromGithub(API_TOKEN);
+    } catch (error) {
+      console.error('Failed to get API token:', error);
+    }
+    
   }
 
