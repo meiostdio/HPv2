@@ -1,8 +1,8 @@
 async function fetchImageFromGithub() {
     const owner = 'meiostdio';
     const repo = 'HPv2';
-    // 注意: 本番環境でこのようにトークンを公開しないでください
-    const token = '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';
+
+    const token = '';
     const path = 'images/stdio.png';
 
     const url = `https://api.github.com/repos/${owner}/${repo}/contents/${path}`;
@@ -24,7 +24,7 @@ async function fetchImageFromGithub() {
       }
       
   }
-
+  
   function arrayBufferToBase64(buffer) {
     let binary = '';
     const bytes = new Uint8Array(buffer);
@@ -34,6 +34,16 @@ async function fetchImageFromGithub() {
     return window.btoa(binary);
   }
 
+  async function getGithubToken() {
+    const response = await fetch('/api/getGithubToken');
+    const data = await response.json();
+    return data.token;
+  }
+
+
   function buttonCliked() {
+    const API_TOKEN = getGithubToken();
+    console.log("API TOKEN : ", API_TOKEN);
     fetchImageFromGithub();
   }
+
