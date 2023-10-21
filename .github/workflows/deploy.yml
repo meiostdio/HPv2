@@ -28,7 +28,7 @@ jobs:
       - name: Checkout gh-pages branch
         run: |
           git fetch origin gh-pages
-          git checkout -b gh-pages --track origin/gh-pages
+          git checkout -b gh-pages --track origin/gh-pages --force
 
       # 一時ディレクトリからコピー
       - name: Copy files to gh-pages branch
