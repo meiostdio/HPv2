@@ -27,7 +27,6 @@ jobs:
           git add .
           git commit -m "Automated GitHub Pages deployment"
           if [[ -n "$GITHUB_TOKEN" ]]; then
-            echo "GITHUB_TOKEN is exist."
             git push https://${GITHUB_TOKEN}@github.com/meiostdio/HPv2.git gh-pages
           else
             echo "GITHUB_TOKEN is not set. Skipping push."
