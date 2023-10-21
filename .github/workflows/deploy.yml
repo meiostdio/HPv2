@@ -22,6 +22,7 @@ jobs:
         run: |
           mkdir -p $GITHUB_WORKSPACE/temp_directory
           cp -R $GITHUB_WORKSPACE/HP/* $GITHUB_WORKSPACE/temp_directory/
+          ls -la $GITHUB_WORKSPACE/temp_directory  # デバッグ情報
 
       - name: Deploy 🚀
         env:
