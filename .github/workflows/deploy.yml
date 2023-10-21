@@ -18,14 +18,15 @@ jobs:
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
 
+      - name: Delete temporary directory
+        run: |
+          rm *
+
       # HP フォルダを一時ディレクトリにコピー
       - name: Copy HP directory to temporary directory
         run: |
           mkdir temp_directory
           cp -R HP/* temp_directory/
-
-      - name: Clean working directory
-        run: git clean -f -d
 
       # gh-pages ブランチに切り替え
       - name: Checkout gh-pages branch
