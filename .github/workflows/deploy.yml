@@ -24,7 +24,7 @@ jobs:
         run: |
           git fetch origin gh-pages
           git checkout gh-pages
-          git rm -rf .  # Remove all files in current directory
+          rm -rf *  # Remove all files in current directory, except for the .git directory
           cp -R ../HP/* .  # Copy new files from HP directory
           git add .
           git commit -m "Automated GitHub Pages deployment" || true  # true ensures the script continues even if commit fails (nothing to commit)
