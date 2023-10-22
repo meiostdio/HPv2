@@ -1,9 +1,11 @@
-async function fetchImageFromGithub(TOKEN) {
+async function fetchImageFromGithub(TOKEN, Name) {
     const owner = 'meiostdio';
     const repo = 'HPv2';
 
     const token = TOKEN;
-    const path = 'images/stdio.png';
+
+    const imageName = Name;
+    const path = 'images/' + imageName;
 
     const url = `https://api.github.com/repos/${owner}/${repo}/contents/${path}`;
     const config = {
@@ -43,13 +45,12 @@ async function fetchImageFromGithub(TOKEN) {
       console.error('Error:', error);
     }
   }
-  
-
 
   async function buttonCliked() {
+    const imageName = document.getElementById('imageName').value;
     try{
       const API_TOKEN = await getGithubToken();
-      fetchImageFromGithub(API_TOKEN);
+      fetchImageFromGithub(API_TOKEN, imageName);
     } catch (error) {
       console.error('Failed to get API token:', error);
     }
