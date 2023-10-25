@@ -5,17 +5,18 @@
         <title>meiostdio</title>
         <link rel="stylesheet" href="css/style.css">
         <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-        <script src="js/main.js"></script>
+        <script src="https://apis.google.com/js/api.js"></script>
+        <script type="module" src="js/google_drive_api.js"></script>
+        <script type="module" src="js/main.js"></script>
     </head>
-    <body></body>
+    <body>
         <h3>imagesディレクトリの画像を取得するテストです。</h3>
         <p>取得する画像名を入力。拡張子も入力してください。</p>
         <input id="imageName" size="20">
-        <button onclick="buttonCliked()">画像を取得</button>
+        <button onclick="searchImageInFolder()">画像を取得</button>
         <br>
         <img id="githubImage" alt="Image will be displayed here" class="images" />
-
+        <img id="driveImage">
         <footer>
             <small>Supported by meiostdio</small>
         </footer>
