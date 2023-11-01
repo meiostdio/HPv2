@@ -4,7 +4,8 @@ async function getGoogleToken(){
         const data = await response.json();
         folderiD = data.folderid;
         apikey = data.apikey;
-        clientid = data.clientid
+        clientid = data.clientid;
+        console.log('Api key:', apikey);
     } catch (error) {
         console.error('Error:', error);
     }
