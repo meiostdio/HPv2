@@ -5,7 +5,6 @@ async function getGoogleToken(){
         folderiD = data.folderid;
         apikey = data.apikey;
         clientid = data.clientid
-        console.log('apikey:', apikey);
     } catch (error) {
         console.error('Error:', error);
     }
