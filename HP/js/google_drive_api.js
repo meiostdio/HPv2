@@ -1,22 +1,27 @@
-async function getGoogleDriveData(directory, fileName){
-    try{
-        const resopnse = await fetch('/api/getGoogleDriveData?directory=${directory}&fileName=${fileName}')
-        .then(response => resopnse.json())
-        .then(data => {
-            return data
-        })
+async function getGoogleDriveData(directory, fileName) {
+    try {
+      const response = await fetch(`/api/getGoogleDriveData?directory=${directory}&fileName=${fileName}`);
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+  
+      const data = await response.json();
+      return data;
     } catch (error) {
-        console.error('ERROR:', error);
+      console.error('ERROR:', error);
+      return null;
     }
-}
+  }
+  
 
-function searchImageInFolder(directory, fileName){
-    const directory = directory;
-    const fileName = fileName;
+export function searchImageInFolder(){
+    const directory = document.getElementById('directoryName').value;
+    const fileName = document.getElementById('fileName').value;
     console.log('directory Name is:',directory);
     console.log('file Name is :', fileName);
     getGoogleDriveData(directory,fileName);
 }
+window.searchImageInFolder = searchImageInFolder;
 // async function getGoogleToken(){
 //     try{
 //         const response = await fetch('/api/getGoogleToken');
