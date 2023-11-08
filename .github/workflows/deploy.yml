@@ -24,15 +24,11 @@ jobs:
           mkdir temp_directory
           cp -R HP/* temp_directory/
 
-      # gh-pagesブランチ内のデータをすべて削除
-      - name: Clear gh-pages buranch
-        run: |
-          git rm -rf *
-
-      # gh-pages ブランチに切り替え
+      # gh-pages ブランチに切り替えて
       - name: Checkout gh-pages branch
         run: |
           git fetch origin gh-pages
+          git rm -rf *
           git checkout -b gh-pages --track origin/gh-pages
 
       # 一時ディレクトリからコピー
