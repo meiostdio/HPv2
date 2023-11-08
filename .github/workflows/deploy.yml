@@ -1,65 +1,15 @@
-name: Deploy to GitHub Pages
-
+name: Deploy to Vercel
 on:
   push:
     branches:
-      - main # or your default branch
-
+      - main
 jobs:
-  build-and-deploy:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout 🛎️
-        uses: actions/checkout@v2
-
-      - name: Set Up Git user
-        run: |
-          git config --local user.email "github-actions[bot]@users.noreply.github.com"
-          git config --local user.name "github-actions[bot]"
-
-      # HP フォルダを一時ディレクトリにコピー
-      - name: Copy HP directory to temporary directory
-        run: |
-          mkdir temp_directory
-          cp -R HP/* temp_directory/
-
-      # gh-pages ブランチに切り替えて
-      - name: Checkout gh-pages branch
-        run: |
-          git fetch origin gh-pages
-          git checkout -b gh-pages --track origin/gh-pages
-
-      # 一時ディレクトリからコピー
-      - name: Copy files to gh-pages branch
-        run: |
-          cp -R temp_directory/* .
-
-      - name: Delete temp_directory from gh-pages branch
-        run: |
-          rm -rf temp_directory
-
-      - name: Commit
-        run: |
-          git add .
-          git commit -m "Automated GitHub Pages deployment"
-
-      # Push
-      - name: Push to gh-pages
-        env:
-          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
-        run: |
-          git push https://${GITHUB_TOKEN}@github.com/meiostdio/HPv2.git gh-pages --force
-
-  depoy-to-vercel:
-    needs: build-and-deploy
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-
       - name: Install Vercel CLI
         run: npm i -g vercel
-
       - name: Deploy to Vercel
-        run: vercel --token ${{ secrets.VERCEL_TOKEN }} --prod --confirm --name meiostdio
+        run: vercel --token ${{ secrets.VERCEL_TOKEN }} --prod
