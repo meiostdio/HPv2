@@ -48,7 +48,7 @@ let folderiD = null;
 let apikey = null;
 let clientid = null;
 try{
-    const token = await getGoogleToken();
+    await getGoogleToken();
     gapi.load('client', function(){ 
         initClient()
     }
