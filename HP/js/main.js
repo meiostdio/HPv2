@@ -39,24 +39,8 @@ function arrayBufferToBase64(buffer) {
   return window.btoa(binary);
 }
 
-async function getGithubToken() {
-  try {
-    const response = await fetch('/api/getGithubToken');
-    const data = await response.json();
-    return data.token
-  } catch (error) {
-    console.error('Error:', error);
-  }
-}
-
-// async function buttonCliked() {
-//   // const imageName = document.getElementById('imageName').value;
-//   // try{
-//   //   const API_TOKEN = await getGithubToken();
-//   //   fetchImageFromGithub(API_TOKEN, imageName);
-//   // } catch (error) {
-//   //   console.error('Failed to get API token:', error);
-//   // }
-//   downloadFile();
+// function getGithubData(){
+//   console.log('mainjs is working!');
 // }
 
+//window.getGithubData = getGithubData;
