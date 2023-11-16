@@ -6,14 +6,9 @@ window.onload = async function() {
   const artList = await getArtList();
   console.log(artList);
 
-  let artListArray = Array.from(artList);
-  console.log(artListArray);
-  artListArray.forEach(data => {
-    console.log(data.title);
-  });
-  // let title = artList.item1[0].title;
-  // let date = artList.item1[0].date;
-  // let tag = artList.item1[0].tag;
+  let title = artList.article1.title;
+  let date = artList.article1.date;
+  let tag = artList.article1.tag;
 
   let main = document.getElementById("main");
   
