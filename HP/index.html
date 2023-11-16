@@ -8,15 +8,49 @@
         <script src="js/main.js"></script>
     </head>
     <body>
-        <h3>stdioのgoogleDriveのimageディレクトリにある画像を取得します。</h3>
-        <h3>検索したいディレクトリ名とファイル名を入力してください。</h3>
-        <input id="directoryName" size="40"> /
-        <input id="fileName" size="40">
-        <button onclick="getGithubData()">取得</button>
-        <br>
-        <img id="image" alt="Image will be displayed here" class="images" />
+        <div class="container">
+            <header>
+                <div class="logo">
+                    <img src="hatena-logo.png" alt="ロゴ">
+                </div>
+                <div class="title">
+                    <h1>MEIOSTDIO</h1>
+                </div>
+            </header>
+            <main>
+                <div class="post">
+                    <h2>海の夕日</h2>
+                    <img src="sunset.jpg" alt="海の夕日の写真">
+                    <p>MEIOSTDIOは</p>
+                </div>
+            </main>
+            <aside>
+                <div class="profile">
+                    <img src="profile.jpg" alt="プロフィール画像">
+                    <p>MEIOSTDIOは名桜大学の情報系の知識交流サークルです。</p>
+                    <p>毎週水曜日の18時から活動しています。</p>
+                </div>
+                <div class="recent-posts">
+                    <h3>最近の投稿</h3>
+                    <ul>
+                        <li><a href="">海の夕日</a></li>
+                        <li><a href="">海の朝日</a></li>
+                        <li><a href="">海の星空</a></li>
+                        <li><a href="">海の波</a></li>
+                        <li><a href="">海の風</a></li>
+                    </ul>
+                </div>
+                <div class="search">
+                    <h3>検索</h3>
+                    <form>
+                        <input type="text" placeholder="キーワードを入力">
+                        <button type="submit">検索</button>
+                    </form>
+                </div>
+            </aside>
+        </div>
         <footer>
-            <small>Supported by meiostdio</small>
+            <p>Supported by meiostdio</p>
         </footer>
     </body>
 </html>
