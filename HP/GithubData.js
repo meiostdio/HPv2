@@ -27,8 +27,23 @@ async function getGithubData(){
     }
 }
 
-export function getArtList(){
-    
+// サーバーから記事のリストを受け取りデコード、パースする
+export async function getArtList(){
+    try {
+        const response = await fetch("/api/getArtList");
+        const data = await response.json();
+        const list = data.content;
+
+        //デコード、パース
+        let decodedData = atob(list);
+        let utf8Decoder = new TextDecoder('utf-8');
+        decodedData = utf8Decoder.decode(new Uint8Array(decodedData.split('').map(c => c.charCodeAt(0))));
+        let formattedData = JSON.parse(decodedData);
+        return formattedData
+    } catch (error) {
+        console.error('データの取得エラー:', error.message);
+        return null;
+    }
 }
 
 window.getGithubData = getGithubData;
