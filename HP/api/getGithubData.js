@@ -1,14 +1,28 @@
+// vercel/functions/getImage.js
+
+const { Octokit } = require('@octokit/rest');
+
 module.exports = async (req, res) => {
-    const apiKey = process.env.GITHUB_API_KEY;
-    const url = 'https://api.github.com/repos/meiostdio/HPv2/contents/HP'; // GitHub APIのエンドポイント
-   
-    const response = await fetch(url, {
-      headers: {
-        'Authorization': `token ${apiKey}`,
-      },
+  const owner = 'meiostdio';
+  const repo = 'HPv2';
+  const path = 'images/stdio.png';  // リポジトリ内の画像ファイルのパス
+
+  // Vercelの環境変数からGitHubトークンを取得
+  const token = process.env.GITHUB_API_KEY;
+
+  // Octokitのセットアップ
+  const octokit = new Octokit({ auth: `token ${token}` });
+
+  try {
+    // ファイルのコンテンツを取得
+    const response = await octokit.repos.getContent({
+      owner,
+      repo,
+      path,
     });
-   
-    const data = await response.json();
-    res.setHeader('Content-Type', 'application/json; charset=utf-8').send(data);
-   };
-   
+    res.status(200).send({ content: response.data.content });
+  } catch (error) {
+    console.error('エラー:', error.message);
+    res.status(500).send({ error: 'Internal Server Error' });
+  }
+};
