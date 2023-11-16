@@ -77,12 +77,6 @@ aside {
     margin-bottom: 20px;
 }
 
-.profile img {
-    width: 100%;
-    height: auto;
-    border-radius: 50%;
-}
-
 .profile p {
     font-size: 14px;
     margin-top: 10px;
@@ -142,7 +136,25 @@ footer{
     color: #fff;
     text-align: center;
     padding: 20px 0;
-    position: absolute;/*←絶対位置*/
-    bottom: 0; /*下に固定*/
+    position: absolute;
+    bottom: 0;
 }
 
+.three-quarter-spinner {
+    margin: 0 auto;
+    width: 100px;
+    height: 100px;
+    border: 3px solid #5EC289;
+    border-top: 3px solid transparent;
+    border-radius: 50%;
+    animation: spin .5s linear 0s infinite;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0);
+    }
+    to{
+        transform: rotate(359deg);
+    }
+}

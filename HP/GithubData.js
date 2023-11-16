@@ -27,4 +27,12 @@ async function getGithubData(){
     }
 }
 
+function getArtList(){
+    console.log("start!");
+    setTimeout(function() {
+        console.log("getArt List finish1!");
+    }, 3000);
+    return "getArtList Finish!"
+}
+
 window.getGithubData = getGithubData;
