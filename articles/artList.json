@@ -1,16 +1,12 @@
 {
-    "item1": [
-        {
-            "title": "Javaで配色支援GUIアプリを作成しました。",
-            "tag": ["java", "デザイン", "配色"],
-            "date": "20231010"
-        }
-    ],
-    "item2": [
-        {
-            "title": "ジェスチャーでパソコン操作",
-            "tag": ["Python", "MediaPipe"],
-            "date": "20231011"
-        }
-    ]
+    "artile1": {
+        "title": "Javaで配色支援GUIアプリを作成しました。",
+        "tag": ["java", "デザイン", "配色"],
+        "date": "20231010"
+    },
+    "article2": {
+        "title": "ジェスチャーでパソコン操作",
+        "tag": ["Python", "MediaPipe"],
+        "date": "20231011"
+    }
 }

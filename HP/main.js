@@ -5,15 +5,16 @@ import { getArtList } from "./GithubData.js";
 window.onload = async function() {
   const artList = await getArtList();
   console.log(artList);
-  let title = artList.item1[0].title;
-  let date = artList.item1[0].date;
-  let tag = artList.item1[0].tag;
 
-  console.log(title);
-  console.log(date);
-  console.log(tag);
+  let artListArray = Array.from(artList);
+  console.log(artListArray);
+  artListArray.forEach(data => {
+    console.log(data.title);
+  });
+  // let title = artList.item1[0].title;
+  // let date = artList.item1[0].date;
+  // let tag = artList.item1[0].tag;
 
-  console.log("onLoaded");
   let main = document.getElementById("main");
   
   main.innerHTML = `
