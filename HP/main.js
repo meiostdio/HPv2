@@ -16,5 +16,9 @@ window.onload = async function() {
   console.log("onLoaded");
   let main = document.getElementById("main");
   
-
+  main.innerHTML = `
+    <h1>${title}</h1>
+    <p>Date: ${date}</p>
+    <p>Tags: ${tag.join(', ')}</p>
+  `;
 };
