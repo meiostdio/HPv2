@@ -1,7 +1,7 @@
 const { Octokit } = require('@octokit/rest');
 
 module.exports = async (req, res) => {
-    const id = req.query;
+    const id = req.query.id;
     const owner = 'meiostdio';
     const repo = 'HPv2';
     const path = `articles/${id}.json`;
