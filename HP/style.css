@@ -49,11 +49,18 @@ main {
 /* 記事リストのスタイル */
 .article {
     margin-bottom: 20px;
+    text-decoration: none;
 }
 
 .article hr {
     background-color: #5EC289;
     height: 3px;
+    margin: 0;
+    border: none;
+}
+
+.article:visited{
+    color: #000000;
 }
 
 
