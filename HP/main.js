@@ -1,12 +1,12 @@
 import { getArtList } from "./GithubData.js";
-import { getArticleImage } from "./GithubData.js";
+import { getImage } from "./GithubData.js";
+
 // ページ読み込み完了後に行う処理
 // 記事のリストを読み込む関数を実行
 window.onload = async function() {
   try {
     const artList = await getArtList();
-    const articleImage = await getArticleImage();
-
+    await getImage("Javaで配色支援GUIアプリを作成しました。5");
     let main = document.getElementById("main");
     // ローディング表示を削除
     main.innerHTML = '';

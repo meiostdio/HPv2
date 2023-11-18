@@ -2,6 +2,7 @@ const { Octokit }  = require('@octokit/rest');
 
 module.exports = async (req, res) => {
   const id = req.query.id;
+  console.log(id);
   const owner = 'meiostdio';
   const repo = 'HPv2';
   const dirPath = 'images';
