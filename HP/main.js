@@ -26,7 +26,6 @@ window.onload = async function() {
           <h1>${title}</h1>
           <p>投稿日: ${date}</p>
           <p>タグ: ${tag.join(', ')}</p>
-          <p>${articleNo}</p>
           <hr />
         </a>
         `; // 各記事の間に区切り線を追加

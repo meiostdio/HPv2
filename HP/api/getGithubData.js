@@ -1,5 +1,3 @@
-// vercel/functions/getImage.js
-
 const { Octokit } = require('@octokit/rest');
 
 module.exports = async (req, res) => {
