@@ -33,7 +33,7 @@ window.onload = async function() {
     `;
 
     // JSONのセクション分繰り返し、動的に表示
-    formattedData.section.forEach(sec => {
+    formattedData.section.forEach(async sec => {
         const type = sec.type;
         const value = sec.value;
         const sectionDev = document.createElement('dev');
@@ -46,8 +46,9 @@ window.onload = async function() {
                 <p>${value}</p>
             `;
         } else if(type == "image"){
+            let image;
             sectionDev.innerHTML = `
-                <p>${value}</p>
+                <img src=${image}
             `;
         } else if(type == "code"){
             sectionDev.innerHTML = `
@@ -59,9 +60,6 @@ window.onload = async function() {
             `;
         }
         main.appendChild(sectionDev);
+
     });
 };
-
-async function getArtcleImage(){
-
-}
