@@ -33,12 +33,8 @@ window.onload = async function() {
     `;
 
     // JSONのセクション分繰り返し、動的に表示
-    const articleKeys = Object.keys(formattedData).reverse();
-    for (const key of articleKeys) {
-        const section = formattedData[key];
-        console.log(section);
-        console.log(section.constent1);
-    }
-
-
+    const JSONArray = JSON.parse(formattedData);
+    JSONArray.array.forEach(section => {
+        for (let i = 1; section[`content`])
+    });
 };
