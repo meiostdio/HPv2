@@ -19,6 +19,17 @@ export async function getArtList(){
 
 // 記事に使用する画像を取得してデコードする
 export async function getImage(id){
-    console.log('getimage working!', id);
-    fetch(`api/getArticleImage?id=${id}`);
+    const imageId = id;
+    try {
+        const response = await fetch(`/api/getArticleImage?id=${imageId}`);
+        const data = await response.json();
+        const imageData = data.content;
+        
+        // デコード
+        let decodedImageData = atob(imageData);
+         return decodedImageData
+    } catch (error) {
+        console.error('画像データ取得エラー: ', error.message);
+        return null;
+    }
 }

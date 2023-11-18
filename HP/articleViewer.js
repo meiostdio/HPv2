@@ -1,3 +1,5 @@
+import { getImage } from "./GithubData";
+
 let urlParams = new URLSearchParams(window.location.search);
 let articleId = urlParams.get('id');
 window.onload = async function() {
@@ -46,7 +48,7 @@ window.onload = async function() {
                 <p>${value}</p>
             `;
         } else if(type == "image"){
-            let image;
+            let image = await getImage(value);
             sectionDev.innerHTML = `
                 <img src=${image}
             `;

@@ -6,7 +6,7 @@ module.exports = async (req, res) => {
   const owner = 'meiostdio';
   const repo = 'HPv2';
   const dirPath = 'images';
-  const path = `images/${id}`;  // リポジトリ内の画像ファイルのパス
+  const path = `images/article1/${id}`;  // リポジトリ内の画像ファイルのパス
 
   // Vercelの環境変数からGitHubトークンを取得
   const token = process.env.GITHUB_API_KEY;

@@ -6,7 +6,6 @@ import { getImage } from "./GithubData.js";
 window.onload = async function() {
   try {
     const artList = await getArtList();
-    await getImage("Javaで配色支援GUIアプリを作成しました。5");
     let main = document.getElementById("main");
     // ローディング表示を削除
     main.innerHTML = '';
