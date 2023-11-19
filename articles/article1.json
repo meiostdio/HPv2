@@ -25,7 +25,7 @@
     },
     {
       "type": "image",
-      "value": "article1"
+      "value": "article1.png"
     },
     {
       "type": "subtitle", 
@@ -37,7 +37,7 @@
     },
     {
       "type": "image",
-      "value": "article2"
+      "value": "article2.png"
     },
     {
       "type": "subtitle",
@@ -49,7 +49,7 @@
     },
     {
       "type": "image",
-      "value": "article3"
+      "value": "article3.png"
     },
     {
       "type": "subtitle",
@@ -61,7 +61,7 @@
     },
     {
       "type": "image",
-      "value": "article4"
+      "value": "article4.png"
     },
     {
       "type": "subtitle",
@@ -113,7 +113,7 @@
     },
     {
       "type": "image",
-      "value": "article5"
+      "value": "article5.png"
     },
     {
       "type": "content",
@@ -173,7 +173,7 @@
     },
     {
       "type": "image",
-      "value": "article6"
+      "value": "article6.png"
     },
     {
       "type": "content",
@@ -189,7 +189,7 @@
     },
     {
       "type": "image",
-      "value": "article7"
+      "value": "article7.jpg"
     },
     {
       "type": "content",
