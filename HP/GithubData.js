@@ -17,17 +17,15 @@ export async function getArtList(){
     }
 }
 
-// 記事に使用する画像を取得してデコードする
-export async function getImage(id){
-    const imageId = id;
+// 記事に使用する画像を取得する
+export async function getImage(directoryName, fileName){
+    const dirName = directoryName;
+    const imageName = fileName;
     try {
-        const response = await fetch(`/api/getArticleImage?id=${imageId}`);
+        const response = await fetch(`/api/getArticleImage?directoryName=${dirName}&fileName=${imageName}`);
         const data = await response.json();
-        const imageData = data.content;
-        
-        // デコード
-        let decodedImageData = atob(imageData);
-         return decodedImageData
+        const imageBase64 = data.image;
+         return imageBase64
     } catch (error) {
         console.error('画像データ取得エラー: ', error.message);
         return null;

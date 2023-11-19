@@ -1,4 +1,4 @@
-import { getImage } from "./GithubData";
+import { getImage } from "./GithubData.js";
 
 let urlParams = new URLSearchParams(window.location.search);
 let articleId = urlParams.get('id');
@@ -29,13 +29,13 @@ window.onload = async function() {
     const tag = formattedData.tag;
     const date = formattedData.date;
     main.innerHTML = `
-        <h2>${title}</h2>
+        <p class="date">作成日時:${date}<p>
+        <h2 class="articleTitle">${title}</h2>
         <p class="tag">${tag}</p>
-        <p>作成日時:${date}<p>
     `;
 
     // JSONのセクション分繰り返し、動的に表示
-    formattedData.section.forEach(async sec => {
+    formattedData.section.forEach(async (sec) => {
         const type = sec.type;
         const value = sec.value;
         const sectionDev = document.createElement('dev');
@@ -48,13 +48,14 @@ window.onload = async function() {
                 <p>${value}</p>
             `;
         } else if(type == "image"){
-            let image = await getImage(value);
-            sectionDev.innerHTML = `
-                <img src=${image}
-            `;
+            const img = document.createElement('img');
+            main.appendChild(img);
+
+            let image = await getImage(articleId, value);
+            img.src = `data:image/;base64,${image}`;
         } else if(type == "code"){
             sectionDev.innerHTML = `
-                <p class="code">${value}</p>
+                <pre class="src"><code>${value}</code></pre>
             `;
         } else if(type == "reference"){
             sectionDev.innerHTML = `
@@ -62,6 +63,5 @@ window.onload = async function() {
             `;
         }
         main.appendChild(sectionDev);
-
     });
 };

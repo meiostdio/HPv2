@@ -65,6 +65,45 @@ main {
     background-color: #ffffff;
 }
 
+/* 記事タイトル */
+main h2 {
+    font-size: 46px;
+}
+
+/* 記事の画像 */
+main img {
+    max-width: 100%;
+}
+
+/* タグ、投稿日時 */
+p.date, p.tag{
+    color: #696969;
+}
+p.tag{
+    margin-top: 20px;
+    margin-bottom: 40px;
+}
+
+.src {
+    background-color: #012a35;
+    color: #8c939f;
+    overflow: auto;
+    margin-bottom: 40px;
+}
+
+.src::-webkit-scrollbar {
+    height: 7px;
+}
+
+.src::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background: #5EC289;
+}
+
+.src::-webkit-scrollbar-track {
+    background: #696969;
+}
+
 /* 記事リストのスタイル */
 .article {
     margin-bottom: 20px;

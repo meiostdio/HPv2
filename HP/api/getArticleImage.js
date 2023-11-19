@@ -1,12 +1,11 @@
 const { Octokit }  = require('@octokit/rest');
 
 module.exports = async (req, res) => {
-  const id = req.query.id;
-  console.log(id);
+  const directoryName = req.query.directoryName;
+  const fileName = req.query.fileName;
   const owner = 'meiostdio';
   const repo = 'HPv2';
-  const dirPath = 'images';
-  const path = `images/article1/${id}`;  // リポジトリ内の画像ファイルのパス
+  const path = `images/${directoryName}/${fileName}`;
 
   // Vercelの環境変数からGitHubトークンを取得
   const token = process.env.GITHUB_API_KEY;
@@ -14,30 +13,19 @@ module.exports = async (req, res) => {
   // Octokitのセットアップ
   const octokit = new Octokit({ auth: `token ${token}` });
   try {
-      // ディレクトリの内容を取得
-      const response = await octokit.repos.getContent({
-        owner,
-        repo,
-        dirPath,
-      });
+    // ファイルの内容を取得
+    const response = await octokit.repos.getContent({
+      owner, 
+      repo,
+      path
+    });
 
-      // ディレクトリ内のすべてのファイルを取得
-      const files = response.data.filter(item => item.type === 'file');
+    // 画像データを取得
+    const content = response.data.content;
 
-      // ファイル名の完全一致でファイルを特定
-      const targetFile = files.find(file => file.name === id);
-      
-      if (targetFile) {
-          // ファイルのコンテンツを取得
-          const contentResponse = await octokit.repos.getContent({
-            owner,
-            repo,
-            path: targetFile.path,
-          });
-          res.status(200).send({ content: contentResponse.data.content });
-      } else {
-          res.status(404).send({ error: 'File not found' });
-      }
+    // Base64エンコードされた画像データをそのまま返す
+    res.status(200).json({ image: content });
+    
     } catch (error) {
       console.error('エラー:', error.message);
       res.status(500).send({ error: 'Internal Server Error' });
