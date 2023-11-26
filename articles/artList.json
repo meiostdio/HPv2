@@ -2,11 +2,16 @@
     "article1": {
         "title": "Javaで配色支援GUIアプリを作成しました。",
         "tag": ["java", "デザイン", "配色"],
-        "date": "20231010"
+        "date": "20230404"
     },
     "article2": {
         "title": "ジェスチャーでパソコン操作",
         "tag": ["Python", "MediaPipe"],
-        "date": "20231011"
+        "date": "20230404"
+    },
+    "artile3": {
+        "title": "スマホをかざすだけで・・・いろいろ遊べるNFC(RFID)",
+        "tag": ["NFC","RFID"],
+        "date": "20230404"
     }
 }
