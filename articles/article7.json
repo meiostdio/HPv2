@@ -1,0 +1,77 @@
+{
+    "title": "GPT4Allで遊んでみる",   
+    "tag": ["GPT4", "チャットAI"],
+    "date": "20230510",
+    "section": [
+        {
+        "type": "content",
+        "value": "GPT4Allというローカルで動かせるチャットAIがあるのでそれを使ってみた感想です。ただ感想を書くだけなのでGPT4allが気になる方は"
+        },
+        {
+        "type": "content",
+        "value": "と"
+        },
+        {
+        "type": "link",
+        "value": "GPT4Allのgithubページ",
+        "url": "https://github.com/nomic-ai/gpt4all"
+        },
+        {
+        "type": "link",
+        "value": "グラボ非搭載の低スペックPCでも使える軽量チャットAI「GPT4ALL」の使い方まとめ",
+        "url": "https://gigazine.net/news/20230331-gpt4all-how-to-use/"
+        },
+        {
+        "type": "content",
+        "value": "を参照してください。ちなみにOpenAIのGPT-4とは、作ってるところも作りも全く違います。"
+        },
+        {
+        "type": "subtitle",
+        "value": "こんな感じで動く"
+        },
+        {
+        "type": "image",
+        "value": "article1.jpg"
+        },
+        {
+        "type": "content",
+        "value": "windowsだとgpt4all-lora-quantized-win64.exeを実行すれば起動できます。pcのスペックにもよりますが、起動してからの準備とプロンプト(命令文)を入力してから返答までのあいだにまあまあ時間がかかります。この時点でChatGPTとか、最近だとGoogleのBardを使ったほうが早いのですが、ローカルでチャットAIを動かせるという点ではこちらのほうにロマンがあるでしょう・・・。"
+        },
+        {
+        "type": "subtitle",
+        "value": "出力の様子"
+        },
+        {
+        "type": "image",
+        "value": "article2.png"
+        },
+        {
+        "type": "content",
+        "value": "なんとなく察しがついていたかもしれませんが、GPT4Allは基本的には英語で質問する必要があります。今だと日本語対応モデルも出ていそうですが。一応意思疎通ができているように見えますね。"
+        },
+        {
+        "type": "subtitle",
+        "value": "プログラムを作らせてみる"
+        },
+        {
+        "type": "content",
+        "value": "じゃんけんのプログラムをPythonで作ってと頼んでみました。"
+        },
+        {
+        "type": "image",
+        "value": "article3.png"
+        },
+        {
+        "type": "content",
+        "value": "途中までですが、結構謎のコードが誕生。これは私のプロンプト(英語)が雑だったからでしょうか。"
+        },
+        {
+        "type": "subtitle",
+        "value": "おわりに"
+        },
+        {
+        "type": "content",
+        "value": "ここでは省きますが、githubからGPT4Allのファイル構成なども確認できます。data.pyとかgenerate.pyの中身を見てみると面白いかもしれません。筆者の所感としては、チャットAIの今後はいかに小さなスケールで優れたAIを動かせられるのか、が肝になってくるんじゃないかなと思います。楽しみですね。"
+        }
+    ]
+}

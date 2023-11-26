@@ -1,0 +1,100 @@
+{
+    "title": "Java21で新しく提案された機能が面白い!",   
+    "tag": ["Java","JDK","OpenJDK"],
+    "date": "20230512",
+    "section": [
+        {
+        "type": "content",
+        "value": "タイトル部分だけ読みたい人は「提案の内容」まで飛ばしてください。"
+        },
+        {
+        "type": "subtitle",
+        "value": "JDKはいろいろある"
+        },
+        {
+        "type": "content",
+        "value": "Javaを開発するうえでJDK(Java Development Kit)をインストールしなければなりません。JDKはソースコードのコンパイラ、Java仮想マシンなどが含まれます。JDKは色んな団体が公開していて、お金を払わなければインストールできないものから無料で使えるものがあります。私が使っているものはOracleJDKというOracle社が公開している無償のJDKです。(サーバーとして不特定多数が使用する場合は有償ライセンスが必要らしい)わざわざインストールしなおすのが面倒なのでやっていませんが、私がオススメするのはOpenJDKです。OpenJDKはオープンソースでありすべての機能において無料で使用することができるからです。"
+        },
+        {
+        "type": "subtitle",
+        "value": "そもそも提案(JEP)とは?"
+        },
+        {
+        "type": "content",
+        "value": "そんなOpenJDKは現在のバージョンが20現在バージョン21を開発中ですが、OpenJDKプロジェクトに参加している開発者は誰でも新機能について提案できます。(JEP-Java Enhancment Proposalといいます)この提案は他のメンバーによって精査されて採択するか決められるのですが、その中に面白いと感じた提案がありました!私もGoogle翻訳で読んでいて大まかに意味が分かるのでぜひ読んでみてください。"
+        },
+        {
+        "type": "link",
+        "value": "OpenJDK JEP 445: JDK 19",
+        "url": "https://openjdk.org/jeps/445"
+        },
+        {
+        "type": "subtitle",
+        "value": "提案の内容"
+        },
+        {
+        "type": "content",
+        "value": "ここからは提案の内容に触れていきます。まず以下のコードはJavaのHelloWorldです。"
+        },
+        {
+        "type": "code",
+        "value": "public class HelloWorld {\n    public static void main(String[] args) {\n    System.out.println(\"Hello, World!\");\n    }\n}"
+        },
+        {
+        "type": "content",
+        "value": "提案者はこのコードに対してめっちゃ文句を言っています。提案の文をGoogle翻訳した文↓"
+        },
+        {
+        "type": "reference",
+        "value": "ここには、プログラムの動作に対して、コードが多すぎ、概念が多すぎ、構成要素が多すぎて、混乱が多すぎます。",
+        "cite": "Google翻訳"
+        },
+        {
+        "type": "content",
+        "value": "確かに初めて勉強をしたときに理解できない部分がとても多いですね。メイン関数の前のpublic static voidやclass HelloWorldなどは理解の妨げになっています。Pythonはprintだけで出力できメソッド名が誰でもわかりやすいです。"
+        },
+        {
+        "type": "reference",
+        "value": "教育者はよく「そんなことは心配しないでください、後でわかるでしょう」と忠告します。 これは彼らにとっても生徒にとっても同様に満足できるものではなく、Java は複雑であるという永続的な印象を生徒に残します。",
+        "cite": "Google翻訳"
+        },
+        {
+        "type": "content",
+        "value": "確かに私もC言語を勉強した際、先生から#include&lt;stdio.h&gt;は無視していいと言われても納得できませんでした!この提案がすべて採択された場合、上記のコードはこうなります。"
+        },
+        {
+        "type": "code",
+        "value": "void main(){\n    System.out.println(\"Hello world!\");\n    }"
+        },
+        {
+        "type": "content",
+        "value": "シンプルすぎて逆に不安になります。Javaっぽくない。さらにSystem.outも省略するのを目標にしているそうです。しかし新しくJavaを勉強する学生からするとよい機能かもしれません。この記事は"
+        },
+        {
+        "type": "link",
+        "value": "TechFeedというエンジニアコミュニティ",
+        "url": "https://techfeed.io/events/techfeed-experts-night-18"
+        },
+        {
+        "type": "content",
+        "value": "のアーカイブから取り上げました。"
+        },
+        {
+        "type": "link",
+        "value": "Java 20, 21, オブジェクト指向からデータ指向へ",
+        "url": "https://speakerdeck.com/kishida/java20-21-object-oriented-to-data-oriented?slide=11"
+        },
+        {
+        "type": "content",
+        "value": "このようなコミュニティは英語しかない1次ソースを翻訳してくれるのでとってもありがたい!私も理解できることの方が少ないですがわかる範囲で見ていく習慣があればプラスになるのでオススメです。"
+        },
+        {
+        "type": "subtitle",
+        "value": "余談"
+        },
+        {
+        "type": "content",
+        "value": "OpenJDKはオープンソースで柔軟性と新しい機能を重視する。OracleJDKは企業向けであり、安定性を重視する傾向がある。らしい、ソースはないです。"
+        }
+    ]
+}

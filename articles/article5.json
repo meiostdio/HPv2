@@ -1,0 +1,39 @@
+{
+    "title": "オンラインしりとり【Google App Script 入門】",
+    "tag": ["Google Apps Script", "JavaScript"],
+    "date": "20230404",
+    "section": [
+    {
+        "type": "iframe",
+        "value": "https://docs.google.com/spreadsheets/d/e/2PACX-1vTramfQIOnU6Rk4z6s-lFSPtWnnYQ7zY24Y7r36ctvDpN5Ro8OrF8PNErqMDjuafMJDoHWiYXzlSmkI/pubhtml?widget=true&amp;headers=false"
+        },
+        {
+        "type": "iframe",
+        "value": "https://docs.google.com/forms/d/e/1FAIpQLSdMpR1rAJia0I2x1_Bdg7qA9AtekLALVl2twyhkA1X9mXbtdw/viewform?embedded=true"
+        },
+        {
+        "type": "subtitle",  
+        "value": "Google Apps Scriptとは"
+        },
+        {
+        "type": "content",
+        "value": "Google Apps Script(GAS)ではGmailやGoogle Sheets(スプレッドシート)などで使用することのできるGoogleのスクリプト言語で、基本的な書き方はJavaScriptと同じです。特定の人物から届いたメールの内容をスプレッドシートにまとめるなど、Googleのサービスを連携させるプログラムを書くことができます。今回はGoogle Formsとスプレッドシートを連携させてオンラインしりとりを作ってみました。"
+        },
+        {
+        "type": "subtitle",  
+        "value": "ソースコード"
+        },
+        {
+        "type": "code",
+        "value": "function myFunction() {\n\n    //シートを取得\n    const sheet = SpreadsheetApp.getActiveSheet();\n  \n    //シートの最後の行(lastRow)と最後の列(lastColumn)を取得\n    const lastRow = sheet.getLastRow();\n    const lastColumn = sheet.getLastColumn();\n  \n    //既存の言葉(LastWord)は最後から二番目の行(lastRow - 1)と最後の列(lastColumn)\n    const LastWord = sheet.getRange(lastRow - 1, lastColumn).getValue();\n  \n    //送信した言葉(NextWord)は最後の行(lastRow)と最後の列(lastColumn)\n    const NextWord = sheet.getRange(lastRow, lastColumn).getValue();\n  \n    //送信した言葉の文字数を取得\n    const length = NextWord.length;\n  \n    //送信した言葉がひらがなならTrue\n    const hiragana = /^[ぁ-んー]+$/.test(NextWord)\n  \n    //既存の言葉の尻と送信した言葉の頭\n    const hip = LastWord.charAt(2);\n    const head = NextWord.charAt(0);\n  \n    console.log(length);\n    console.log(hiragana);\n    console.log(hip + \",\" + head);\n\n    //文字数、ひらがな、しりとりになるか\n    if (length != 3 || hiragana != true || hip != head) {\n      sheet.deleteRow(lastRow);\n    }      \n  }"
+        },
+        {
+        "type": "content",
+        "value": "かなり簡単に作れます。コードを書いたら、ウェブアプリとしてデプロイし(デプロイのボタンが右上にあります)、ここで作った関数をトリガーに設定すれば完成です。"
+        },
+        {
+        "type": "style",
+        "value": "iframe {\n            width: 90%;\n            height: fit-content;\n            max-height: 60%;\n        }"
+        }
+    ]
+}
