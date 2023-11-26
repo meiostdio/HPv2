@@ -12,6 +12,10 @@
         "value": "CSSを書かせてみた"
     },
     {
+        "type": "content",
+        "value": "CSSとは・・・\nHTMLで表示するWebページの見た目（ボタンの色や文字の大きさ、間隔など）を定義するファイルのこと"
+    },
+    {
         "type": "image",
         "value": "article1.png"  
     },
@@ -25,7 +29,11 @@
     },
     {
         "type": "content",
-        "value": "MatTableで全てのセルのサイズを同じにするには、以下のようなCSSを使用することができます。コードの説明文も自動で挿入されています。さらに前の会話も記憶しているため、この回答に注文を付けることもできます。この回答ではセルの幅を100pxで指定して、セル内のテキストが長い時に省略するようにしています。画面の大きさによってセルの大きさも変化させたい&テキストを折り返して全体を表示させたいため以下の文で質問しました。"
+        "value": "MatTableで全てのセルのサイズを同じにするには、以下のようなCSSを使用することができます。\n.mat-cell {\n  width: 100px; /* セルの幅を100pxに指定する /\n  white-space: nowrap; / セル内のテキストを折り返さないようにする /\n  overflow: hidden; / セル内のテキストを隠す /\n  text-overflow: ellipsis; / セル内のテキストがはみ出した場合に省略符号を表示する */\n}\nこのCSSを使用することで、全てのセルが同じ幅になり、セル内のテキストもはみ出した場合には省略符号で表示されます。\nただし、この方法はセル内のテキストが長くなる場合には、全てのテキストが省略符号で表示されてしまうため、\n適切な幅を指定する必要があります。"
+    },
+    {
+        "type": "content",
+        "value": "この回答で出力されたコードをコピペしても動作します。すごい！ コードの説明文も自動で挿入されています。 ChatGPTを使ったことのない人が驚くポイントなのですが、単純に会話をするだけではなくコード文の生成も可能です。"
     },
     {
         "type": "image",
@@ -33,11 +41,31 @@
     },
     {
         "type": "content",
-        "value": "この回答でもいまだにテキストを省略していたので再度省略しないように質問したところしっかりとしたCSSの設定を回答してくれました。そして最終的なテーブルが以下のようになりました。"
+        "value": "さらに前の会話も記憶しているため、この回答に注文を付けることもできます。 この回答ではセルの幅を100pxで指定して、セル内のテキストが長い時に省略するようにしています。 画面の大きさによってセルの大きさも変化させたい＆テキストを折り返して全体を表示させたいため以下の文で質問しました。"
+    },
+    {
+        "type": "code",
+        "value": "・幅をレスポンシブにして、画面の大きさによって最適化する\n・長いテキストを省略符号ではなく折り返して表示する\n上記の点を反映してCSSを作り直してください。"  
+    },
+    {
+        "type": "content",
+        "value": "回答は以下のようになりました。"
+    },
+    {
+        "type": "code",
+        "value": "以下は、幅をレスポンシブにして、テキストを折り返すCSSの例です。\ntable {\\n      width: 100%;\\n      border-collapse: collapse;\\n      table-layout: fixed;\\n    }\\n    \\nth, td {\\n      padding: 12px 15px;\\n      text-align: left;\\n      border-bottom: 1px solid #ddd;\\n      white-space: nowrap;\\n      overflow: hidden;\\n      text-overflow: ellipsis;\\n    }\\n    \\nth {\\n      background-color: #f2f2f2;\\n      font-weight: bold;\\n    }\\n    \\n@media (max-width: 768px) {\\n     \\ntd {\\n        white-space: normal;\\n        word-wrap: break-word;\\n      }\\n    }\\n\\n\\n **table-layout: fixedは、テーブルのセルの幅を均等にするために必要です。\\nwhite-space: nowrapは、テキストを折り返さずに表示するために必要です。\\noverflow: hiddenは、テキストがセルからはみ出るのを防ぐために必要です。\\ntext-overflow: ellipsis**は、テキストがセルからはみ出た場合に省略符号で表示するために必要です。 \\n**@media (max-width: 768px)は、768px以下の画面サイズの場合に適用されるスタイルを定義しています。\\nword-wrap: break-wordは、テキストが折り返されるようにするために必要です。\\nwhite-space: normal**は、テキストを折り返すために必要です。"  
+    },
+    {
+        "type": "content",
+        "value": "この回答でもいまだにテキストを省略していたので再度省略しないように質問したところしっかりとしたCSSの設定を回答してくれました。 そして最終的なテーブルが以下のようになりました。"
     },
     {
         "type": "image",
         "value": "article3.png"  
+    },
+    {
+        "type": "content",
+        "value": "ChatGPTを使い始めてからは\n・ChatGPTに質問する。\n・ChatGPTからの回答で動くか試す\n・動かない場合、回答の中にあるキーワードで個別に検索してみる\nのようにインターネットに落ちている情報を集めてもらうツールとして活用するようになりました。"
     },
     {
         "type": "subtitle",
