@@ -4,6 +4,7 @@
     margin: 0;
     padding: 0;
     font-family: 'Zen Kaku Gothic New', sans-serif;
+    text-decoration: none;
 }
 
 html {
@@ -105,7 +106,12 @@ p.tag{
 }
 
 /* 記事リストのスタイル */
-.article {
+.article .thumbnail {
+    max-width: 100px;
+    max-height: 100px;
+}
+
+.article{
     margin-bottom: 20px;
     text-decoration: none;
     color: #000000;
@@ -121,7 +127,6 @@ p.tag{
 .article:visited{
     color: #000000;
 }
-
 
 /* サイドバーのスタイル */
 aside {

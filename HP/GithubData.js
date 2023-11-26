@@ -37,9 +37,8 @@ export async function getThumbnails(thumb){
     const imageName = thumb;
     try{
         const response = await fetch(`/api/getThumbnails?imageName=${imageName}`);
-        console.log(response);
         const data = await response.json();
-        const imageBase64 = data.images;
+        const imageBase64 = data.image;
         return imageBase64
     } catch (error) {
         console.error('サムネ取得エラー:',error.message);
