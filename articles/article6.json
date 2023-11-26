@@ -28,7 +28,7 @@
         "value": "MatTableで9個の要素がありそれぞれの大きさを文字の大きさによって変更するのではなく、同じ大きさで固定するCSSはどのように実装すればよいですか。"
     },
     {
-        "type": "content",
+        "type": "code",
         "value": "MatTableで全てのセルのサイズを同じにするには、以下のようなCSSを使用することができます。\n.mat-cell {\n  width: 100px; /* セルの幅を100pxに指定する /\n  white-space: nowrap; / セル内のテキストを折り返さないようにする /\n  overflow: hidden; / セル内のテキストを隠す /\n  text-overflow: ellipsis; / セル内のテキストがはみ出した場合に省略符号を表示する */\n}\nこのCSSを使用することで、全てのセルが同じ幅になり、セル内のテキストもはみ出した場合には省略符号で表示されます。\nただし、この方法はセル内のテキストが長くなる場合には、全てのテキストが省略符号で表示されてしまうため、\n適切な幅を指定する必要があります。"
     },
     {
@@ -53,7 +53,7 @@
     },
     {
         "type": "code",
-        "value": "以下は、幅をレスポンシブにして、テキストを折り返すCSSの例です。\ntable {\\n      width: 100%;\\n      border-collapse: collapse;\\n      table-layout: fixed;\\n    }\\n    \\nth, td {\\n      padding: 12px 15px;\\n      text-align: left;\\n      border-bottom: 1px solid #ddd;\\n      white-space: nowrap;\\n      overflow: hidden;\\n      text-overflow: ellipsis;\\n    }\\n    \\nth {\\n      background-color: #f2f2f2;\\n      font-weight: bold;\\n    }\\n    \\n@media (max-width: 768px) {\\n     \\ntd {\\n        white-space: normal;\\n        word-wrap: break-word;\\n      }\\n    }\\n\\n\\n **table-layout: fixedは、テーブルのセルの幅を均等にするために必要です。\\nwhite-space: nowrapは、テキストを折り返さずに表示するために必要です。\\noverflow: hiddenは、テキストがセルからはみ出るのを防ぐために必要です。\\ntext-overflow: ellipsis**は、テキストがセルからはみ出た場合に省略符号で表示するために必要です。 \\n**@media (max-width: 768px)は、768px以下の画面サイズの場合に適用されるスタイルを定義しています。\\nword-wrap: break-wordは、テキストが折り返されるようにするために必要です。\\nwhite-space: normal**は、テキストを折り返すために必要です。"  
+        "value": "以下は、幅をレスポンシブにして、テキストを折り返すCSSの例です。\ntable {\\n      width: 100%;\n      border-collapse: collapse;\n      table-layout: fixed;\n    }\n    \nth, td {\n      padding: 12px 15px;\n      text-align: left;\n      border-bottom: 1px solid #ddd;\n      white-space: nowrap;\n      overflow: hidden;\n      text-overflow: ellipsis;\n    }\n    \nth {\n      background-color: #f2f2f2;\n      font-weight: bold;\n    }\n    \n@media (max-width: 768px) {\n     \ntd {\n        white-space: normal;\n        word-wrap: break-word;\n      }\\n    }\n\n\n **table-layout: fixedは、テーブルのセルの幅を均等にするために必要です。\nwhite-space: nowrapは、テキストを折り返さずに表示するために必要です。\noverflow: hiddenは、テキストがセルからはみ出るのを防ぐために必要です。\ntext-overflow: ellipsis**は、テキストがセルからはみ出た場合に省略符号で表示するために必要です。 \n**@media (max-width: 768px)は、768px以下の画面サイズの場合に適用されるスタイルを定義しています。\nword-wrap: break-wordは、テキストが折り返されるようにするために必要です。\nwhite-space: normal**は、テキストを折り返すために必要です。"  
     },
     {
         "type": "content",
