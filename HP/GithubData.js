@@ -31,3 +31,24 @@ export async function getImage(directoryName, fileName){
         return null;
     }
 }
+
+// 記事リストに追加するサムネを一括で取得する
+export async function getThumbnails(){
+    try{
+        const response = await fetch('/api/getThumbnails');
+        const data = await response.json();
+        // JSONオブジェクトに変換
+        const imagesJson = images.map(imgBase64 => {
+        // ファイル名を取得  
+        const fileName = imgBase64.split(';')[1].split('=')[1];
+        return {
+        name: fileName,
+        data: imgBase64
+        };
+  
+  });
+    } catch (error) {
+        console.error('サムネ取得エラー:',error.message);
+        return null
+    }
+}

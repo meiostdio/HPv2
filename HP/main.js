@@ -1,11 +1,13 @@
 import { getArtList } from "./GithubData.js";
-import { getImage } from "./GithubData.js";
+import { getThumbnails } from "./GithubData.js";
 
 // ページ読み込み完了後に行う処理
 // 記事のリストを読み込む関数を実行
 window.onload = async function() {
   try {
     const artList = await getArtList();
+    const imagesJson = await getThumbnails();
+    console.log(imagesJson);
     let main = document.getElementById("main");
     // ローディング表示を削除
     main.innerHTML = '';
