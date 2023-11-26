@@ -1,0 +1,119 @@
+{
+  "title":"ジェスチャーでパソコンを操作【MediaPipe】",
+  "tag":[  
+    "Python",
+    "MediaPipe",
+    "OpenCV"
+   ],
+    "date": "20230226",
+    "section": [
+    {
+    "type":"content",
+    "value":"Pythonに慣れるための練習にもなりそう。結構簡単にすごい機能のプログラムが作れちゃいます。"
+    },
+    {
+    "type":"subtitle",
+    "value":"プログラムの概要"
+    },
+    {
+    "type":"content",
+    "value":"親指と人差しで空中をつまみ、移動して指を離す動作でなんらかの処理を実行させるというプログラムです。今回のプログラムではPyAutoGUIのキーボード操作で、四方に動く指に合わせて4パターンのWindowsのショートカットキーが処理されます。"
+    },
+    {
+    "type":"subtitle",
+    "value":"環境"
+    },
+    {
+    "type":"content",
+    "value":"AnacondaのJupyter Notebookを開発環境としましたが、その必要がどこまであるのかよくわかってません。とりあえずPythonを実行できるとよいですが、注意点として、Google ColaboratoryとMediaPipeの組み合わせは少なくとも筆者は確認していません(できたらいいな)。とりあえずAnacondaをインストールし、以下のコードをAnaconda Powershell Prompt に入力します。"
+    },
+    {
+    "type":"code",
+    "value":"conda create -n mediapipe\nconda activate mediapipe\npip install mediapipe"
+    },
+    {
+    "type":"subtitle",
+    "value":"コードの説明"
+    },
+    {
+    "type":"content",
+    "value":"MediaPipeのインストールができれば、さっそくJupyter Notebookでコーディングします。あとでソースコードを貼りますが、すべて一行のセルに入力して大丈夫です。"
+    },
+    {
+    "type":"subtitle",
+    "value":"ライブラリをインポート"
+    },
+    {
+    "type":"content",
+    "value":"ライブラリをインポートするとあらかじめ用意された便利なプログラムを呼び出すことができます。"
+    },
+    {
+    "type":"code",
+    "value":"import pyautogui\nimport cv2\nimport mediapipe as mp\nimport math\nimport numpy as np"
+    },
+    {
+    "type":"subtitle",
+    "value":"角度を求めるための関数の定義"
+    },
+    {
+    "type":"content",
+    "value":"degreeが関数名になります。()内に6つの変数を入れると、それらがx0からy2に対応して角度(0-180°)が計算されます。ここで入力される変数は手のランドマーク、つまり手の関節に与えられた点の座標になります。参照元(https://www.higashisalary.com/entry/numpy-angle-calc)"
+    },
+    {
+    "type":"subtitle",
+    "value":"リアルタイムで手を認識"
+    },
+    {
+    "type":"content",
+    "value":"MediaPipeの公式サイトからコードを引っ張ってきます。(https://google.github.io/mediapipe/solutions/hands.html)このコードをコピペしてしまえば、それだけで十分それっぽいプログラムになります。コードの大意としては、ウェブカメラから映像が入力される間、そこで取得した画像を一コマずつOpenCVで加工し、それをMediaPipeに読み込ませ、グラフを描画し出力するというものになっています。なおEscキーを押すとプログラムは停止します。"
+    },
+    {
+    "type":"subtitle",
+    "value":"イベントハンドラ"
+    },
+    {
+    "type":"content",
+    "value":"ここからようやくオリジナルのコードになります。 条件は親指と人差し指でなにかをつまむ動作です。本来の方法は特定の手の形状を機械学習的なもので識別させるのかもしれませんが、そんな高度なことはできないので、親指先ー手首ー人差し指先の座標を取得し、この3点が作る角度の開閉がイベントの最初の条件にします。そこからは早い話、以下のような流れになります。"
+    },
+    {
+    "type":"image",
+    "value":"article1.jpg"
+    },
+    {
+    "type":"content",
+    "value":"(tmpx, tmpy)は座標の変数です。角度から移動させた方向がわかり、それに応じて処理が発生します。ちなみにこの座標ではx,yは0-1で表現されます。"
+    },
+    {
+    "type":"code",
+    "value":"indX=hand_landmarks.landmark[8].x\nindY=hand_landmarks.landmark[8].y\n\nwriX=hand_landmarks.landmark[0].x\nwriY=hand_landmarks.landmark[0].y\n\nthuX=hand_landmarks.landmark[4].x\nthuY=hand_landmarks.landmark[4].y"
+    },
+    {
+    "type":"content",
+    "value":"繰り返し処理(for)のなかで3点の座標、ind(人差し指)、wri(手首)、thu(親指)を取得します。"
+    },
+    {
+    "type":"code",
+    "value":"finger = 0\ntmp1x, tmp1y, tmp2x, tmp2y = 0, 0, 0, 0"
+    },
+    {
+    "type":"code",
+    "value":"繰り返し処理の外でフラグを宣言・初期化します。"
+    },
+    {
+    "type":"code",
+    "value":"degree1 = degree(wriX, wriY, thuX, thuY, indX, indY)\n\n    if finger == 0 or finger == 3 and degree1 > 25:\n       print('ready')\n       finger = 1\n    \n    if finger == 1 and degree1 < 5:\n       print('catch')\n       tmp1x = (indX + thuX)/2\n       tmp1y = (indY + thuY)/2\n       finger = 2\n    \n     if finger == 2 and degree1 > 10:\n        print('release')\n        tmp2x = (indX + thuX)/2\n        tmp2y = (indY + thuY)/2\n        degree2 = degree(tmp1x, tmp1y, 0, tmp1y, tmp2x, tmp2y)\n    \n        if degree2 < 60:\n           pyautogui.hotkey('ctrl', 'y')\n           print('右')\n    \n        if degree2 > 60 and degree2 < 120:\n    \n           if tmp1y > tmp2y:\n    \n              pyautogui.hotkey('ctrl', 'c')\n              print('上')\n    \n            if tmp2y > tmp1y:\n    \n               pyautogui.hotkey('ctrl', 'v')\n               print('下')\n    \n            if degree2 > 120:\n    \n               pyautogui.hotkey('ctrl', 'z')\n               print('左')\n    \n               finger = 3"
+    },
+    {
+    "type":"content",
+    "value":"これはfor文内部で座標を取得したあとに書かれます。先に宣言したfingerは指の動作の行程を順序よく認識させるために用いられます。また、tmpみたいな変数はキャッチとリリース時に取得した座標を一時的に保管するためのものです。最初に定義した関数の計算の都合上、算出される角度は0から180までになっています。そのため、右方向は1-60°、上下方向は61-120°、左方向は121-180°という割り当てになり、角度だけでは上下は判別できません。苦し紛れの方策として、上下方向は角度に加えて、キャッチ時よりy座標が大きくなっているかどうかで上下の判別をします。最後におまけ程度のpyauto.hotkey()を使います。引数にショートカットキーとして打ち込むキーを入力すればOKです。"
+    },
+    {
+    "type":"subtitle",
+    "value":"総括"
+    },
+    {
+    "type":"content",
+    "value":"ひとえに手の形状を判別させるといってもそう簡単ではありませんでした。空中をつまんだりする動作は近未来なUIという感じがしますが、親指と人差し指が近づいているか離れているかくらいしか確度の高い判別をしてくれなかったため、やむを得ずこのジェスチャーにしたまでです。また、誤認識も頻繁に生じるので実用には程遠いクオリティです。ただMediaPipeといった強力なライブラリに触れることができたのはよい経験になりました。"
+    }
+    ]
+}
