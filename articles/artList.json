@@ -9,9 +9,14 @@
         "tag": ["Python", "MediaPipe"],
         "date": "20230404"
     },
-    "artile3": {
+    "article3": {
         "title": "スマホをかざすだけで・・・いろいろ遊べるNFC(RFID)",
         "tag": ["NFC","RFID"],
+        "date": "20230404"
+    },
+    "article4": {
+        "title": "フレームワークのイメージをAngularから学ぶ",
+        "tag": ["Angular","フレームワーク"],
         "date": "20230404"
     }
 }
