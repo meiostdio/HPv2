@@ -6,8 +6,6 @@ import { getThumbnails } from "./GithubData.js";
 window.onload = async function() {
   try {
     const artList = await getArtList();
-    const imagesJson = await getThumbnails();
-    console.log(imagesJson);
     let main = document.getElementById("main");
     // ローディング表示を削除
     main.innerHTML = '';
@@ -21,7 +19,8 @@ window.onload = async function() {
       let title = article.title;
       let date = article.date;
       let tag = article.tag;
-
+      const thumbail = await getThumbnails(encodeURI(title));
+      console.log(thumbail);
       let articleDiv = document.createElement('div');
       articleDiv.innerHTML = `
         <a class="article" href="/articleViewer.html?id=${articleNo}">

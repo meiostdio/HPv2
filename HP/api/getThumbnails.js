@@ -1,44 +1,27 @@
 const { Octokit } = require('@octokit/rest');
 
 module.exports = async (req, res) => {
-
-  const dirPath = 'images/thumbnails';
+  const imageName = req.query.imageName;
+  console.log(imageName);
+  const dirPath = encodeURI(`images/thumbnails/${imageName}`);
   const owner = 'meiostdio';
   const repo = 'HPv2';  
 
+  // vercel環境変数からGithubトークンを取得
   const token = process.env.GITHUB_API_KEY;
 
+  // トークンをデータ取得ライブラリにセット
   const octokit = new Octokit({ auth: `token ${token}` });
 
   try {
-    const listFilesResponse = await octokit.repos.getContent({
+    const response = await octokit.repos.getContent({
       owner, 
       repo,
       path: dirPath,
-      per_page: 100 // 1回で100件取得
     });
 
-    const imagePaths = listFilesResponse.data.map(file => file.path);
-    
-    // 100ファイルずつgetContentする
-    const responses = [];
-    for(let i = 0; i < imagePaths.length; i+=100) {
-      const paths = imagePaths.slice(i, i+100);  
-      const res = await octokit.repos.getContent({
-        owner, 
-        repo,
-        paths  
-      })
-      responses.push(res);
-    }
-
-    // 結果をまとめる 
-    let images = [];
-    responses.forEach(res => {
-      images = images.concat(res.data.map(d => d.content));  
-    });
-
-    res.status(200).json({images});
+    const content = response.data.content;
+    res.status(200).json({image: content});
 
   } catch (error) {
     console.error('Error:', error);

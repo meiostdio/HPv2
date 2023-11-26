@@ -33,20 +33,14 @@ export async function getImage(directoryName, fileName){
 }
 
 // 記事リストに追加するサムネを一括で取得する
-export async function getThumbnails(){
+export async function getThumbnails(title){
+    const imageName = title;
     try{
-        const response = await fetch('/api/getThumbnails');
+        const response = await fetch(`/api/getThumbnails?imageName=${imageName}`);
+        console.log(response);
         const data = await response.json();
-        // JSONオブジェクトに変換
-        const imagesJson = images.map(imgBase64 => {
-        // ファイル名を取得  
-        const fileName = imgBase64.split(';')[1].split('=')[1];
-        return {
-        name: fileName,
-        data: imgBase64
-        };
-  
-  });
+        const imageBase64 = data.images;
+        return imageBase64
     } catch (error) {
         console.error('サムネ取得エラー:',error.message);
         return null
