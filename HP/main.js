@@ -19,7 +19,7 @@ window.onload = async function() {
       let title = article.title;
       let date = article.date;
       let tag = article.tag;
-      const thumbail = await getThumbnails(encodeURI(title));
+      const thumbail = await getThumbnails(articleNo);
       console.log(thumbail);
       let articleDiv = document.createElement('div');
       articleDiv.innerHTML = `
