@@ -33,8 +33,8 @@ export async function getImage(directoryName, fileName){
 }
 
 // 記事リストに追加するサムネを一括で取得する
-export async function getThumbnails(title){
-    const imageName = title;
+export async function getThumbnails(thumb){
+    const imageName = thumb;
     try{
         const response = await fetch(`/api/getThumbnails?imageName=${imageName}`);
         console.log(response);

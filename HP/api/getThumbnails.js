@@ -4,7 +4,6 @@ module.exports = async (req, res) => {
   const imageName = req.query.imageName;
   console.log(imageName);
   const dirPath = `images/thumbnails/${imageName}`;
-  console.log(dirPath);
   const owner = 'meiostdio';
   const repo = 'HPv2';  
 
@@ -27,5 +26,5 @@ module.exports = async (req, res) => {
   } catch (error) {
     console.error('Error:', error);
     res.status(500).send({error: 'Internal Server Error'}); 
-  }  
+  }
 }
