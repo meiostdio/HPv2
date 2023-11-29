@@ -30,13 +30,14 @@ window.onload = async function() {
       let articleDiv = document.createElement('list');
       // サムネ以外の情報を追加
       articleDiv.innerHTML = `
-        <a class="article" href="/articleViewer.html?id=${articleNo}">
-          <h1>${title}</h1>
-          <p>投稿日: ${date}</p>
-          <p>タグ: ${tag.join(', ')}</p>
-          <img class="thumbnail" src="data:image/;base64,${thumbnailDataBase64}">
-          <hr />
-        </a>
+        <div class="contents">
+          <a class="article" href="/articleViewer.html?id=${articleNo}">
+            <img class="thumbnail" src="data:image/;base64,${thumbnailDataBase64}">
+            <h1>${title}</h1>
+            <p>投稿日: ${date}</p>
+            <p>タグ: ${tag.join(', ')}</p>
+          </a>
+        </div>
         `; // 各記事の間に区切り線を追加
 
       main.appendChild(articleDiv);
