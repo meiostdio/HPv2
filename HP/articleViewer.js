@@ -38,6 +38,14 @@ window.onload = async function() {
     formattedData.section.forEach(async (sec) => {
         const type = sec.type;
         const value = sec.value;
+        let url;
+        if (sec.url){
+            url = sec.url;
+            console.log('link');
+            console.log('value:', value);
+            console.log('url :', url);
+        }
+        
         const sectionDev = document.createElement('dev');
         if(type == "subtitle"){
             sectionDev.innerHTML = `
@@ -60,6 +68,11 @@ window.onload = async function() {
         } else if(type == "reference"){
             sectionDev.innerHTML = `
                 <p>${value}</p>
+            `;
+        } else if(type == "link"){
+            console.log('type link!');
+            sectionDev.innerHTML = `
+                <a href=${url} target="_blank">${value}</a>
             `;
         }
         main.appendChild(sectionDev);
