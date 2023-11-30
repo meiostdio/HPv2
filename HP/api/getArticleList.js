@@ -11,55 +11,43 @@ const graphQLClient = new GraphQLClient(endpoint, {
 })
 
 const query = gql`
-    query {
-        repository(owner: "meiostdio", name:"HPv2") {
-        articleJson: object(expression: "main:articles/artList.json") {
-            ... on Blob {
-            text
-            }
+  query {
+    repository(owner: "meiostdio", name: "HPv2") {
+      articleJson: object(expression: "main:articles/artList.json") {
+        ... on Blob {
+          text
         }
-        thumbnailImages: object(expression: "main:images/thumbnails/") {
-            ... on Tree {
+      }
+      thumbnailImages: object(expression: "main:images/thumbnails") {
+        ... on Tree {
             entries {
                 name
                 object {
-                ... on Blob {
-                    byteSize
-                    restContent: object(expression: "main:images/thumbnails/"${name}) {
-                        ... on Blob {
-                            text
-                        }
+                    ... on Blob {
+                        text
                     }
                 }
-                }
-            }
             }
         }
-        }
+      }
     }
-  `;
+  }
+`;
 
     const data = await graphQLClient.request(query);
 
     const jsonText = data.repository.articleJson.text;
-    const jsonData = JSON.parse(jsonText);
+    const articleListData = JSON.parse(jsonText);
 
-    const images = [];
+    const images = {};
     data.repository.thumbnailImages.entries.forEach(entry => {
-    if (entry.object && entry.object.text !== null) {
-        images.push(entry.object.text);
-    } else {
-        console.warn('Skipping null or undefined entry:', entry);
-    }
-    images.push(entry.object.downloadUrl);
-    });
+        images[entry.name] = entry.object.text; 
+      });
 
-
-    console.log('thumbnails :', images);
     res.status(200).json({
         data: {
         articles: {
-            items: jsonData  
+            items: articleListData 
         },
         images: {
             items: images

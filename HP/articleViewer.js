@@ -3,7 +3,6 @@ import { getImage } from "./GithubData.js";
 let urlParams = new URLSearchParams(window.location.search);
 let articleId = urlParams.get('id');
 window.onload = async function() {
-    console.log(articleId);
     let artData;
     try {
         const response = await fetch(`/api/getArticle?id=${articleId}`);
@@ -18,7 +17,6 @@ window.onload = async function() {
     let utf8Decoder = new TextDecoder('utf-8');
     decodedData = utf8Decoder.decode(new Uint8Array(decodedData.split('').map(c => c.charCodeAt(0))));
     let formattedData = JSON.parse(decodedData);
-    console.log(formattedData);
 
     // 表示領域を取得しローディング表示を削除
     let main = document.getElementById('main');
@@ -39,11 +37,10 @@ window.onload = async function() {
         const type = sec.type;
         const value = sec.value;
         let url;
+
+        // URLがある場合、変数に格納
         if (sec.url){
             url = sec.url;
-            console.log('link');
-            console.log('value:', value);
-            console.log('url :', url);
         }
         
         const sectionDev = document.createElement('dev');
@@ -70,7 +67,6 @@ window.onload = async function() {
                 <p>${value}</p>
             `;
         } else if(type == "link"){
-            console.log('type link!');
             sectionDev.innerHTML = `
                 <a href=${url} target="_blank">${value}</a>
             `;

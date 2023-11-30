@@ -1,22 +1,3 @@
-// サーバーから記事のリストを受け取りデコード、パースする
-export async function getArtList(){
-    try {
-        const response = await fetch("/api/getArtList");
-        const data = await response.json();
-        const list = data.content;
-
-        //デコード、パース
-        let decodedData = atob(list);
-        let utf8Decoder = new TextDecoder('utf-8');
-        decodedData = utf8Decoder.decode(new Uint8Array(decodedData.split('').map(c => c.charCodeAt(0))));
-        let formattedData = JSON.parse(decodedData);
-        return formattedData
-    } catch (error) {
-        console.error('データの取得エラー:', error.message);
-        return null;
-    }
-}
-
 // 記事に使用する画像を取得する
 export async function getImage(directoryName, fileName){
     const dirName = directoryName;
@@ -32,21 +13,7 @@ export async function getImage(directoryName, fileName){
     }
 }
 
-// 記事リストに追加するサムネを一括で取得する
-export async function getThumbnails(thumb){
-    const imageName = thumb;
-    try{
-        const response = await fetch(`/api/getThumbnails?imageName=${imageName}`);
-        const data = await response.json();
-        const imageBase64 = data.image;
-        return imageBase64
-    } catch (error) {
-        console.error('サムネ取得エラー:',error.message);
-        return null
-    }
-}
-
-// GraphQLを使用してartList.jsonを取得する
+// GraphQLを使用して記事リスト、サムネを一括取得する
 export async function getArticleList(){
     try{
         const response = await fetch('/api/getArticleList');
