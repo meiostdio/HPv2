@@ -45,3 +45,16 @@ export async function getThumbnails(thumb){
         return null
     }
 }
+
+// GraphQLを使用してartList.jsonを取得する
+export async function getArticleList(){
+    try{
+        const response = await fetch('/api/getArticleList');
+        const data = await response.json();
+        console.log('記事リスト:', data);
+        return data
+    } catch (error) {
+        console.error('記事リスト取得エラー(GraphQL): ', error);
+        return null
+    }
+}

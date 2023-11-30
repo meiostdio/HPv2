@@ -1,10 +1,13 @@
-import { getArtList } from "./GithubData.js";
+import { getArtList, getArticleList } from "./GithubData.js";
 import { getThumbnails } from "./GithubData.js";
 
 // ページ読み込み完了後に行う処理
 // 記事のリストを読み込む関数を実行
 window.onload = async function() {
   try {
+    const articleList = await getArticleList();
+
+
     const artList = await getArtList();
     let main = document.getElementById("main");
     // ローディング表示を削除
@@ -29,6 +32,7 @@ window.onload = async function() {
       // サムネ以外のDOM要素を作成
       let articleDiv = document.createElement('list');
       // サムネ以外の情報を追加
+      console.log(thumbnailDataBase64);
       articleDiv.innerHTML = `
         <a class="article" href="/articleViewer.html?id=${articleNo}">
           <h1>${title}</h1>
