@@ -87,28 +87,38 @@ main {
 
 /* 記事タイトル */
 main h2 {
-    font-size: 46px;
+    font-size: 32px;
+    margin: 30px 0 30px 0;
+    text-align: center;
 }
 
 /* 記事の画像 */
 main img {
-    max-width: 100%;
+    width: 80%;
+    margin: 20px 10%;
+    box-sizing: border-box;
+    border: solid #ccc 1px;
 }
 
 /* タグ、投稿日時 */
 p.date, p.tag{
-    color: #696969;
+    color: #617b7c;
+}
+p.date{
+    text-align: right;
+    padding-right: 30px;
 }
 p.tag{
-    margin-top: 20px;
-    margin-bottom: 40px;
+    text-align: right;
+    padding-right: 30px;
 }
 
 .src {
+    width: 80%;
+    margin: 20px 10%;
     background-color: #012a35;
     color: #8c939f;
     overflow: auto;
-    margin-bottom: 40px;
 }
 
 .src::-webkit-scrollbar {
@@ -117,7 +127,7 @@ p.tag{
 
 .src::-webkit-scrollbar-thumb {
     border-radius: 10px;
-    background: #5EC289;
+    background: #A4E0D1;
 }
 
 .src::-webkit-scrollbar-track {
@@ -130,12 +140,14 @@ p.tag{
     width: 180px;
     background-size: cover;
     float: left;
-    margin: 10px;
+    margin: 10px 20px 10px 10px;
 }
 
 .article h1{
     padding-top: 10px;
     font-size: 30px;
+    padding-right: 3%;
+    width: 97%;
 }
 .article p{
     padding-top: 5px;
@@ -235,19 +247,24 @@ form{
 
 footer{
     width: 100%;
-    background-color: #5EC289;
+    height: 60px;
+    background-color: #A4E0D1;
     color: #fff;
     text-align: center;
-    padding: 20px 0;
-    bottom: 0;
-    display: none;
+    padding: 0 0;
+    display: block;
+    float: left;
+    margin-top: 40px;
+}
+footer p{
+    margin-top: 18px;
 }
 
 .three-quarter-spinner {
     margin: 0 auto;
     width: 100px;
     height: 100px;
-    border: 3px solid #5EC289;
+    border: 3px solid #A4E0D1;
     border-top: 3px solid transparent;
     border-radius: 50%;
     animation: spin .5s linear 0s infinite;
@@ -260,4 +277,31 @@ footer{
     to{
         transform: rotate(359deg);
     }
+}
+
+/*articleViewer*/
+
+#article_main main{
+    margin-top: 60px;
+    background-color: #ffffff;
+    padding-bottom: 100px;
+    color: #012a35;
+    margin-bottom: 20px;
+}
+#article_main p{
+    margin: 10px 5%;
+    width: 90%;
+}
+#article_main h3{
+    background-color: #ffffff;
+    color: #012a35;
+    margin: 50px 0 25px 5%;
+    width: 95%;
+    text-align: left;
+}
+#article_main a:link, a:visited, a:hover, a:active{
+    margin: 10px 5%;
+    width: 90%;
+    color: #A4E0D1;
+    text-decoration: underline;
 }

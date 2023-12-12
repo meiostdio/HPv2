@@ -27,8 +27,8 @@ window.onload = async function() {
     const tag = formattedData.tag;
     const date = formattedData.date;
     main.innerHTML = `
-        <p class="date">作成日時:${date}<p>
         <h2 class="articleTitle">${title}</h2>
+        <p class="date">作成日時：${date}<p>
         <p class="tag">${tag}</p>
     `;
 
