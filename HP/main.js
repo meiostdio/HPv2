@@ -1,5 +1,5 @@
 import { getArticleList } from "./GithubData.js";
-import { login } from "./auth.js";
+import { getUser } from "./auth.js";
 
 // ページ読み込み完了後に行う処理
 // 記事のリストを読み込む関数を実行
@@ -42,12 +42,15 @@ window.onload = async function() {
   } catch (error) {
     console.error("Error fetching or processing data:", error);
   }
+
 };
 
 // ログインボタンにリスナーを設定
 const loginBtn = document.getElementById('login').querySelector('button');
-loginBtn.addEventListener('click', auth);
+loginBtn.addEventListener('click', login);
 
-function auth(){
-  login();
+// auth.jsでログイン機能を呼び出す
+function login(){
+  console.log('main.js login');
+  getUser();
 }
