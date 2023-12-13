@@ -27,8 +27,7 @@ window.onload = async function() {
       let articleDiv = document .createElement('list');
       articleDiv.innerHTML = `
         <div class="contents">
-          <a class="article" href="/articleViewer.html?id=article${articleNo}">
-            <img class="thumbnail" src="${thumbImageBase64}">
+            <a class="article" href="/articleViewer.html?id=article${articleNo}">        <img class="thumbnail" src="${thumbImageBase64}">
             <h1>${title}</h1>
             <p>投稿日: ${date}</p>
             <p>タグ: ${tag}</p>

@@ -6,7 +6,9 @@ async function getAuth0Client(){
         domain: 'mieiostdio.jp.auth0.com',
         client_id: '3NKELeme13IvWgricfnixqOjIzt23KD5',
         redirect_uri: 'http://localhost:3000',
+        debug: true,
     });
+    console.log(auth0Client);
     return auth0Client
 }
 
@@ -15,7 +17,9 @@ async function getAuth0Client(){
 async function getUser(){
     console.log('auth.js getUser()');
     const auth0Client = await getAuth0Client();
-    auth0Client.loginWithPopup();
+    auth0Client.loginWithRedirect({
+        redirect_uri: window.location.origin
+      });
 }
 
 // 関数をエクスポート
