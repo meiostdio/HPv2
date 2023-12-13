@@ -4,11 +4,12 @@ async function getAuth0Client(){
     console.log('getAuth0Client');
     const auth0Client = await auth0.createAuth0Client({
         domain: 'mieiostdio.jp.auth0.com',
-        client_id: '3NKELeme13IvWgricfnixqOjIzt23KD5',
+        clientId: '3NKELeme13IvWgricfnixqOjIzt23KD5',
         redirect_uri: 'http://localhost:3000',
-        debug: true,
     });
     console.log(auth0Client);
+    const is = await auth0Client.isAuthenticated();
+    console.log(is);
     return auth0Client
 }
 
@@ -17,7 +18,7 @@ async function getAuth0Client(){
 async function getUser(){
     console.log('auth.js getUser()');
     const auth0Client = await getAuth0Client();
-    auth0Client.loginWithRedirect({
+    auth0Client.loginWithPopup({
         redirect_uri: window.location.origin
       });
 }
