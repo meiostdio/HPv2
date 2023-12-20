@@ -3,8 +3,7 @@
 async function getAuth0Client(){
     const auth0Client = await auth0.createAuth0Client({
         domain: 'mieiostdio.jp.auth0.com',
-        clientId: '3NKELeme13IvWgricfnixqOjIzt23KD5',
-        redirect_uri: 'http://localhost:3000',
+        clientId: '3NKELeme13IvWgricfnixqOjIzt23KD5'
     });
     console.log(auth0Client);
     const is = await auth0Client.isAuthenticated();
@@ -17,7 +16,9 @@ async function getAuth0Client(){
 async function getUser(){
     const auth0Client = await getAuth0Client();
     auth0Client.loginWithRedirect({
-        redirect_uri: 'http://localhost:3000'
+        authorizationParams: {
+            redirect_uri: window.location.origin
+          }
     });
     // ユーザー情報を取得する
     const user = await auth0.getUser();
