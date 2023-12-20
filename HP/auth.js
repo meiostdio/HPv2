@@ -5,9 +5,6 @@ async function getAuth0Client(){
         domain: 'mieiostdio.jp.auth0.com',
         clientId: '3NKELeme13IvWgricfnixqOjIzt23KD5'
     });
-    console.log(auth0Client);
-    const is = await auth0Client.isAuthenticated();
-    console.log(is);
     return auth0Client
 }
 
@@ -21,9 +18,11 @@ async function getUser(){
           }
     });
     // ユーザー情報を取得する
-    const user = await auth0.getUser();
+    const user = await auth0Client.getUser();
     console.log(user);
 }
+
+
 
 // 関数をエクスポート
 export { getUser };

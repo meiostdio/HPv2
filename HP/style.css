@@ -5,10 +5,7 @@
     margin: 0;
     padding: 0;
     font-family: 'Noto Sans JP', sans-serif;
-    text-decoration: none;
-}
-
-html {
+    /* text-decoration: none; */
 }
 
 body {
@@ -29,14 +26,78 @@ header {
     height: 60px;
     padding: 10px;
     width: 100%;
+    display: flex;
 }
 
+/* ログインボタン */
+.loginBtn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 15px;
+    gap: 15px;
+    background-color: #007ACC;
+    outline: 3px #007ACC solid;
+    outline-offset: -3px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    transition: 400ms;
+}
+
+/* ログインボタン内のテキスト */
+.loginBtn .BtnText {
+    color: white;
+    font-weight: 700;
+    font-size: 1em;
+    transition: 400ms;
+}
+
+/* ログインボタンホバー時 */
+.loginBtn:hover {
+    background-color: transparent;
+}
+.loginBtn:hover .BtnText {
+    color: #007ACC;
+}
+
+/* 記事投稿ボタン */
+.postBtn {
+    padding: 10px 15px;
+    gap: 15px;
+    background-color: #007ACC;
+    outline: 3px #007ACC solid;
+    outline-offset: -3px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    transition: 400ms;
+}
+
+.postBtn .BtnText{
+    color: white;
+    font-weight: 700;
+    font-size: 1em;
+    transition: 400ms;
+}
+
+/* 記事投稿ボタンホバー時 */
+.postBtn:hover {
+    background-color: transparent;
+}
+.postBtn:hover .BtnText {
+    color: #007ACC;
+}
+
+
+/* ヘッダーロゴ */
 .logo {
     width: 100px;
-    flex-grow: 1;
-    display: none;
+    border-radius: 5px;
+    background-color: #ccc;
 }
 
+/* ヘッダータイトル */
 .title {
     margin: -3px 0;
     height: 40px;
@@ -44,10 +105,15 @@ header {
     color: #ffffff;
     text-align: center;
     vertical-align: middle;
+    flex-grow: 1;
 }
 
 .title a {
     text-decoration: none;
+}
+
+.title:hover a {
+    color: #ccc;
 }
 
 .title a:visited {
