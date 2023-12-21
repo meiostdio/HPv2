@@ -1,9 +1,24 @@
 import { getArticleList } from "./GithubData.js";
-import { getUser } from "./auth.js";
+import { loginWithAuth0,getUser,getAuth0Client } from "./auth.js";
 
 // ページ読み込み完了後に行う処理
 // 記事のリストを読み込む関数を実行
 window.onload = async function() {
+
+  // URLを取得して末尾にパラメータが格納されているか確認
+  // パラメータがある場合はログインできている
+  const query = window.location.search;
+  const shouldParseResult = query.includes("code=") && query.includes("state=");
+  if (shouldParseResult) {
+    console.log('Login!');
+    let auth0Client = await getAuth0Client();
+    // セッションを確立
+    await auth0Client.handleRedirectCallback();
+    // ユーザー情報を取得
+    const user = await getUser(auth0Client);
+    console.log(user);
+  }
+
   try {
     // 記事リストを取得
     const articleList = await getArticleList();
@@ -49,8 +64,7 @@ window.onload = async function() {
 const loginBtn = document.getElementById('login').querySelector('button');
 loginBtn.addEventListener('click', login);
 
-// auth.jsでログイン機能を呼び出す
-function login(){
-  console.log('main.js login');
-  getUser();
+// auth.jsからログイン機能を呼び出す
+async function login(){
+  await loginWithAuth0();
 }

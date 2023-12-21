@@ -8,21 +8,31 @@ async function getAuth0Client(){
     return auth0Client
 }
 
-// main.jsから呼び出される関数
-// ログインボタンが押されたら呼び出される
-async function getUser(){
+// ログイン画面を開きAuth0認証機能を呼び出す
+async function loginWithAuth0(){
     const auth0Client = await getAuth0Client();
-    auth0Client.loginWithRedirect({
+    await auth0Client.loginWithRedirect({
         authorizationParams: {
             redirect_uri: window.location.origin
           }
     });
-    // ユーザー情報を取得する
-    const user = await auth0Client.getUser();
-    console.log(user);
 }
 
+async function getUser(client){
+    const auth0Client = client;
+  
+    // まずは認証済みかチェック
+    const isAuthenticated = await auth0Client.isAuthenticated();
+  
+    // 認証済みの場合のみgetUserを呼び出す
+    if(isAuthenticated){
+      const user = await auth0Client.getUser(); 
+      return user;
+    }
+  
+    return null;
+  }
 
 
 // 関数をエクスポート
-export { getUser };
+export { getUser,loginWithAuth0,getAuth0Client };
