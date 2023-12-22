@@ -29,6 +29,16 @@ header {
     display: flex;
 }
 
+/* ログイン時アイコン */
+.userIcon {
+    display: none;
+    border-radius: 5px;
+    object-fit: cover;
+    height: 100%;
+    width: 100;
+    cursor: pointer;
+}
+
 /* ログインボタン */
 .loginBtn {
     display: flex;

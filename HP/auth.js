@@ -29,7 +29,6 @@ async function getUser(client){
       const user = await auth0Client.getUser(); 
       return user;
     }
-  
     return null;
   }
 

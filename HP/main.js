@@ -5,6 +5,9 @@ import { loginWithAuth0,getUser,getAuth0Client } from "./auth.js";
 // 記事のリストを読み込む関数を実行
 window.onload = async function() {
 
+  // ユーザー情報を格納する
+  let user;
+
   // URLを取得して末尾にパラメータが格納されているか確認
   // パラメータがある場合はログインできている
   const query = window.location.search;
@@ -15,8 +18,18 @@ window.onload = async function() {
     // セッションを確立
     await auth0Client.handleRedirectCallback();
     // ユーザー情報を取得
-    const user = await getUser(auth0Client);
+    user = await getUser(auth0Client);
     console.log(user);
+  }
+
+  // ユーザー情報が取得できている場合、ログインボタンをアイコンに変更
+  if (user) {
+    const loginBtn = document.getElementById('login');
+    const userIcon = document.getElementById('userIcon');
+
+    loginBtn.style.display = "none";
+    userIcon.style.display = "block";
+    userIcon.src = user.picture;
   }
 
   try {
