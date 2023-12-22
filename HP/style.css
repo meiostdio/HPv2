@@ -71,6 +71,41 @@ header {
     color: #007ACC;
 }
 
+/* プロフィール等サブメニュー */
+.subMenu {
+    display: none;
+    position: absolute;
+    top: 60px;
+    right: 100px;
+    width: 200px;
+    background-color: #007ACC;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px 5px 5px 10px;
+}
+
+.subMenu ul {
+    list-style: none;
+    border-radius: 5px;
+}
+
+.subMenu p {
+    color: #f5f5f5;
+}
+
+.subMenu li img {
+    vertical-align: top;
+}
+
+.subMenu li{
+    margin-bottom: 5px;
+    cursor: pointer;
+}
+
+.subMenu li:hover {
+    background-color: #617b7c;
+}
+
 /* 記事投稿ボタン */
 .postBtn {
     padding: 10px 15px;

@@ -81,3 +81,15 @@ loginBtn.addEventListener('click', login);
 async function login(){
   await loginWithAuth0();
 }
+
+// ユーザーアイコンにリスナーを設定
+const userIcon = document.getElementById('userIcon').addEventListener('click', subMenu);
+const subMenu = document.getElementById('subMenu');
+function subMenu(){
+  if (subMenu.style.display === "none"){
+    subMenu.style.display = "block";
+  } else {
+    subMenu.style.display = "none";
+  }
+
+}
