@@ -84,8 +84,8 @@ async function login(){
 
 // ユーザーアイコンにリスナーを設定
 const userIcon = document.getElementById('userIcon').addEventListener('click', subMenu);
-const subMenu = document.getElementById('subMenu');
 function subMenu(){
+  const subMenu = document.getElementById('subMenu');
   if (subMenu.style.display === "none"){
     subMenu.style.display = "block";
   } else {
