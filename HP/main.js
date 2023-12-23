@@ -1,5 +1,8 @@
 import { getArticleList } from "./GithubData.js";
-import { loginWithAuth0,getUser,getAuth0Client } from "./auth.js";
+import { loginWithAuth0,getUser,getAuth0Client,logout } from "./auth.js";
+
+
+let auth0Client;
 
 // ページ読み込み完了後に行う処理
 // 記事のリストを読み込む関数を実行
@@ -7,14 +10,13 @@ window.onload = async function() {
 
   // ユーザー情報を格納する
   let user;
+  auth0Client = await getAuth0Client();
 
   // URLを取得して末尾にパラメータが格納されているか確認
   // パラメータがある場合はログインできている
   const query = window.location.search;
   const shouldParseResult = query.includes("code=") && query.includes("state=");
   if (shouldParseResult) {
-    console.log('Login!');
-    let auth0Client = await getAuth0Client();
     // セッションを確立
     await auth0Client.handleRedirectCallback();
     // ユーザー情報を取得
@@ -79,7 +81,7 @@ loginBtn.addEventListener('click', login);
 
 // auth.jsからログイン機能を呼び出す
 async function login(){
-  await loginWithAuth0();
+  await loginWithAuth0(auth0Client);
 }
 
 // ユーザーアイコンにリスナーを設定
@@ -91,5 +93,10 @@ function subMenu(){
   } else {
     subMenu.style.display = "none";
   }
-
 }
+
+// ログアウト機能
+// サブメニュー、ユーザーアイコンの非表示、ログインボタンの再表示
+const logoutBtn = document.getElementById('logout').addEventListener('click', async function(){
+  await logout(auth0Client);
+});
