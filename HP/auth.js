@@ -1,22 +1,51 @@
 
 // Auth0のセットアップ
 async function getAuth0Client(){
-    console.log('getAuth0Client');
     const auth0Client = await auth0.createAuth0Client({
         domain: 'mieiostdio.jp.auth0.com',
-        client_id: '3NKELeme13IvWgricfnixqOjIzt23KD5',
-        redirect_uri: 'http://localhost:3000',
+        clientId: '3NKELeme13IvWgricfnixqOjIzt23KD5'
     });
     return auth0Client
 }
 
-// main.jsから呼び出される関数
-// ログインボタンが押されたら呼び出される
-async function getUser(){
-    console.log('auth.js getUser()');
-    const auth0Client = await getAuth0Client();
-    auth0Client.loginWithPopup();
+// ログイン画面を開きAuth0認証機能を呼び出す
+async function loginWithAuth0(client){
+    const auth0Client = client;
+    await auth0Client.loginWithRedirect({
+        authorizationParams: {
+            redirect_uri: window.location.origin
+          }
+    });
+}
+
+
+// ユーザー情報を取得してreturn
+async function getUser(client){
+    const auth0Client = client;
+  
+    // まずは認証済みかチェック
+    const isAuthenticated = await auth0Client.isAuthenticated();
+  
+    // 認証済みの場合のみgetUserを呼び出す
+    if(isAuthenticated){
+      const user = await auth0Client.getUser(); 
+      return user;
+    }
+    return null;
+}
+
+async function logout(client){
+  let auth0Client = client;
+  try {
+    await auth0Client.logout({
+      logoutParams: {
+        returnTo: window.location.origin
+      }
+    });
+  } catch (error) {
+    console.log('Logout faild: ', error);
+  }
 }
 
 // 関数をエクスポート
-export { getUser };
+export { getUser,loginWithAuth0,getAuth0Client,logout };

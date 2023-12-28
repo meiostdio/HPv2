@@ -28,6 +28,6 @@ module.exports = async (req, res) => {
     
     } catch (error) {
       console.error('エラー:', error.message);
-      res.status(500).send({ error: 'Internal Server Error' });
+      res.status(500).send({ error: 'Internal Server Error : Get article image faild' });
     }
    }

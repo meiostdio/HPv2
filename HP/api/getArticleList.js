@@ -55,5 +55,5 @@ const query = gql`
         }
     });
 
-    }
+}
 
