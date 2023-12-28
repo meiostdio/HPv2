@@ -1,0 +1,43 @@
+<!--スタイルはindex.htmlを継承しつつ変更してるので、ややこしいかもしれんけど一旦css二枚リンクさせてる-->
+<!--ここで表示されるコンテンツとはhtml要素であるべきか、jsonデータであるべきか-->
+<!--結局jsonデータになるなら、json-to-htmlのコードをインポートしてプレビューには変換後のhtmlを表示させたらかっこいいな-->
+
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <title>meiostdio</title>
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="style.css">
+    <script type="module" src="articlePost.js"></script>
+
+</head>
+
+<body>
+    <header>
+        <div class="logo">
+            <img src="" alt="ロゴ">
+        </div>
+        <div class="title">
+            <a href="../index.html">MEIOSTDIO</a>
+        </div>
+    </header>
+    <div id="draft">
+        <input name="" id="draft-title" value="記事タイトルを入力"></textarea>
+
+        <div id="draft-container">
+            draft-container
+        </div>
+        <div id="addElement">
+            <button id="addBtn">+</button>
+            <div id="comment">ボタンを押して要素を追加</div>
+        </div>
+
+    </div>
+    <footer>
+        <p>Supported by meiostdio</p>
+    </footer>
+</body>
+
+</html>

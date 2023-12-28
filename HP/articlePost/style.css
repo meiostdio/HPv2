@@ -1,0 +1,34 @@
+#draft {
+    background-color:darkorchid;
+    height: fit-content;
+    padding: 1vw;
+
+}
+
+#draft-title {
+    background-color: cadetblue;
+    margin: 1vw;
+}
+
+#draft-container {
+    background-color: hotpink;
+    width: fit-content;
+    height:fit-content;
+
+}
+
+#addElement {
+    background-color: aquamarine;
+    display: flex;
+
+}
+
+#addBtn {
+    background-color:gold;
+
+}
+
+#comment {
+    background-color: crimson;
+
+}
