@@ -1,7 +1,8 @@
+//ドラッグアンドドロップについては
+
 //addBtnで追加するinputはinput.classNameはjsonのtype、input.valueはjsonのvalueに対応する
-
-
-//メモ：createElementの記述のところ、なぜか一括でオプション設定できない
+//createElementの記述のところ、なぜか一括でオプション設定できない・・・
+//ドラッグ＆ドロップの参照　https://jp-seemore.com/web/4702/#toc5
 
 
 //もとになるjsonデータ
@@ -14,13 +15,14 @@ const draftData = {
 
 //ボタンと表示領域の取得
 const addBtn = document.getElementById('addBtn');
-let draftContainer = document.getElementById('draft-container');
-
+const draftContainer = document.getElementById('draft-container');
 
 //ボタンを押して、cell{grip, input} になる要素を追加
 addBtn.addEventListener('click', () => {
-    const cell = document.createElement('div')
+    const cell = document.createElement('div');
+    cell.className = 'cell';
     cell.draggable = 'true';
+    cell.style.cursor = 'move';
     cell.style.backgroundColor = 'tarquoise';
     cell.style.display = 'flex';
 
@@ -30,46 +32,33 @@ addBtn.addEventListener('click', () => {
     const input = document.createElement('input');
     input.className = 'content';
 
-    //ドラッグアンドドロップのときにはcell{dragArea, input}を作り直す必要がある
-
-
-    grip.addEventListener('dragstart', e => {
-        const draggedInputData = e.target.parentNode.querySelector('input');
-        e.dataTransfer.setData('text/plain', JSON.stringify({
-            className: draggedInputData.className,
-            value: draggedInputData.value
-        }))
-
-        e.preventDefault();
-    })
-
-    cell.addEventListener('drop', e => {
-        const dropInputData = JSON.parse(e.dataTransfer.getData('text/plain'));
-        const dropCell = document.createElement('div')
-        dropCell.draggable = 'true';
-        dropCell.style.backgroundColor = 'tarquoise';
-        dropCell.style.display = 'flex';
-
-        const dropGrip = document.createElement('div');
-        dropGrip.innerHTML = '#';
-
-        const dropInput = document.createElement('input');
-        dropInput.className = dropInputData.className;
-        dropInput.value = dropInputData.value;
-
-        e.target.insertAdjacentElement('beforebegin', replacedInput7);
-        e.preventDefault();
-    })
-
-
     draftContainer.appendChild(cell);
-    cell.append(grip, input)
+    cell.append(grip, input);
 
 });
 
+//ドラッグスタートとドラッグオーバーのイベントリスナーを設定
+let dragTarget;
 
+draftContainer.addEventListener('dragstart', e => {
+    dragTarget = e.target;
+});
 
+draftContainer.addEventListener('dragover', e => {
+    e.preventDefault();
 
+    //ドラッグ中の要素とドロップ先の要素が異なるかチェック
+    const dropTarget = e.target.closest('.cell');
+    if (!dropTarget || dropTarget === dragTarget) return;
 
+    //ドラッグオーバーが要素の上半分と下半分のどちらにかかっているかで
+    //ドラッグしている要素を上と下のどちらにドロップするのかを決定する
+    const rect = dropTarget.getBoundingClientRect();
+    const middleY = (rect.top + rect.bottom) / 2;
 
-
+    if (e.clientY < middleY) {
+        draftContainer.insertBefore(dragTarget, dropTarget);
+    } else {
+        draftContainer.insertBefore(dragTarget, dropTarget.nextSibling);
+    }
+});
