@@ -1,16 +1,35 @@
 import { getImage } from "./GithubData.js";
 import { fetchInclude } from "./main.js";
+import { checkAuthState } from "./auth.js";
 
 let urlParams = new URLSearchParams(window.location.search);
 let articleId = urlParams.get('id');
+let loginBtn;
+let userIcon;
 
 // DOM構築完了後に行う処理
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
     //ヘッダー、フッターを読み込んで表示
-    fetchInclude();
-  })
+    await fetchInclude();
+    let checkExist = setInterval(function() {
+        if (document.getElementById('login')) {
+          loginBtn = document.getElementById('login');
+          userIcon = document.getElementById('userIcon');
+          clearInterval(checkExist);
+        }
+    }, 50);  
+});
 
 window.onload = async function() {
+    // ユーザー情報を格納する
+    let user = await checkAuthState();
+    // ユーザー情報が取得できている場合、ログインボタンをアイコンに変更
+    if (user) {
+        loginBtn.style.display = "none";
+        userIcon.style.display = "block";
+        userIcon.src = user.picture;
+    }
+
     let artData;
     try {
         const response = await fetch(`/api/getArticle?id=${articleId}`);

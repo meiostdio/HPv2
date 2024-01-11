@@ -1,3 +1,4 @@
+let auth0Client = await getAuth0Client();
 
 // Auth0のセットアップ(初期状態)
 async function getAuth0Client(){
@@ -9,13 +10,15 @@ async function getAuth0Client(){
 }
 
 // ログイン画面を開きAuth0認証機能を呼び出す
-async function loginWithAuth0(client){
-    const auth0Client = client;
-    await auth0Client.loginWithRedirect({
-        authorizationParams: {
-            redirect_uri: window.location.origin
-          }
-    });
+async function loginWithAuth0(e){
+  const baseURI = e.target.baseURI;
+  console.log(baseURI);
+  console.log(window.location.origin)
+  await auth0Client.loginWithRedirect({
+      authorizationParams: {
+          redirect_uri: baseURI
+        }
+  });
 }
 
 // ユーザー情報を取得してreturn
@@ -31,9 +34,25 @@ async function getUser(client){
     return null;
 }
 
+async function checkAuthState() {
+  // URLを取得して末尾にパラメータが格納されているか確認
+  // パラメータがある場合はログインできている
+  const query = window.location.search;
+  const shouldParseResult = query.includes("code=") && query.includes("state=");
+  let user;
+  if (shouldParseResult) {
+    // セッションを確立
+    await auth0Client.handleRedirectCallback();
+    // ユーザー情報を取得
+    user = await getUser(auth0Client);
+    console.log(user);
+    return user
+  }
+  return null
+}
+
 // ログアウト
-async function logout(client){
-  let auth0Client = client;
+async function logout(){
   try {
     await auth0Client.logout({
       logoutParams: {
@@ -46,4 +65,4 @@ async function logout(client){
 }
 
 // 関数をエクスポート
-export { getUser,loginWithAuth0,getAuth0Client,logout };
+export { getUser,loginWithAuth0,getAuth0Client,logout,checkAuthState };

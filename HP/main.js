@@ -1,8 +1,6 @@
 import { getArticleList } from "./GithubData.js";
-import { loginWithAuth0,getUser,getAuth0Client,logout } from "./auth.js";
+import { loginWithAuth0,getUser,getAuth0Client,logout,checkAuthState } from "./auth.js";
 
-
-let auth0Client;
 let loginBtn;
 let userIcon;
 
@@ -13,22 +11,7 @@ window.onload = async function() {
   fetchInclude();
 
   // ユーザー情報を格納する
-  let user;
-  auth0Client = await getAuth0Client();
-
-  // URLを取得して末尾にパラメータが格納されているか確認
-  // パラメータがある場合はログインできている
-  const query = window.location.search;
-  const shouldParseResult = query.includes("code=") && query.includes("state=");
-  
-  if (shouldParseResult) {
-    // セッションを確立
-    await auth0Client.handleRedirectCallback();
-    // ユーザー情報を取得
-    user = await getUser(auth0Client);
-    console.log(user);
-  }
-
+  let user = await checkAuthState();
   // ユーザー情報が取得できている場合、ログインボタンをアイコンに変更
   if (user) {
     loginBtn.style.display = "none";
@@ -78,21 +61,20 @@ window.onload = async function() {
 };
 
 // auth.jsからログイン機能を呼び出す
-async function login(){
-  await loginWithAuth0(auth0Client);
+async function login(e){
+  await loginWithAuth0(e);
 }
 window.login = login;
 
 // ログアウト機能
 async function CallLogout(){
-  await logout(auth0Client);
+  await logout();
 };
 window.logout = CallLogout;
 
 // サブメニュー開閉
 function subMenu(){
   const subMenu = document.querySelector('.subMenu');
-  console.log(document.querySelector('.subMenu'));
   if (subMenu.style.display === "none"){
     subMenu.style.display = "block";
   } else {
@@ -102,7 +84,7 @@ function subMenu(){
 window.subMenu = subMenu;
 
 //　ヘッダー、フッター読み込み
-function fetchInclude(){
+export async function fetchInclude(){
   fetch('includes/header.html')
   .then((response) => response.text())
   .then((data) => document.querySelector('#header').innerHTML = data)
@@ -118,6 +100,7 @@ function fetchInclude(){
   });;
 }
 
+// DOM読み込み完了後にリスナーの設定
 window.addEventListener('DOMContentLoaded', async function() {
   let checkExist = setInterval(function() {
     if (document.getElementById('login')) {
