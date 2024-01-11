@@ -3,10 +3,14 @@ import { loginWithAuth0,getUser,getAuth0Client,logout } from "./auth.js";
 
 
 let auth0Client;
+let loginBtn;
+let userIcon;
 
 // ページ読み込み完了後に行う処理
 // 記事のリストを読み込む関数を実行
 window.onload = async function() {
+  //ヘッダー、フッターを読み込んで表示
+  fetchInclude();
 
   // ユーザー情報を格納する
   let user;
@@ -16,6 +20,7 @@ window.onload = async function() {
   // パラメータがある場合はログインできている
   const query = window.location.search;
   const shouldParseResult = query.includes("code=") && query.includes("state=");
+  
   if (shouldParseResult) {
     // セッションを確立
     await auth0Client.handleRedirectCallback();
@@ -26,9 +31,6 @@ window.onload = async function() {
 
   // ユーザー情報が取得できている場合、ログインボタンをアイコンに変更
   if (user) {
-    const loginBtn = document.getElementById('login');
-    const userIcon = document.getElementById('userIcon');
-
     loginBtn.style.display = "none";
     userIcon.style.display = "block";
     userIcon.src = user.picture;
@@ -75,28 +77,53 @@ window.onload = async function() {
 
 };
 
-// ログインボタンにリスナーを設定
-const loginBtn = document.getElementById('login').querySelector('button');
-loginBtn.addEventListener('click', login);
-
 // auth.jsからログイン機能を呼び出す
 async function login(){
   await loginWithAuth0(auth0Client);
 }
+window.login = login;
 
-// ユーザーアイコンにリスナーを設定
-const userIcon = document.getElementById('userIcon').addEventListener('click', subMenu);
+// ログアウト機能
+async function CallLogout(){
+  await logout(auth0Client);
+};
+window.logout = CallLogout;
+
+// サブメニュー開閉
 function subMenu(){
-  const subMenu = document.getElementById('subMenu');
+  const subMenu = document.querySelector('.subMenu');
+  console.log(document.querySelector('.subMenu'));
   if (subMenu.style.display === "none"){
     subMenu.style.display = "block";
   } else {
     subMenu.style.display = "none";
   }
 }
+window.subMenu = subMenu;
 
-// ログアウト機能
-// サブメニュー、ユーザーアイコンの非表示、ログインボタンの再表示
-const logoutBtn = document.getElementById('logout').addEventListener('click', async function(){
-  await logout(auth0Client);
-});
+//　ヘッダー、フッター読み込み
+function fetchInclude(){
+  fetch('includes/header.html')
+  .then((response) => response.text())
+  .then((data) => document.querySelector('#header').innerHTML = data)
+  .catch((error) => {
+    console.error('ヘッダーファイルの読み込みに失敗しました', error);
+  });
+
+  fetch('includes/footer.html')
+  .then((response) => response.text())
+  .then((data) => document.querySelector('#footer').innerHTML = data)
+  .catch((error) => {
+    console.error('フッターファイルの読み込みに失敗しました', error);
+  });;
+}
+
+window.addEventListener('DOMContentLoaded', async function() {
+  let checkExist = setInterval(function() {
+    if (document.getElementById('login')) {
+      loginBtn = document.getElementById('login');
+      userIcon = document.getElementById('userIcon');
+      clearInterval(checkExist);
+    }
+  }, 50);  
+})

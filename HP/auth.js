@@ -1,5 +1,5 @@
 
-// Auth0のセットアップ
+// Auth0のセットアップ(初期状態)
 async function getAuth0Client(){
     const auth0Client = await auth0.createAuth0Client({
         domain: 'mieiostdio.jp.auth0.com',
@@ -18,15 +18,12 @@ async function loginWithAuth0(client){
     });
 }
 
-
 // ユーザー情報を取得してreturn
 async function getUser(client){
     const auth0Client = client;
   
     // まずは認証済みかチェック
     const isAuthenticated = await auth0Client.isAuthenticated();
-  
-    // 認証済みの場合のみgetUserを呼び出す
     if(isAuthenticated){
       const user = await auth0Client.getUser(); 
       return user;
@@ -34,6 +31,7 @@ async function getUser(client){
     return null;
 }
 
+// ログアウト
 async function logout(client){
   let auth0Client = client;
   try {

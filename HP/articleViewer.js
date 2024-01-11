@@ -1,7 +1,15 @@
 import { getImage } from "./GithubData.js";
+import { fetchInclude } from "./main.js";
 
 let urlParams = new URLSearchParams(window.location.search);
 let articleId = urlParams.get('id');
+
+// DOM構築完了後に行う処理
+document.addEventListener('DOMContentLoaded', () => {
+    //ヘッダー、フッターを読み込んで表示
+    fetchInclude();
+  })
+
 window.onload = async function() {
     let artData;
     try {
