@@ -1,14 +1,16 @@
 import { getArticleList } from "./GithubData.js";
-import { loginWithAuth0,getUser,getAuth0Client,logout,checkAuthState } from "./auth.js";
+import { loginWithAuth0,logout,checkAuthState } from "./auth.js";
+import { findAnchorElementId,getArticle } from "./articleViewer.js";
 
 let loginBtn;
 let userIcon;
+let container = document.querySelector(".container");
 
 // ページ読み込み完了後に行う処理
 // 記事のリストを読み込む関数を実行
 window.onload = async function() {
   //ヘッダー、フッターを読み込んで表示
-  fetchInclude();
+  await fetchInclude();
 
   // ユーザー情報を格納する
   let user = await checkAuthState();
@@ -19,6 +21,15 @@ window.onload = async function() {
     userIcon.src = user.picture;
   }
 
+  // URLにidがある場合、記事本文を取得
+  const urlParams = new URLSearchParams(window.location.search);
+  const articleId = urlParams.get('id');
+  if(articleId) {
+    await showArticleContent(articleId);
+    return
+  }
+
+  // URLにidがない場合記事リストを表示
   try {
     // 記事リストを取得
     const articleList = await getArticleList();
@@ -42,7 +53,7 @@ window.onload = async function() {
       let articleDiv = document .createElement('list');
       articleDiv.innerHTML = `
         <div class="contents">
-            <a class="article" href="/articleViewer.html?id=article${articleNo}">       
+            <a class="article" id="article${articleNo}" onclick="showArticleContent(event)">       
             <img class="thumbnail" src="${thumbImageBase64}">
             <h1>${title}</h1>
             <p>投稿日: ${date}</p>
@@ -59,6 +70,30 @@ window.onload = async function() {
   }
 
 };
+
+// 記事クリックで本文を表示
+async function showArticleContent(e) {
+  let event;
+  let articleId;
+
+  if(typeof e === 'string'){
+    articleId = e;
+  } else {
+    event = e;
+    articleId = findAnchorElementId(event);
+  }
+
+  // URLの末尾にidを付与、リロードなし
+  const currentUrl = new URL(window.location.href);
+  currentUrl.searchParams.set('id', articleId);
+  window.history.pushState({}, '', currentUrl);
+
+  // 本文を取得して描画
+  const articleContent = await getArticle(articleId);
+  container.innerHTML = '';
+  container.appendChild(articleContent);
+}
+window.showArticleContent = showArticleContent;
 
 // auth.jsからログイン機能を呼び出す
 async function login(e){
@@ -85,6 +120,7 @@ window.subMenu = subMenu;
 
 //　ヘッダー、フッター読み込み
 export async function fetchInclude(){
+
   fetch('includes/header.html')
   .then((response) => response.text())
   .then((data) => document.querySelector('#header').innerHTML = data)

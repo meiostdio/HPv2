@@ -1,35 +1,23 @@
 import { getImage } from "./GithubData.js";
-import { fetchInclude } from "./main.js";
-import { checkAuthState } from "./auth.js";
 
-let urlParams = new URLSearchParams(window.location.search);
-let articleId = urlParams.get('id');
-let loginBtn;
-let userIcon;
+// let urlParams = new URLSearchParams(window.location.search);
 
-// DOM構築完了後に行う処理
-document.addEventListener('DOMContentLoaded', async () => {
-    //ヘッダー、フッターを読み込んで表示
-    await fetchInclude();
-    let checkExist = setInterval(function() {
-        if (document.getElementById('login')) {
-          loginBtn = document.getElementById('login');
-          userIcon = document.getElementById('userIcon');
-          clearInterval(checkExist);
-        }
-    }, 50);  
-});
+let article_main;
 
-window.onload = async function() {
-    // ユーザー情報を格納する
-    let user = await checkAuthState();
-    // ユーザー情報が取得できている場合、ログインボタンをアイコンに変更
-    if (user) {
-        loginBtn.style.display = "none";
-        userIcon.style.display = "block";
-        userIcon.src = user.picture;
+// 親要素のaタグのIdを取得する
+export function findAnchorElementId(e) {
+    let currentElement = e.target;
+    // 最初の <a> 要素を見つけるまで親要素をたどる
+    while (currentElement !== null && currentElement.tagName !== 'A') {
+        currentElement = currentElement.parentElement;
     }
+    return currentElement.id;
+}
 
+// Githubから記事本文を取得する
+export async function getArticle(id) {
+    let articleId = id;
+    console.log(articleId);
     let artData;
     try {
         const response = await fetch(`/api/getArticle?id=${articleId}`);
@@ -46,8 +34,10 @@ window.onload = async function() {
     let formattedData = JSON.parse(decodedData);
 
     // 表示領域を取得しローディング表示を削除
-    let main = document.getElementById('main');
-    main.innerHTML = '';
+    article_main = document.createElement('div');
+    article_main.id = 'article_main';
+    main = document.createElement('main');
+    main.id = 'main';
 
     // タイトル、タグ、日付を取得して表示
     const title = formattedData.title;
@@ -100,4 +90,6 @@ window.onload = async function() {
         }
         main.appendChild(sectionDev);
     });
+    article_main.appendChild(main);
+    return article_main
 };

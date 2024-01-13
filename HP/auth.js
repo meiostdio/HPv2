@@ -42,7 +42,9 @@ async function checkAuthState() {
   let user;
   if (shouldParseResult) {
     // セッションを確立
-    await auth0Client.handleRedirectCallback();
+    const redirectResult = await auth0Client.handleRedirectCallback();
+    setTokenToCookie(redirectResult);
+    console.log(JSON.stringify(redirectResult.access_token));
     // ユーザー情報を取得
     user = await getUser(auth0Client);
     console.log(user);
@@ -62,6 +64,27 @@ async function logout(){
   } catch (error) {
     console.log('Logout faild: ', error);
   }
+}
+
+// クッキーにトークンを保存
+async function setTokenToCookie(result) {
+  const redirectResult = result;
+  const accessToken = await auth0Client.getTokenSilently();
+  // 有効期限を1時間に制限
+  const expires = new Date(Date.now() + 21600000); 
+
+  document.cookie = `authToken=${accessToken}; 
+                  expires=${expires};
+                  httpOnly;
+                  Secure;
+                  SameSite=Strict`;
+
+  console.log(accessToken);
+}
+
+function getAuthTokenFromCookie() {
+  const tokenMatch = document.cookie.match(new RegExp('authToken=([^;]+)'));
+  return tokenMatch ? tokenMatch[1] : null; 
 }
 
 // 関数をエクスポート
