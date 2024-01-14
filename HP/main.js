@@ -1,6 +1,7 @@
 import { loginWithAuth0,logout,checkAuthState } from "./auth.js";
 import { findAnchorElementId,getArticleContentElement } from "./articleViewer.js";
 import { getArticleListElement } from "./articleIndex.js";
+import { saveWithExpire } from "./cache.js";
 
 let loginBtn;
 let userIcon;
@@ -36,6 +37,10 @@ window.onload = async function() {
   container.innerHTML = '';
   container.appendChild(articleListElement.card);
   container.appendChild(articleListElement.main);
+  saveWithExpire('element', container.innerHTML, 10);
+  const ele = localStorage.getItem('element');
+  const parsed = JSON.parse(ele)
+  console.log(parsed.jsonValue);
 };
 
 // 記事クリックで記事本文を表示
