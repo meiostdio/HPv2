@@ -3,7 +3,11 @@ export async function getImage(directoryName, fileName){
     const dirName = directoryName;
     const imageName = fileName;
     try {
-        const response = await fetch(`/api/getArticleImage?directoryName=${dirName}&fileName=${imageName}`);
+        const response = await fetch(`/api/getArticleImage?directoryName=${dirName}&fileName=${imageName}`, {
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        });
         const data = await response.json();
         const imageBase64 = data.image;
          return imageBase64
@@ -16,7 +20,11 @@ export async function getImage(directoryName, fileName){
 // GraphQLを使用して記事リスト、サムネを一括取得する
 export async function getArticleList(){
     try{
-        const response = await fetch('/api/getArticleList');
+        const response = await fetch('/api/getArticleList', {
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        });
         const data = await response.json();
         return data
     } catch (error) {

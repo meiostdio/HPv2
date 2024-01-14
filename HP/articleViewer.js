@@ -15,7 +15,7 @@ export function findAnchorElementId(e) {
 }
 
 // Githubから記事本文を取得する
-export async function getArticle(id) {
+export async function getArticleContentElement(id) {
     let articleId = id;
     console.log(articleId);
     let artData;
