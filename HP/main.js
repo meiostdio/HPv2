@@ -31,12 +31,14 @@ window.onload = async function() {
   }
 
   // URLにidがない場合記事リストを表示
-  const [card, main] = getArticleListElement();
-  console.log(JSON.stringify(card));
-  console.log(JSON.stringify(main));
+  const articleListElement = await getArticleListElement();
+  // ローディング表示を削除
+  container.innerHTML = '';
+  container.appendChild(articleListElement.card);
+  container.appendChild(articleListElement.main);
 };
 
-// 記事クリックで本文を表示
+// 記事クリックで記事本文を表示
 async function showArticleContent(e) {
   let event;
   let articleId;

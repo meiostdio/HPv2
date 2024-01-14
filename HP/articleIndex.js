@@ -1,7 +1,6 @@
-import { getArticleList } from "./GithubData";
+import { getArticleList } from "./GithubData.js";
 
 export async function getArticleListElement() {
-
     const card = document.createElement('div');
     card.id = 'leftcolumm-title';
     
@@ -9,12 +8,11 @@ export async function getArticleListElement() {
     pText.appendChild(document.createTextNode('新着記事'));
     card.appendChild(pText);
 
+    let main = document.createElement('main');
+    main.id = 'main';
     try {
         // 記事リストを取得
         const articleList = await getArticleList();
-
-        let main = document.createElement('main');
-        main.id = 'main';
 
         // 記事リストを投稿日順に表示するために逆順に変換
         const articleList_asc = Object.values(articleList.data.articles.items).reverse();
@@ -41,9 +39,9 @@ export async function getArticleListElement() {
         `;
         // main要素に記事を追加
         main.appendChild(articleDiv);
-
-        return [card, main]
+        
         })
+        return { card: card, main: main}
 
     } catch (error) {
         console.error("Error fetching or processing data:", error);
