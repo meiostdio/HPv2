@@ -1,4 +1,5 @@
 import { getImage } from "./GithubData.js";
+import { saveArticleImageWithExpire } from "./cache.js";
 
 // let urlParams = new URLSearchParams(window.location.search);
 
@@ -36,7 +37,7 @@ export async function getArticleContentElement(id) {
     // 表示領域を取得しローディング表示を削除
     article_main = document.createElement('div');
     article_main.id = 'article_main';
-    main = document.createElement('main');
+    let main = document.createElement('main');
     main.id = 'main';
 
     // タイトル、タグ、日付を取得して表示
@@ -72,8 +73,9 @@ export async function getArticleContentElement(id) {
         } else if(type == "image"){
             const img = document.createElement('img');
             main.appendChild(img);
-
             let image = await getImage(articleId, value);
+            // localStorageにbase64の画像データを格納
+            saveArticleImageWithExpire(articleId, value, image, 10);
             img.src = `data:image/;base64,${image}`;
         } else if(type == "code"){
             sectionDev.innerHTML = `

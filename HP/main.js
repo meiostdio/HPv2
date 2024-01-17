@@ -1,7 +1,7 @@
 import { loginWithAuth0,logout,checkAuthState } from "./auth.js";
 import { findAnchorElementId,getArticleContentElement } from "./articleViewer.js";
 import { getArticleListElement } from "./articleIndex.js";
-import { saveWithExpire } from "./cache.js";
+import { checkCachesExpire, saveContainerElementWithExpire } from "./cache.js";
 
 let loginBtn;
 let userIcon;
@@ -25,22 +25,30 @@ window.onload = async function() {
   // URLにidがある場合、記事本文を取得
   const urlParams = new URLSearchParams(window.location.search);
   const articleId = urlParams.get('id');
-  console.log(articleId);
   if(articleId) {
+    // キャッシュを確認
+    const isCacheValid = checkCachesExpire(false, articleId);
+    console.log("記事本文のキャッシュは" ,isCacheValid);
     await showArticleContent(articleId);
     return
-  }
+  } else {
 
-  // URLにidがない場合記事リストを表示
-  const articleListElement = await getArticleListElement();
-  // ローディング表示を削除
-  container.innerHTML = '';
-  container.appendChild(articleListElement.card);
-  container.appendChild(articleListElement.main);
-  saveWithExpire('element', container.innerHTML, 10);
-  const ele = localStorage.getItem('element');
-  const parsed = JSON.parse(ele)
-  console.log(parsed.jsonValue);
+    // URLにidがない場合記事リストを表示
+    const articleListElement = await getArticleListElement();
+    const isCacheValid = checkCachesExpire(true);
+    console.log("記事リストのキャッシュは", isCacheValid);
+
+    // ローディング表示を削除
+    container.innerHTML = '';
+    container.appendChild(articleListElement.card);
+    container.appendChild(articleListElement.main);
+
+    saveContainerElementWithExpire('element', container, 10);
+    const ele = localStorage.getItem('element');
+    const parsed = JSON.parse(ele);
+    container.innerHTML = parsed.containerHTML;
+  }
+  
 };
 
 // 記事クリックで記事本文を表示

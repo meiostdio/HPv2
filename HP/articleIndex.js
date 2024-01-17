@@ -1,4 +1,5 @@
 import { getArticleList } from "./GithubData.js";
+import { saveThumbImageWithExpire } from "./cache.js";
 
 export async function getArticleListElement() {
     const card = document.createElement('div');
@@ -24,6 +25,9 @@ export async function getArticleListElement() {
         const date = article.date;
         const tag = article.tag;
         const thumbImageBase64 = articleList.data.images.items[`article${articleNo}.txt`];
+        
+        // localStorageに画像データを格納
+        saveThumbImageWithExpire(articleNo, thumbImageBase64, 10);
 
         // 追加する記事のHTMLを作成
         let articleDiv = document .createElement('list');
