@@ -1,4 +1,4 @@
-// コンテナ要素保存用メソッド  
+// 記事リストコンテナ要素保存用メソッド  
 export function saveContainerElementWithExpire (key, container, expirationInMinutes) {
 
   // 期限を計算
@@ -71,10 +71,10 @@ export function getWithExpire(key) {
 }
 
 // 表示するページのデータが格納されているか確認する
-export function checkCachesExpire(isIndex, key) {
+export function checkCachesExpire(isList, key) {
   let item;
   // 記事リストか記事本文中の画像かチェック
-  if(isIndex) {
+  if(isList) {
     // 記事リストの場合keyが1から20までキャッシュにアクセスしていく
     // 途中で期限切れがある場合中断してfalse
     // エラーが出るまで繰り返しが出来た場合はtrue
@@ -94,4 +94,24 @@ export function checkCachesExpire(isIndex, key) {
     }
   }
   return true;
+}
+
+export function getCache(isList, key){
+  // 記事リストの場合は記事リストの要素とサムネを全て取得してreturn
+  if(isList) {
+    const listElement = JSON.parse(localStorage.getItem('articleList'));
+    let thumbBase64 = {};
+    for(let i = 1; i <= 10; i ++) {
+      let item = JSON.parse(localStorage.getItem(i));
+      thumbBase64[i] = item.imageBase64;
+    } 
+    const item = {
+      listElement,
+      thumbBase64
+    };
+    return item
+  } else {
+    // 記事リストではない、本文の場合は本文のコンテナ要素と記事内画像を取得してreturn
+
+  }
 }

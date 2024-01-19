@@ -1,7 +1,7 @@
 import { loginWithAuth0,logout,checkAuthState } from "./auth.js";
 import { findAnchorElementId,getArticleContentElement } from "./articleViewer.js";
 import { getArticleListElement } from "./articleIndex.js";
-import { checkCachesExpire, saveContainerElementWithExpire } from "./cache.js";
+import { checkCachesExpire, getCache, saveContainerElementWithExpire } from "./cache.js";
 
 let loginBtn;
 let userIcon;
@@ -31,22 +31,38 @@ window.onload = async function() {
     console.log("記事本文のキャッシュは" ,isCacheValid);
     await showArticleContent(articleId);
     return
+
   } else {
-
     // URLにidがない場合記事リストを表示
-    const articleListElement = await getArticleListElement();
-    const isCacheValid = checkCachesExpire(true);
-    console.log("記事リストのキャッシュは", isCacheValid);
+    
+    // 有効期限のキャッシュがあるかどうか確認
+    if(checkCachesExpire(true)){
+      console.log("記事リストのキャッシュは", true);
 
-    // ローディング表示を削除
-    container.innerHTML = '';
-    container.appendChild(articleListElement.card);
-    container.appendChild(articleListElement.main);
+      // 記事リスト要素、サムネを取得
+      const item = getCache(true);
+      container.innerHTML = item.listElement.containerHTML;
 
-    saveContainerElementWithExpire('element', container, 10);
-    const ele = localStorage.getItem('element');
-    const parsed = JSON.parse(ele);
-    container.innerHTML = parsed.containerHTML;
+      const imgs = container.querySelectorAll('img');
+      const imgsLength = imgs.length;
+      imgs.forEach((img, index) => {
+        img.src = item.thumbBase64[imgsLength - index];
+      });
+      console.log('item', item);
+      console.log('getCache', item.listElement.containerHTML);
+      console.log('thumb', item.thumbBase64[1]);
+
+    } else {
+      // キャッシュがない場合はAPIから取得して表示
+      const articleListElement = await getArticleListElement();
+      // ローディング表示を削除
+      container.innerHTML = '';
+      container.appendChild(articleListElement.card);
+      container.appendChild(articleListElement.main);
+      
+      // 記事リストの要素をlocalStorageに保存
+      saveContainerElementWithExpire('articleList', container, 10);
+    }
   }
   
 };
