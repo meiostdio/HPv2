@@ -74,9 +74,9 @@ export async function getArticleContentElement(id) {
             const img = document.createElement('img');
             main.appendChild(img);
             let image = await getImage(articleId, value);
-            // localStorageにbase64の画像データを格納
-            saveArticleImageWithExpire(articleId, value, image, 10);
             img.src = `data:image/;base64,${image}`;
+            // localStorageにbase64の画像データを格納
+            saveArticleImageWithExpire(articleId, value, img.src, 10);
         } else if(type == "code"){
             sectionDev.innerHTML = `
                 <pre class="src"><code>${value}</code></pre>

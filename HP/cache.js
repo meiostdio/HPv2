@@ -58,18 +58,6 @@ export function saveArticleImageWithExpire (key, imageName, imageBase64, expirat
   localStorage.setItem(newKey, JSON.stringify(item));
 }
 
-// 取得時は期限もチェックする
-export function getWithExpire(key) {
-  const item = JSON.parse(localStorage.getItem(key));
-
-  // 期限切れならnullを返す
-  if (!item || Date.now() > item.expiry) {
-    return null;
-  }
-
-  return item.jsonValue;
-}
-
 // 表示するページのデータが格納されているか確認する
 export function checkCachesExpire(isList, key) {
   let item;
@@ -77,7 +65,9 @@ export function checkCachesExpire(isList, key) {
   if(isList) {
     // 記事リストをgetItemして期限をチェック
     item = JSON.parse(localStorage.getItem('articleList'));
-    console.log(item.expiry);
+    if(item === null) {
+      return false
+    }
     const expiryDate = new Date(item.expiry)
     // 期限切れならfalseを返す
     if (new Date > expiryDate) {
@@ -108,11 +98,21 @@ export function getCache(isList, key){
     };
     return item
   } else {
-    // 記事リストではない、本文の場合は本文のコンテナ要素と記事内画像を取得してreturn
-
+    // 本文の場合は本文のコンテナ要素と記事内画像を取得してreturn
+    const articleElement = JSON.parse(localStorage.getItem(key));
+    let images = {};
+    let item = {};
+    for(let i = 1;; i ++){
+      let item = JSON.parse(localStorage.getItem(`${key}-article${i}`));
+      if(item === null){
+        break;
+      }
+      images[i] = item.imageBase64;
+    }
+    item = {
+      images,
+      articleElement
+    };
+    return item
   }
-}
-
-export function cleaningCache(){
-
 }

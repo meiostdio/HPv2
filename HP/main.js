@@ -29,7 +29,21 @@ window.onload = async function() {
     // キャッシュを確認
     const isCacheValid = checkCachesExpire(false, articleId);
     console.log("記事本文のキャッシュは" ,isCacheValid);
-    await showArticleContent(articleId);
+    
+    // キャッシュがある場合は取得して表示
+    if(isCacheValid){
+      const articleContent = getCache(false, articleId);
+      container.innerHTML = articleContent.articleElement.containerHTML;
+      const imgs = container.querySelectorAll('img');
+      const imgsLength = imgs.length;
+      imgs.forEach((img, index) => {
+        img.src = articleContent.images[index + 1];
+      });
+    } else {
+      console.log('記事本文キャッシュは', false);
+      await showArticleContent(articleId);
+    }
+
     return
 
   } else {
@@ -48,11 +62,9 @@ window.onload = async function() {
       imgs.forEach((img, index) => {
         img.src = item.thumbBase64[imgsLength - index];
       });
-      console.log('item', item);
-      console.log('getCache', item.listElement.containerHTML);
-      console.log('thumb', item.thumbBase64[1]);
 
     } else {
+      console.log("記事リストのキャッシュは", false);
       // キャッシュがない場合はAPIから取得して表示
       const articleListElement = await getArticleListElement();
       // ローディング表示を削除
@@ -88,6 +100,9 @@ async function showArticleContent(e) {
   const articleContent = await getArticleContentElement(articleId);
   container.innerHTML = '';
   container.appendChild(articleContent);
+
+  // キャッシュに保存
+  saveContainerElementWithExpire(articleId, container, 10);
 }
 window.showArticleContent = showArticleContent;
 
