@@ -2,6 +2,8 @@ import { getArticleList } from "./GithubData.js";
 import { saveThumbImageWithExpire } from "./cache.js";
 
 export async function getArticleListElement() {
+    
+
     const card = document.createElement('div');
     card.id = 'leftcolumm-title';
     

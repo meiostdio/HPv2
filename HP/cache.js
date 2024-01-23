@@ -75,16 +75,13 @@ export function checkCachesExpire(isList, key) {
   let item;
   // 記事リストか記事本文中の画像かチェック
   if(isList) {
-    // 記事リストの場合keyが1から20までキャッシュにアクセスしていく
-    // 途中で期限切れがある場合中断してfalse
-    // エラーが出るまで繰り返しが出来た場合はtrue
-    for(let i = 1; i <= 10; i++) {
-      console.log("key: ", i);
-      item = JSON.parse(localStorage.getItem(i));
-      // 期限切れならfalseを返す
-      if (!item || Date.now() > item.expiry) {
-        return false;
-      }
+    // 記事リストをgetItemして期限をチェック
+    item = JSON.parse(localStorage.getItem('articleList'));
+    console.log(item.expiry);
+    const expiryDate = new Date(item.expiry)
+    // 期限切れならfalseを返す
+    if (new Date > expiryDate) {
+      return false;
     }
   } else {
     // 本文中のデータの場合画像が1つでもあり、有効期限内であればtrue
@@ -114,4 +111,8 @@ export function getCache(isList, key){
     // 記事リストではない、本文の場合は本文のコンテナ要素と記事内画像を取得してreturn
 
   }
+}
+
+export function cleaningCache(){
+
 }
