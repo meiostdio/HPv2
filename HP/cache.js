@@ -116,3 +116,38 @@ export function getCache(isList, key){
     return item
   }
 }
+
+// 期限切れのキャッシュを削除する
+export function cleanCache() {
+
+  // localStorageのすべてのキーを取得
+  const keys = Object.keys(localStorage);
+
+  // 現在の時刻を取得
+  const now = new Date();
+
+  // 期限切れのアイテムを削除する
+  keys.forEach(key => {
+    const item = JSON.parse(localStorage.getItem(key));
+
+    if (item && item.expiry && new Date(item.expiry) < now) {
+      localStorage.removeItem(key);
+    }
+  });
+}
+
+export function saveURLState(uri) {
+  try {
+    const Url =  new URL(window.location.href);
+    const currentUrl = Url.toString();
+  
+    // セッションストレージにURLを格納
+    const storedURLs = sessionStorage.getItem('history') || '[]';
+    const urlArray = JSON.parse(storedURLs);
+    urlArray.push(currentUrl);
+    sessionStorage.setItem('history', JSON.stringify(urlArray));
+  } catch (e) {
+    console.log(e);
+  }
+  
+}

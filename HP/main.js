@@ -1,7 +1,7 @@
 import { loginWithAuth0,logout,checkAuthState } from "./auth.js";
 import { findAnchorElementId,getArticleContentElement } from "./articleViewer.js";
 import { getArticleListElement } from "./articleIndex.js";
-import { checkCachesExpire, getCache, saveContainerElementWithExpire } from "./cache.js";
+import { checkCachesExpire, cleanCache, getCache, saveContainerElementWithExpire, saveURLState } from "./cache.js";
 
 let loginBtn;
 let userIcon;
@@ -12,6 +12,9 @@ let container = document.querySelector(".container");
 window.onload = async function() {
   //ヘッダー、フッターを読み込んで表示
   await fetchInclude();
+
+  // セッションストレージに現在のURLを格納
+  saveURLState();
 
   // ユーザー情報を格納する
   let user = await checkAuthState();
@@ -77,6 +80,9 @@ window.onload = async function() {
     }
   }
   
+
+  // 期限切れのキャッシュを削除する
+  cleanCache();
 };
 
 // 記事クリックで記事本文を表示
@@ -157,3 +163,14 @@ window.addEventListener('DOMContentLoaded', async function() {
     }
   }, 50);  
 })
+
+// ブラウザバックの禁止
+// history.pushState(null, null, location.href);
+window.addEventListener('popstate', (e) => {
+  // 戻るボタンが押された場合
+  if(e.state) { 
+
+  } else {
+    // 進むボタンが押された場合
+  }
+});
