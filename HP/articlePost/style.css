@@ -20,15 +20,12 @@
 #addElement {
     background-color: aquamarine;
     display: flex;
-
 }
 
-#addBtn {
-    background-color:gold;
-
+#addElement button {
+    margin: 0.5vw;
 }
 
 #comment {
-    background-color: crimson;
-
+    margin: 0.5vw;
 }

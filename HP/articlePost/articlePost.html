@@ -1,6 +1,7 @@
 <!--スタイルはindex.htmlを継承しつつ変更してるので、ややこしいかもしれんけど一旦css二枚リンクさせてる-->
 <!--ここで表示されるコンテンツとはhtml要素であるべきか、jsonデータであるべきか-->
 <!--結局jsonデータになるなら、json-to-htmlのコードをインポートしてプレビューには変換後のhtmlを表示させたらかっこいいな-->
+<!--title, tag, date, type{subtitle, content, image, code, reference}-->
 
 <!DOCTYPE html>
 <html lang="ja">
@@ -27,10 +28,13 @@
         <input name="" id="draft-title" value="記事タイトルを入力"></textarea>
 
         <div id="draft-container">
-            draft-container
         </div>
         <div id="addElement">
-            <button id="addBtn">+</button>
+            <button id="addSubtitle">+subtitle</button>
+            <button id="addContent">+content</button>
+            <button id="addImage">+image</button>
+            <button id="addCode">+code</button>
+            <button id="addReference">+reference</button>
             <div id="comment">ボタンを押して要素を追加</div>
         </div>
 
