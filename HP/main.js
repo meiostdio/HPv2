@@ -1,7 +1,7 @@
 import { loginWithAuth0,logout,checkAuthState } from "./auth.js";
 import { findAnchorElementId,getArticleContentElement } from "./articleViewer.js";
 import { getArticleListElement } from "./articleIndex.js";
-import { checkCachesExpire, cleanCache, getCache, saveContainerElementWithExpire, saveURLState } from "./cache.js";
+import { checkCachesExpire, cleanCache, getCache, getLastURLState, removeLastURLState, saveContainerElementWithExpire, saveURLState } from "./cache.js";
 
 let loginBtn;
 let userIcon;
@@ -13,8 +13,17 @@ window.onload = async function() {
   //ヘッダー、フッターを読み込んで表示
   await fetchInclude();
 
-  // セッションストレージに現在のURLを格納
-  saveURLState();
+  // セッションストレージを確認して最後に訪れたURLと現在のURLを比較する
+  // 変更がある場合は保存
+  const lastURL = getLastURLState();
+  const currentUrl = new URL(window.location.href);
+  if (lastURL === currentUrl) {
+    console.log('URLが変更されていません');
+    removeLastURLState();
+  } else {
+    console.log('URLが変更されました');
+    saveURLState();
+  }
 
   // ユーザー情報を格納する
   let user = await checkAuthState();
@@ -85,6 +94,21 @@ window.onload = async function() {
   cleanCache();
 };
 
+// URLが変更されたときに発火するイベント
+window.addEventListener('urlChange', function(e) {
+  console.log('URL has changed to', e.detail);
+  const lastURL = getLastURLState();
+  const currentUrl = e.detail;
+  if (lastURL === currentUrl) {
+    console.log('URLが変更されていません');
+    removeLastURLState();
+    return
+  } else {
+    console.log('URLが変更されました');
+    saveURLState();
+  }
+});
+
 // 記事クリックで記事本文を表示
 async function showArticleContent(e) {
   let event;
@@ -102,6 +126,10 @@ async function showArticleContent(e) {
   currentUrl.searchParams.set('id', articleId);
   window.history.pushState({}, '', currentUrl);
 
+  // カスタムイベントを発火
+  const urlChangeEvent = new CustomEvent('urlChange', { detail: currentUrl });
+  window.dispatchEvent(urlChangeEvent);
+
   // 本文を取得して描画
   const articleContent = await getArticleContentElement(articleId);
   container.innerHTML = '';
@@ -111,6 +139,29 @@ async function showArticleContent(e) {
   saveContainerElementWithExpire(articleId, container, 10);
 }
 window.showArticleContent = showArticleContent;
+
+// headerのロゴクリックで記事リストを表示
+async function showArticleList() {
+  // URLの末尾のidを削除
+  const currentUrl = new URL(window.location.href);
+  currentUrl.searchParams.delete('id');
+  window.history.pushState({}, '', currentUrl);
+
+  // カスタムイベントを発火
+  const urlChangeEvent = new CustomEvent('urlChange', { detail: currentUrl });
+  window.dispatchEvent(urlChangeEvent);
+
+  const articleListElement = await getArticleListElement();
+  // ローディング表示を削除
+  container.innerHTML = '';
+  container.appendChild(articleListElement.card);
+  container.appendChild(articleListElement.main);
+  
+  // 記事リストの要素をlocalStorageに保存
+  saveContainerElementWithExpire('articleList', container, 10);
+}
+window.showArticleList = showArticleList;
+
 
 // auth.jsからログイン機能を呼び出す
 async function login(e){

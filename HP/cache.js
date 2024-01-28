@@ -136,7 +136,8 @@ export function cleanCache() {
   });
 }
 
-export function saveURLState(uri) {
+// URLをセッションストレージに保存
+export function saveURLState() {
   try {
     const Url =  new URL(window.location.href);
     const currentUrl = Url.toString();
@@ -150,4 +151,29 @@ export function saveURLState(uri) {
     console.log(e);
   }
   
+}
+
+// セッションストレージから最後のURLを取得
+export function getLastURLState() {
+  try {
+    const storedURLs = sessionStorage.getItem('history');
+    const urlArray = JSON.parse(storedURLs);
+    const previousURL = urlArray.pop();
+    sessionStorage.setItem('history', JSON.stringify(urlArray));
+    return previousURL
+  } catch (e) {
+    console.log(e);
+  }
+}
+
+// セッションストレージから最後のURLを削除
+export function removeLastURLState() {
+  try {
+    const storedURLs = sessionStorage.getItem('history');
+    const urlArray = JSON.parse(storedURLs);
+    urlArray.pop();
+    sessionStorage.setItem('history', JSON.stringify(urlArray));
+  } catch (e) {
+    console.log(e);
+  }
 }
