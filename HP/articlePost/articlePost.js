@@ -1,8 +1,10 @@
 //ドラッグアンドドロップについては
 
-//addBtnで追加するinputはinput.classNameはjsonのtype、input.valueはjsonのvalueに対応する
+//addSubtitleで追加するinputはinput.classNameはjsonのtype、input.valueはjsonのvalueに対応する
 //createElementの記述のところ、なぜか一括でオプション設定できない・・・
 //ドラッグ＆ドロップの参照　https://jp-seemore.com/web/4702/#toc5
+
+//ボタンを押して追加される要素のclassはcell
 
 
 //もとになるjsonデータ
@@ -14,11 +16,11 @@ const draftData = {
 }
 
 //ボタンと表示領域の取得
-const addBtn = document.getElementById('addBtn');
+const addSubtitle = document.getElementById('addSubtitle');
 const draftContainer = document.getElementById('draft-container');
 
 //ボタンを押して、cell{grip, input} になる要素を追加
-addBtn.addEventListener('click', () => {
+addSubtitle.addEventListener('click', () => {
     const cell = document.createElement('div');
     cell.className = 'cell';
     cell.draggable = 'true';
@@ -33,8 +35,52 @@ addBtn.addEventListener('click', () => {
     input.className = 'content';
 
     draftContainer.appendChild(cell);
-    cell.append(grip, input);
+    cell.appendChild(grip);
+    cell.appendChild(input);
 
+});
+
+const addElement = document.getElementById('addElement');
+const addElementBtn = addElement.querySelectorAll('button');
+addElementBtn.forEach((button) => {
+    button.addEventListener('click', () => {
+
+        const cell = document.createElement('div');
+        cell.className = 'cell';
+        cell.draggable = 'true';
+        cell.style.cursor = 'move';
+        cell.style.backgroundColor = 'tarquoise';
+        cell.style.display = 'flex';
+
+        const input = null;
+        const grip = document.createElement('div');
+        grip.innerHTML = '#';
+
+        switch (button.id) {
+            case 'addSubtitle':
+                input = document.createElement('input');
+                input.type = 'text';
+                break;
+
+            case 'addContent':
+                input = document.createElement('textarea');
+                break;
+
+            case 'addImage':
+                input = document.createElement('input');
+                input.type = 'file';
+                input.accept = 'image/*';
+                break;
+
+            case 'addConde':
+                input = document.createElement('textarea');
+                break;
+
+            case 'addReference':
+                input = document.createElement('textarea');
+                break;
+        }
+    });
 });
 
 //ドラッグスタートとドラッグオーバーのイベントリスナーを設定
