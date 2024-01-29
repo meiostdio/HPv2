@@ -52,7 +52,7 @@ addElementBtn.forEach((button) => {
         cell.style.backgroundColor = 'tarquoise';
         cell.style.display = 'flex';
 
-        const input = null;
+        let input;
         const grip = document.createElement('div');
         grip.innerHTML = '#';
 
@@ -60,26 +60,35 @@ addElementBtn.forEach((button) => {
             case 'addSubtitle':
                 input = document.createElement('input');
                 input.type = 'text';
+                input.className = 'subtitle';
                 break;
 
             case 'addContent':
                 input = document.createElement('textarea');
+                input.className = 'content';
                 break;
 
             case 'addImage':
                 input = document.createElement('input');
                 input.type = 'file';
                 input.accept = 'image/*';
+                input.className = 'image';
                 break;
 
-            case 'addConde':
+            case 'addCode':
                 input = document.createElement('textarea');
+                input.className = 'code';
                 break;
 
             case 'addReference':
                 input = document.createElement('textarea');
+                input.className = 'reference';
                 break;
         }
+
+        draftContainer.appendChild(cell);
+        cell.appendChild(grip);
+        cell.appendChild(input);
     });
 });
 
