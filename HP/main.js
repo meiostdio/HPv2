@@ -13,17 +13,11 @@ window.onload = async function() {
   //ヘッダー、フッターを読み込んで表示
   await fetchInclude();
 
-  // セッションストレージを確認して最後に訪れたURLと現在のURLを比較する
-  // 変更がある場合は保存
-  const lastURL = getLastURLState();
-  const currentUrl = new URL(window.location.href);
-  if (lastURL === currentUrl) {
-    console.log('URLが変更されていません');
-    removeLastURLState();
-  } else {
-    console.log('URLが変更されました');
-    saveURLState();
-  }
+  // セッションストレージに履歴を保存
+  saveURLState();
+
+  // 古いキャッシュを削除
+  cleanCache();
 
   // ユーザー情報を格納する
   let user = await checkAuthState();
@@ -38,24 +32,7 @@ window.onload = async function() {
   const urlParams = new URLSearchParams(window.location.search);
   const articleId = urlParams.get('id');
   if(articleId) {
-    // キャッシュを確認
-    const isCacheValid = checkCachesExpire(false, articleId);
-    console.log("記事本文のキャッシュは" ,isCacheValid);
-    
-    // キャッシュがある場合は取得して表示
-    if(isCacheValid){
-      const articleContent = getCache(false, articleId);
-      container.innerHTML = articleContent.articleElement.containerHTML;
-      const imgs = container.querySelectorAll('img');
-      const imgsLength = imgs.length;
-      imgs.forEach((img, index) => {
-        img.src = articleContent.images[index + 1];
-      });
-    } else {
-      console.log('記事本文キャッシュは', false);
-      await showArticleContent(articleId);
-    }
-
+    await showArticleContent(articleId);
     return
 
   } else {
@@ -97,16 +74,8 @@ window.onload = async function() {
 // URLが変更されたときに発火するイベント
 window.addEventListener('urlChange', function(e) {
   console.log('URL has changed to', e.detail);
-  const lastURL = getLastURLState();
-  const currentUrl = e.detail;
-  if (lastURL === currentUrl) {
-    console.log('URLが変更されていません');
-    removeLastURLState();
-    return
-  } else {
-    console.log('URLが変更されました');
-    saveURLState();
-  }
+  console.log('URL href is', window.location.href);
+  saveURLState();
 });
 
 // 記事クリックで記事本文を表示
@@ -120,6 +89,21 @@ async function showArticleContent(e) {
     event = e;
     articleId = findAnchorElementId(event);
   }
+
+  const isCacheValid = checkCachesExpire(false, articleId);
+  console.log("記事本文のキャッシュは" ,isCacheValid);
+  
+  // キャッシュがある場合は取得して表示
+  if(isCacheValid){
+    const articleContent = getCache(false, articleId);
+    container.innerHTML = articleContent.articleElement.containerHTML;
+    const imgs = container.querySelectorAll('img');
+    const imgsLength = imgs.length;
+    imgs.forEach((img, index) => {
+      img.src = articleContent.images[index + 1];
+    });
+  }
+  console.log('記事本文キャッシュは', false);
 
   // URLの末尾にidを付与、リロードなし
   const currentUrl = new URL(window.location.href);

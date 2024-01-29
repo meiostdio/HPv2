@@ -61,22 +61,18 @@ export function saveArticleImageWithExpire (key, imageName, imageBase64, expirat
 // 表示するページのデータが格納されているか確認する
 export function checkCachesExpire(isList, key) {
   let item;
-  // 記事リストか記事本文中の画像かチェック
   if(isList) {
-    // 記事リストをgetItemして期限をチェック
     item = JSON.parse(localStorage.getItem('articleList'));
     if(item === null) {
       return false
     }
     const expiryDate = new Date(item.expiry)
-    // 期限切れならfalseを返す
-    if (new Date > expiryDate) {
+    if (new Date() > expiryDate) {
       return false;
     }
   } else {
-    // 本文中のデータの場合画像が1つでもあり、有効期限内であればtrue
     item = JSON.parse(localStorage.getItem(key + "-article1"));
-    if (!item || Date.now() > item.expiry) {
+    if (!item || Date.now() > new Date(item.expiry)) {
       return false;
     }
   }
@@ -141,16 +137,21 @@ export function saveURLState() {
   try {
     const Url =  new URL(window.location.href);
     const currentUrl = Url.toString();
-  
+    const lastURL = getLastURLState();
+    if (lastURL === currentUrl) {
+      return
+    }
     // セッションストレージにURLを格納
     const storedURLs = sessionStorage.getItem('history') || '[]';
     const urlArray = JSON.parse(storedURLs);
+    
+    // 新しいURLが既に存在するか確認
     urlArray.push(currentUrl);
     sessionStorage.setItem('history', JSON.stringify(urlArray));
+    
   } catch (e) {
     console.log(e);
   }
-  
 }
 
 // セッションストレージから最後のURLを取得
@@ -159,10 +160,12 @@ export function getLastURLState() {
     const storedURLs = sessionStorage.getItem('history');
     const urlArray = JSON.parse(storedURLs);
     const previousURL = urlArray.pop();
-    sessionStorage.setItem('history', JSON.stringify(urlArray));
+    //sessionStorage.setItem('history', JSON.stringify(urlArray));
     return previousURL
   } catch (e) {
-    console.log(e);
+    console.log('セッションストレージにURLがありません');
+    console.log('Error:', e);
+    return null
   }
 }
 
