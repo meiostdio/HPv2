@@ -113,8 +113,35 @@ export function getCache(isList, key){
   }
 }
 
+// 履歴の古いキャッシュを削除する
+export function removeOldArticleCache() {
+  // 'history'キーから履歴を取得
+  let history = JSON.parse(sessionStorage.getItem('history') || '[]');
+  // 履歴の長さを制限
+  const historyRenge = 7;
+  // 履歴が存在し、5つ以上のエントリがある場合にのみ削除を行う
+  if (history && history.length > historyRenge) {
+    const oldArticleIds = history.slice(0, history.length - 5);
+    let oldArticleId;
+    oldArticleIds.forEach(id => {
+      if(id.includes('/?id=')){
+        oldArticleId = id.split('/?id=').pop();
+      } else {
+        return null
+      }
+    });
+    const aritcleKeys = Object.keys(localStorage);
+    // 削除対象の記事IDを含むキーを削除
+    aritcleKeys.forEach(key => {
+      if(key.includes(oldArticleId)) {
+        localStorage.removeItem(key);
+      }
+    });
+  }
+}
+
 // 期限切れのキャッシュを削除する
-export function cleanCache() {
+export function removeExpiredCache() {
 
   // localStorageのすべてのキーを取得
   const keys = Object.keys(localStorage);
@@ -133,6 +160,7 @@ export function cleanCache() {
 }
 
 // URLをセッションストレージに保存
+// 履歴内の古すぎるキャッシュは削除する
 export function saveURLState() {
   try {
     const Url =  new URL(window.location.href);
@@ -149,6 +177,7 @@ export function saveURLState() {
     urlArray.push(currentUrl);
     sessionStorage.setItem('history', JSON.stringify(urlArray));
     
+    removeOldArticleCache();
   } catch (e) {
     console.log(e);
   }

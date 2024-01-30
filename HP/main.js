@@ -1,7 +1,7 @@
 import { loginWithAuth0,logout,checkAuthState } from "./auth.js";
 import { findAnchorElementId,getArticleContentElement } from "./articleViewer.js";
 import { getArticleListElement } from "./articleIndex.js";
-import { checkCachesExpire, cleanCache, getCache, getLastURLState, removeLastURLState, saveContainerElementWithExpire, saveURLState } from "./cache.js";
+import { checkCachesExpire, getCache, removeExpiredCache, saveContainerElementWithExpire, saveURLState } from "./cache.js";
 
 let loginBtn;
 let userIcon;
@@ -17,7 +17,8 @@ window.onload = async function() {
   saveURLState();
 
   // 古いキャッシュを削除
-  cleanCache();
+  removeExpiredCache();
+  
 
   // ユーザー情報を格納する
   let user = await checkAuthState();
@@ -68,13 +69,11 @@ window.onload = async function() {
   
 
   // 期限切れのキャッシュを削除する
-  cleanCache();
+  removeExpiredCache();
 };
 
 // URLが変更されたときに発火するイベント
 window.addEventListener('urlChange', function(e) {
-  console.log('URL has changed to', e.detail);
-  console.log('URL href is', window.location.href);
   saveURLState();
 });
 
@@ -103,7 +102,6 @@ async function showArticleContent(e) {
       img.src = articleContent.images[index + 1];
     });
   }
-  console.log('記事本文キャッシュは', false);
 
   // URLの末尾にidを付与、リロードなし
   const currentUrl = new URL(window.location.href);
