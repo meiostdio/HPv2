@@ -5,9 +5,32 @@
 
 }
 
+#title-area {
+    background-color: darkslateblue;
+    margin: 0.5vw;
+}
+
 #draft-title {
     background-color: cadetblue;
-    margin: 1vw;
+    margin: 0.5vw;
+}
+
+#tag-area {
+    background-color: darkgoldenrod;
+    display: flex;
+    margin: 0.5vw;
+}
+
+#tag-container {
+    background-color: darkgray;
+    width: fit-content;
+    height:fit-content;
+    margin: 0.5vw;
+}
+
+#addTag {
+    background-color: darkgray;
+    margin: 0.5vw;
 }
 
 #draft-container {
@@ -27,5 +50,13 @@
 }
 
 #comment {
+    margin: 0.5vw;
+}
+
+#submit {
+    margin: 0.5vw;
+}
+
+#submit button {
     margin: 0.5vw;
 }

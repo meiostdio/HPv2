@@ -25,20 +25,31 @@
         </div>
     </header>
     <div id="draft">
-        <input name="" id="draft-title" value="記事タイトルを入力"></textarea>
+        <div id="title-area">
+            <input name="" id="draft-title" value="記事タイトルを入力"></textarea>
+        </div>
+        <div id="tag-area">
+            <div id="tag-container"></div>
+            <button id="addTag">タグを追加</button>
+        </div>
 
         <div id="draft-container">
         </div>
         <div id="addElement">
-            <button id="addSubtitle">+subtitle</button>
-            <button id="addContent">+content</button>
-            <button id="addImage">+image</button>
-            <button id="addCode">+code</button>
-            <button id="addReference">+reference</button>
-            <div id="comment">ボタンを押して要素を追加</div>
+            <button id="addSubtitle">小見出し</button>
+            <button id="addContent">テキスト</button>
+            <button id="addImage">画像</button>
+            <button id="addCode">ソースコード</button>
+            <button id="addReference">引用元</button>
         </div>
 
     </div>
+
+    <div id="submit">
+        <button id="submit-button">投稿</button>
+    </div>
+    <div id="json-area"></div>
+
     <footer>
         <p>Supported by meiostdio</p>
     </footer>

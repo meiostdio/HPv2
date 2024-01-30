@@ -1,11 +1,9 @@
 //ドラッグアンドドロップについては
 
 //addSubtitleで追加するinputはinput.classNameはjsonのtype、input.valueはjsonのvalueに対応する
-//createElementの記述のところ、なぜか一括でオプション設定できない・・・
 //ドラッグ＆ドロップの参照　https://jp-seemore.com/web/4702/#toc5
 
 //dragoverでドロップ先の位置を決定する
-
 
 //もとになるjsonデータ
 const draftData = {
@@ -14,6 +12,14 @@ const draftData = {
     date: "",
     section: []
 }
+
+const addTag = document.getElementById('addTag');
+const tagContainer = document.getElementById('tag-container');
+addTag.addEventListener('click', () => {
+    const input = document.createElement('input');
+    input.className = 'tag';
+    tagContainer.appendChild(input);
+});
 
 //ボタンと表示領域の取得
 const addSubtitle = document.getElementById('addSubtitle');
@@ -33,12 +39,18 @@ addElementBtn.forEach((button) => {
         cell.style.backgroundColor = 'tarquoise';
         cell.style.display = 'flex';
 
-
         var input;
         const grip = document.createElement('div');
         grip.draggable = true;
         grip.innerHTML = '#';
 
+        const remove = document.createElement('div');
+        remove.innerHTML = '×';
+        remove.style.cursor = 'pointer';
+        remove.style.marginLeft = 'auto';
+        remove.addEventListener('click', () => {
+            cell.remove();
+        });
 
         if (button.id === 'addSubtitle') {
             input = document.createElement('input');
@@ -57,7 +69,7 @@ addElementBtn.forEach((button) => {
             cell.appendChild(img);
 
             input.addEventListener('input', function (e) {
-                // If no file was selected (user cancelled the file dialog), restore the previous file data
+                // ファイルを選択しなかった場合は、以前のファイルを表示する
                 if (input.files.length === 0 && inputFileData[input]) {
                     let dt = new DataTransfer();
                     for (let file of inputFileData[input]) {
@@ -65,15 +77,17 @@ addElementBtn.forEach((button) => {
                     }
                     input.files = dt.files;
                 } else {
-                    // If a file was selected, store it in fileData
+
                     inputFileData[input] = input.files;
 
-                    // Use FileReader to read the file and create a preview
+                    // 選択した画像のプレビュー
                     let reader = new FileReader();
                     reader.onloadend = function () {
                         img.src = reader.result;
                     }
                     reader.readAsDataURL(input.files[0]);
+                    img.style.width = '100px';
+                    img.style.height = 'auto';
                 }
             });
         } else if (button.id === 'addCode') {
@@ -87,6 +101,7 @@ addElementBtn.forEach((button) => {
         draftContainer.appendChild(cell);
         cell.appendChild(grip);
         cell.appendChild(input);
+        cell.appendChild(remove);
     });
 });
 
@@ -95,11 +110,11 @@ let dragTarget;
 draftContainer.addEventListener('dragstart', (e) => {
     dragTarget = e.target.closest('.cell');
     dragTarget.draggable = true;
+    dragTarget.style.backgroundColor = 'lightgreen';
     e.dataTransfer.effectAllowed = 'move';
 });
 
 draftContainer.addEventListener('dragover', (e) => {
-    e.preventDefault();
     e.dataTransfer.dropEffect = 'move';
 
     const dropTarget = e.target.closest('.cell');
@@ -118,5 +133,39 @@ draftContainer.addEventListener('dragover', (e) => {
 draftContainer.addEventListener('dragend', (e) => {
     e.preventDefault();
     dragTarget.draggable = false;
+    dragTarget.style.backgroundColor = '';
     dragTarget = null;
 });
+
+//追加されたcellをもとにdraftDataを更新する
+const title = document.getElementById('draft-title');
+const tag = document.getElementById('tag');
+const section = document.getElementById('section');
+const submitBtn = document.getElementById('submit-button');
+
+submitBtn.addEventListener('click', () => {
+    draftData.title = title.value;
+    draftData.tag = [];
+    draftData.data = new Date();
+
+    const tags = tagContainer.querySelectorAll('.tag');
+    tags.forEach((tag) => {
+        const value = tag.value;
+        draftData.tag.push(value);
+    });
+    draftData.section = [];
+    const cells = draftContainer.querySelectorAll('.cell');
+    cells.forEach((cell) => {
+        const input = cell.querySelector('input, textarea');
+        const type = input.className;
+        const value = input.value;
+        draftData.section.push({
+            type: type,
+            value: value
+        });
+    });
+    const json = JSON.stringify(draftData);
+    const jsonArea = document.getElementById('json-area');
+    jsonArea.textContent = json;
+});
+
