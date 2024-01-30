@@ -28,7 +28,7 @@ const draftContainer = document.getElementById('draft-container');
 const addElement = document.getElementById('addElement');
 const addElementBtn = addElement.querySelectorAll('button');
 
-let inputFileData = {}; // to store the file data for each input
+let inputFileData = {};
 addElementBtn.forEach((button) => {
     button.addEventListener('click', () => {
 
@@ -146,7 +146,7 @@ const submitBtn = document.getElementById('submit-button');
 submitBtn.addEventListener('click', () => {
     draftData.title = title.value;
     draftData.tag = [];
-    draftData.data = new Date();
+    draftData.date = formatDate(new Date());
 
     const tags = tagContainer.querySelectorAll('.tag');
     tags.forEach((tag) => {
@@ -169,3 +169,9 @@ submitBtn.addEventListener('click', () => {
     jsonArea.textContent = json;
 });
 
+function formatDate(date) {
+    const y = date.getFullYear();
+    const m = ("00" + (date.getMonth() + 1)).slice(-2);
+    const d = ("00" + date.getDate()).slice(-2);
+    return `${y}${m}${d}`;
+}
