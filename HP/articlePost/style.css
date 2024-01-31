@@ -23,9 +23,14 @@
 
 #tag-container {
     background-color: darkgray;
-    width: fit-content;
-    height:fit-content;
     margin: 0.5vw;
+    display: flex;
+}
+
+.tag-cell {
+    background-color: darkgray;
+    margin: 0.5vw;
+    display: flex;
 }
 
 #addTag {
@@ -46,10 +51,6 @@
 }
 
 #addElement button {
-    margin: 0.5vw;
-}
-
-#comment {
     margin: 0.5vw;
 }
 

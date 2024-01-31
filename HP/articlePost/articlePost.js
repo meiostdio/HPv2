@@ -1,10 +1,3 @@
-//ドラッグアンドドロップについては
-
-//addSubtitleで追加するinputはinput.classNameはjsonのtype、input.valueはjsonのvalueに対応する
-//ドラッグ＆ドロップの参照　https://jp-seemore.com/web/4702/#toc5
-
-//dragoverでドロップ先の位置を決定する
-
 //もとになるjsonデータ
 const draftData = {
     title: "",
@@ -15,10 +8,21 @@ const draftData = {
 
 const addTag = document.getElementById('addTag');
 const tagContainer = document.getElementById('tag-container');
+
 addTag.addEventListener('click', () => {
+    const tagCell = document.createElement('div');
+    tagCell.className = 'tag-cell';
+    tagContainer.appendChild(tagCell);
     const input = document.createElement('input');
     input.className = 'tag';
-    tagContainer.appendChild(input);
+    const remove = document.createElement('div');
+    remove.innerHTML = '×';
+    remove.style.cursor = 'pointer';
+    remove.addEventListener('click', () => {
+        tagCell.remove();
+    });
+    tagCell.appendChild(input);
+    tagCell.appendChild(remove);
 });
 
 //ボタンと表示領域の取得
@@ -28,45 +32,39 @@ const draftContainer = document.getElementById('draft-container');
 const addElement = document.getElementById('addElement');
 const addElementBtn = addElement.querySelectorAll('button');
 
+
 let inputFileData = {};
+
 addElementBtn.forEach((button) => {
     button.addEventListener('click', () => {
 
-        const cell = document.createElement('div');
-        cell.className = 'cell';
-        cell.draggable = false;
-        cell.style.cursor = 'move';
-        cell.style.backgroundColor = 'tarquoise';
-        cell.style.display = 'flex';
-
-        var input;
-        const grip = document.createElement('div');
-        grip.draggable = true;
-        grip.innerHTML = '#';
-
-        const remove = document.createElement('div');
-        remove.innerHTML = '×';
-        remove.style.cursor = 'pointer';
-        remove.style.marginLeft = 'auto';
-        remove.addEventListener('click', () => {
-            cell.remove();
-        });
-
         if (button.id === 'addSubtitle') {
-            input = document.createElement('input');
+            const cell = creatCellAndGrip();
+            const remove = createRemoveElement(cell);
+            const input = document.createElement('input');
             input.className = 'subtitle';
+            cell.appendChild(input);
+            cell.appendChild(remove);
         } else if (button.id === 'addContent') {
-            input = document.createElement('textarea');
+            const cell = creatCellAndGrip();
+            const remove = createRemoveElement(cell);
+            const input = document.createElement('textarea');
             input.className = 'content';
+            cell.appendChild(input);
+            cell.appendChild(remove);
         } else if (button.id === 'addImage') {
-            input = document.createElement('input');
+            const input = document.createElement('input');
             input.type = 'file';
             input.accept = 'image/*';
             input.className = 'image';
+            input.style.display = 'none';
+
             // Create an img element for the preview
             let img = document.createElement('img');
             img.className = 'preview';
-            cell.appendChild(img);
+            img.addEventListener('click', () => {
+                replaceImage(input, img);
+            });
 
             input.addEventListener('input', function (e) {
                 // ファイルを選択しなかった場合は、以前のファイルを表示する
@@ -77,7 +75,6 @@ addElementBtn.forEach((button) => {
                     }
                     input.files = dt.files;
                 } else {
-
                     inputFileData[input] = input.files;
 
                     // 選択した画像のプレビュー
@@ -89,21 +86,73 @@ addElementBtn.forEach((button) => {
                     img.style.width = '100px';
                     img.style.height = 'auto';
                 }
+                const cell = creatCellAndGrip();
+                const remove = createRemoveElement(cell);
+                cell.appendChild(img);
+                cell.appendChild(input);
+                cell.appendChild(remove);
             });
+            
+            input.click();
+
         } else if (button.id === 'addCode') {
-            input = document.createElement('textarea');
+            const cell = creatCellAndGrip();
+            const remove = createRemoveElement(cell);
+            const input = document.createElement('textarea');
+            cell.appendChild(input);
+            cell.appendChild(remove);
             input.className = 'code';
         } else if (button.id === 'addReference') {
-            input = document.createElement('input');
+            const cell = creatCellAndGrip();
+            const remove = createRemoveElement(cell);
+            const input = document.createElement('input');
             input.className = 'reference';
+            cell.appendChild(input);
+            cell.appendChild(remove);
         }
-
-        draftContainer.appendChild(cell);
-        cell.appendChild(grip);
-        cell.appendChild(input);
-        cell.appendChild(remove);
     });
 });
+
+function creatCellAndGrip() {
+    const cell = document.createElement('div');
+    cell.className = 'cell';
+    cell.draggable = false;
+    cell.style.cursor = 'move';
+    cell.style.backgroundColor = 'tarquoise';
+    cell.style.display = 'flex';
+    cell.style.alignItems = 'center';
+    draftContainer.appendChild(cell);
+
+    const grip = document.createElement('div');
+    grip.draggable = true;
+    grip.innerHTML = ':::';
+    cell.appendChild(grip);
+
+    return cell;
+}
+
+function createRemoveElement(cell) {
+    const remove = document.createElement('div');
+    remove.innerHTML = '×';
+    remove.style.cursor = 'pointer';
+    remove.addEventListener('click', () => {
+        cell.remove();
+    });
+    return remove;
+}
+
+//imgをクリックしたらimageを変更できる関数
+function replaceImage(input, image) {
+    input.click();
+    input.addEventListener('input', () => {
+        const file = input.files[0];
+        const reader = new FileReader();
+        reader.onloadend = () => {
+            image.src = reader.result;
+        }
+        reader.readAsDataURL(file);
+    });
+}
 
 let dragTarget;
 
