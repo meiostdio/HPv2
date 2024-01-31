@@ -18,7 +18,6 @@ window.onload = async function() {
 
   // 古いキャッシュを削除
   removeExpiredCache();
-  
 
   // ユーザー情報を格納する
   let user = await checkAuthState();

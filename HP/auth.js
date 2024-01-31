@@ -43,8 +43,7 @@ async function checkAuthState() {
   if (shouldParseResult) {
     // セッションを確立
     const redirectResult = await auth0Client.handleRedirectCallback();
-    setTokenToCookie(redirectResult);
-    console.log(JSON.stringify(redirectResult.access_token));
+    // setTokenToCookie(redirectResult);
     // ユーザー情報を取得
     user = await getUser(auth0Client);
     console.log(user);
