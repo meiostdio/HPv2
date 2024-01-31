@@ -42,21 +42,21 @@ addElementBtn.forEach((button) => {
             const cell = creatCellAndGrip();
             const remove = createRemoveElement(cell);
             const input = document.createElement('input');
-            input.className = 'subtitle';
+            input.className = 'subtitle element';
             cell.appendChild(input);
             cell.appendChild(remove);
         } else if (button.id === 'addContent') {
             const cell = creatCellAndGrip();
             const remove = createRemoveElement(cell);
             const input = document.createElement('textarea');
-            input.className = 'content';
+            input.className = 'content element';
             cell.appendChild(input);
             cell.appendChild(remove);
         } else if (button.id === 'addImage') {
             const input = document.createElement('input');
             input.type = 'file';
             input.accept = 'image/*';
-            input.className = 'image';
+            input.className = 'image element';
             input.style.display = 'none';
 
             // Create an img element for the preview
@@ -92,21 +92,21 @@ addElementBtn.forEach((button) => {
                 cell.appendChild(input);
                 cell.appendChild(remove);
             });
-            
+
             input.click();
 
         } else if (button.id === 'addCode') {
             const cell = creatCellAndGrip();
             const remove = createRemoveElement(cell);
             const input = document.createElement('textarea');
+            input.className = 'code element';
             cell.appendChild(input);
             cell.appendChild(remove);
-            input.className = 'code';
         } else if (button.id === 'addReference') {
             const cell = creatCellAndGrip();
             const remove = createRemoveElement(cell);
             const input = document.createElement('input');
-            input.className = 'reference';
+            input.className = 'reference element';
             cell.appendChild(input);
             cell.appendChild(remove);
         }
@@ -124,6 +124,7 @@ function creatCellAndGrip() {
     draftContainer.appendChild(cell);
 
     const grip = document.createElement('div');
+    grip.className = 'grip';
     grip.draggable = true;
     grip.innerHTML = ':::';
     cell.appendChild(grip);
@@ -133,6 +134,7 @@ function creatCellAndGrip() {
 
 function createRemoveElement(cell) {
     const remove = document.createElement('div');
+    remove.className = 'remove';
     remove.innerHTML = '×';
     remove.style.cursor = 'pointer';
     remove.addEventListener('click', () => {
