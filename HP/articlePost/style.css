@@ -1,56 +1,68 @@
-#draft {
-    background-color:darkorchid;
+#width-control {
+    width: 100%;
     height: fit-content;
-    padding: 1vw;
-
+    display: flex;
+    justify-content: center;
 }
 
-#title-area {
-    background-color: darkslateblue;
-    margin: 0.5vw;
+#draft {
+    width: 60vw;
+    height: fit-content;
 }
 
 #draft-title {
-    background-color: cadetblue;
-    margin: 0.5vw;
+    width: 100%;
+    height: 10vw;
+    margin-top: 2vw;
+    margin-bottom: 2vw;
+    border-style: dashed;
 }
 
 #tag-area {
-    background-color: darkgoldenrod;
     display: flex;
-    margin: 0.5vw;
+    text-align: center;
 }
 
 #tag-container {
-    background-color: darkgray;
-    width: fit-content;
-    height:fit-content;
-    margin: 0.5vw;
+    display: flex;
 }
 
-#addTag {
-    background-color: darkgray;
-    margin: 0.5vw;
+.tag-cell {
+    display: flex;
 }
 
 #draft-container {
-    background-color: hotpink;
-    width: fit-content;
-    height:fit-content;
+    width: 100%;
+}
 
+.cell {
+    width: 100%;
+    margin: 1vw;
+}
+
+.grip {
+    margin: 1vw;
+}
+
+.remove {
+    margin: 1vw;
+}
+
+.grip {
+    margin: 1vw;
 }
 
 #addElement {
-    background-color: aquamarine;
     display: flex;
+    margin: 0.5vw;
 }
 
 #addElement button {
     margin: 0.5vw;
 }
 
-#comment {
-    margin: 0.5vw;
+.subtitle {
+    border-style: dashed;
 }
 
 #submit {
