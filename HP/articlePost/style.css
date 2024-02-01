@@ -19,25 +19,35 @@
 }
 
 #tag-area {
+    margin-bottom: 1vw;
     display: flex;
+    flex-wrap: wrap;
     text-align: center;
 }
 
 #tag-container {
-    display: flex;
+}
+
+#addTag {
+    width: 10vw;
+    height: 3vw;
 }
 
 .tag-cell {
+    margin-bottom: 1vw;
     display: flex;
 }
 
 #draft-container {
     width: 100%;
+    margin-top: 1vw;
+    margin-bottom: 1vw;
 }
 
 .cell {
     width: 100%;
-    margin: 1vw;
+    margin-top: 1vw;
+    margin-bottom: 1vw;
 }
 
 .grip {
@@ -54,11 +64,12 @@
 
 #addElement {
     display: flex;
-    margin: 0.5vw;
 }
 
 #addElement button {
-    margin: 0.5vw;
+    margin-top: 1vw;
+    margin-bottom: 1vw;
+    margin-right: 1vw;
 }
 
 .subtitle {
@@ -66,9 +77,9 @@
 }
 
 #submit {
-    margin: 0.5vw;
+    margin-top: 1vw;
+    margin-bottom: 1vw;
 }
 
 #submit button {
-    margin: 0.5vw;
 }
