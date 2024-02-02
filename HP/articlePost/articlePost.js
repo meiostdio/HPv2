@@ -33,9 +33,9 @@ const addElement = document.getElementById('addElement');
 const addElementBtn = addElement.querySelectorAll('button');
 
 
-let inputFileData = {};
 
 addElementBtn.forEach((button) => {
+    
     button.addEventListener('click', () => {
         //テキストコンテントの追加
         if (button.classList.contains('text')) {
@@ -49,6 +49,7 @@ addElementBtn.forEach((button) => {
         }
         //画像の追加
         else if (button.id === 'image') {
+            const inputFileData = {};
             const input = document.createElement('input');
             input.type = 'file';
             input.accept = 'image/*';
@@ -70,7 +71,27 @@ addElementBtn.forEach((button) => {
                         dt.items.add(file);
                     }
                     input.files = dt.files;
-                } else {
+                } else if (!inputFileData[input]) {
+                    // そのinput要素にまだファイルが選択されていない場合
+
+                    inputFileData[input] = input.files;
+
+                    // 選択した画像のプレビュー
+                    let reader = new FileReader();
+                    reader.onloadend = function () {
+                        img.src = reader.result;
+                    }
+                    reader.readAsDataURL(input.files[0]);
+                    img.style.width = '100px';
+                    img.style.height = 'auto';
+                    const cell = creatCellAndGrip();
+                    const remove = createRemoveElement(cell);
+                    cell.appendChild(img);
+                    cell.appendChild(input);
+                    cell.appendChild(remove);
+                }
+                else {
+                    //そのinput要素にすでにファイルが選択されている場合
                     inputFileData[input] = input.files;
 
                     // 選択した画像のプレビュー
@@ -84,11 +105,6 @@ addElementBtn.forEach((button) => {
                 }
             });
 
-            const cell = creatCellAndGrip();
-            const remove = createRemoveElement(cell);
-            cell.appendChild(img);
-            cell.appendChild(input);
-            cell.appendChild(remove);
             input.click();
         }
     });
