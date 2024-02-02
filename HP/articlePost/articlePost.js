@@ -37,33 +37,29 @@ let inputFileData = {};
 
 addElementBtn.forEach((button) => {
     button.addEventListener('click', () => {
-
-        if (button.id === 'addSubtitle') {
+        //テキストコンテントの追加
+        if (button.classList.contains('text')) {
             const cell = creatCellAndGrip();
             const remove = createRemoveElement(cell);
-            const input = document.createElement('input');
-            input.className = 'subtitle element';
+            const inputTag = button.classList.contains('input') ? 'input' : 'textarea';
+            const input = document.createElement(inputTag);
+            input.className = button.id;
             cell.appendChild(input);
             cell.appendChild(remove);
-        } else if (button.id === 'addContent') {
-            const cell = creatCellAndGrip();
-            const remove = createRemoveElement(cell);
-            const input = document.createElement('textarea');
-            input.className = 'content element';
-            cell.appendChild(input);
-            cell.appendChild(remove);
-        } else if (button.id === 'addImage') {
+        }
+        //画像の追加
+        else if (button.id === 'image') {
             const input = document.createElement('input');
             input.type = 'file';
             input.accept = 'image/*';
-            input.className = 'image element';
+            input.className = 'image';
             input.style.display = 'none';
 
             // Create an img element for the preview
             let img = document.createElement('img');
             img.className = 'preview';
             img.addEventListener('click', () => {
-                replaceImage(input, img);
+                input.click();
             });
 
             input.addEventListener('input', function (e) {
@@ -86,29 +82,14 @@ addElementBtn.forEach((button) => {
                     img.style.width = '100px';
                     img.style.height = 'auto';
                 }
-                const cell = creatCellAndGrip();
-                const remove = createRemoveElement(cell);
-                cell.appendChild(img);
-                cell.appendChild(input);
-                cell.appendChild(remove);
             });
 
+            const cell = creatCellAndGrip();
+            const remove = createRemoveElement(cell);
+            cell.appendChild(img);
+            cell.appendChild(input);
+            cell.appendChild(remove);
             input.click();
-
-        } else if (button.id === 'addCode') {
-            const cell = creatCellAndGrip();
-            const remove = createRemoveElement(cell);
-            const input = document.createElement('textarea');
-            input.className = 'code element';
-            cell.appendChild(input);
-            cell.appendChild(remove);
-        } else if (button.id === 'addReference') {
-            const cell = creatCellAndGrip();
-            const remove = createRemoveElement(cell);
-            const input = document.createElement('input');
-            input.className = 'reference element';
-            cell.appendChild(input);
-            cell.appendChild(remove);
         }
     });
 });
@@ -143,21 +124,9 @@ function createRemoveElement(cell) {
     return remove;
 }
 
-//imgをクリックしたらimageを変更できる関数
-function replaceImage(input, image) {
-    input.click();
-    input.addEventListener('input', () => {
-        const file = input.files[0];
-        const reader = new FileReader();
-        reader.onloadend = () => {
-            image.src = reader.result;
-        }
-        reader.readAsDataURL(file);
-    });
-}
-
 let dragTarget;
 
+//grip要素を掴ませて、cellが動くようにする
 draftContainer.addEventListener('dragstart', (e) => {
     dragTarget = e.target.closest('.cell');
     dragTarget.draggable = true;
@@ -165,6 +134,7 @@ draftContainer.addEventListener('dragstart', (e) => {
     e.dataTransfer.effectAllowed = 'move';
 });
 
+//ドラッグした要素がドロップする位置を決める
 draftContainer.addEventListener('dragover', (e) => {
     e.dataTransfer.dropEffect = 'move';
 
@@ -181,6 +151,7 @@ draftContainer.addEventListener('dragover', (e) => {
     }
 });
 
+//ドラッグ完了による初期化
 draftContainer.addEventListener('dragend', (e) => {
     e.preventDefault();
     dragTarget.draggable = false;
