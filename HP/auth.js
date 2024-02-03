@@ -4,7 +4,8 @@ let auth0Client = await getAuth0Client();
 async function getAuth0Client(){
     const auth0Client = await auth0.createAuth0Client({
         domain: 'mieiostdio.jp.auth0.com',
-        clientId: '3NKELeme13IvWgricfnixqOjIzt23KD5'
+        clientId: '3NKELeme13IvWgricfnixqOjIzt23KD5',
+        useRefreshTokens: true
     });
     return auth0Client
 }
@@ -16,7 +17,8 @@ async function loginWithAuth0(e){
   console.log(window.location.origin)
   await auth0Client.loginWithRedirect({
       authorizationParams: {
-          redirect_uri: baseURI
+          redirect_uri: baseURI,
+          scope: 'offline_access'
         }
   });
 }
@@ -24,32 +26,50 @@ async function loginWithAuth0(e){
 // ユーザー情報を取得してreturn
 async function getUser(client){
     const auth0Client = client;
-  
-    // まずは認証済みかチェック
-    const isAuthenticated = await auth0Client.isAuthenticated();
-    if(isAuthenticated){
-      const user = await auth0Client.getUser(); 
+    const user = await auth0Client.getUser(); 
+    if(user){
       return user;
     }
     return null;
 }
 
 async function checkAuthState() {
-  // URLを取得して末尾にパラメータが格納されているか確認
-  // パラメータがある場合はログインできている
-  const query = window.location.search;
-  const shouldParseResult = query.includes("code=") && query.includes("state=");
-  let user;
-  if (shouldParseResult) {
-    // セッションを確立
-    const redirectResult = await auth0Client.handleRedirectCallback();
-    // setTokenToCookie(redirectResult);
-    // ユーザー情報を取得
-    user = await getUser(auth0Client);
-    console.log(user);
-    return user
+  console.log('checkAuthState');
+  // ブラウザに有効なキャッシュが保存されているか確認
+  const isAuthenticated = await auth0Client.isAuthenticated();
+
+  try {
+    if (isAuthenticated) {
+      console.log('isAuthenticated', isAuthenticated); 
+      // リフレッシュトークンを使用してアクセストークンを取得
+      const token = await auth0Client.getTokenSilently();
+      console.log('token', token);
+      return user;
+    } else {
+      
+      // *** メモ handleRedirectCallback()を使用するとログイン後のリロード時にエラーが発生する
+
+      console.log('isAuthenticated', isAuthenticated);
+      // URLを取得して末尾にパラメータが格納されているか確認
+      // パラメータがある場合はログインできている
+      const query = window.location.search;
+      const shouldParseResult = query.includes("code=") && query.includes("state=");
+      let user;
+      if (shouldParseResult) {
+      //   // セッションを確立
+      const redirectResult = await auth0Client.handleRedirectCallback();
+      //   // setTokenToCookie(redirectResult);
+        // ユーザー情報を取得
+        user = await getUser(auth0Client);
+        console.log(user);
+        return user
+      }
+
+      return null;
+    }
+  } catch (error) {
+    console.log('Error: ', error);
   }
-  return null
 }
 
 // ログアウト

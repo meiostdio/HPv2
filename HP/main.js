@@ -18,7 +18,7 @@ window.onload = async function() {
 
   // 古いキャッシュを削除
   removeExpiredCache();
-
+  console.log("古いキャッシュを削除しました");
   // ユーザー情報を格納する
   let user = await checkAuthState();
   // ユーザー情報が取得できている場合、ログインボタンをアイコンに変更
