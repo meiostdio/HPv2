@@ -34,8 +34,6 @@ const draftContainer = document.getElementById('draft-container');
 const addElement = document.getElementById('addElement');
 const addElementBtn = addElement.querySelectorAll('button');
 
-
-
 addElementBtn.forEach((button) => {
     
     button.addEventListener('click', () => {
@@ -47,6 +45,20 @@ addElementBtn.forEach((button) => {
             const input = document.createElement(inputTag);
             input.className = button.id;
             cell.appendChild(input);
+            cell.appendChild(remove);
+        }
+        else if (button.id === 'link') {
+            const cell = creatCellAndGrip();
+            const remove = createRemoveElement(cell);
+            const inputField = document.createElement('div');
+            const linkedTextInput = document.createElement('input');
+            linkedTextInput.className = 'linked-text';
+            const linkedUrlInput = document.createElement('input');
+            linkedUrlInput.className = 'linked-url';
+
+            cell.appendChild(inputField);
+            inputField.appendChild(linkedTextInput);
+            inputField.appendChild(linkedUrlInput);
             cell.appendChild(remove);
         }
         //画像の追加
