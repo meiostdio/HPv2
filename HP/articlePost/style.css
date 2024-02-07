@@ -8,6 +8,8 @@
 #draft {
     width: 60vw;
     height: fit-content;
+    margin-bottom: 30px;
+    position: relative;
 }
 
 #draft-title {
@@ -38,6 +40,13 @@
     align-items: center;
     justify-content: center;
 
+}
+
+#addTag:hover {
+    cursor: pointer;
+    background-color: #a1a1a1;
+    color: whitesmoke;
+    fill: whitesmoke;
 }
 
 .tag-cell {
@@ -100,7 +109,30 @@
 #submit {
     margin-top: 1vw;
     margin-bottom: 1vw;
+    position: absolute;
+    right: 0;
 }
 
 #submit button {
+    padding: 1vw 2vw 1.5vw;
+    outline: #A4E0D1 4px solid;
+    border: none;
+    border-radius: 3px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: #A4E0D1;
+    color: whitesmoke;
+}
+
+#sumbit button p {
+    color: whitesmoke;
+}
+
+#submit button:hover{
+    cursor: pointer;
+    background-color: transparent;
+    color: #12b388;
+    fill: #12b388;
 }
