@@ -1,4 +1,4 @@
-import { postArticleContent } from "../GithubData.js";
+import { postArticleContent, postArticleImage } from "../GithubData.js";
 
 //もとになるjsonデータ
 const draftData = {
@@ -250,12 +250,21 @@ submitBtn.addEventListener('click', async () => {
     const jsonArea = document.getElementById('json-area');
     jsonArea.textContent = json;
 
-    const response = await postArticleContent(draftData);
-    if (response) {
-        alert('記事を投稿しました');
-    } else {
-        alert('記事の投稿に失敗しました');
-    }
+    // *** ここで記事データをGitHubに保存する ***
+    // const response = await postArticleContent(draftData);
+    // if (response) {
+    //     alert('記事を投稿しました');
+    // } else {
+    //     alert('記事の投稿に失敗しました');
+    // }
+    
+    // *** ここで記事に使用する画像をGitHubに保存する ***
+    // const testBase64 = await getImagesFromDraftContainer();
+    // testBase64.forEach(async (base64, index) => {
+    //     //const resposnse = await postArticleImage('article11', `article${index+1}.png`, base64);
+    //     const resposnse = await postArticleImage('article11', `article3.png`, base64);
+    //     console.log(resposnse);
+    // });
 });
 
 function formatDate(date) {
@@ -263,4 +272,26 @@ function formatDate(date) {
     const m = ("00" + (date.getMonth() + 1)).slice(-2);
     const d = ("00" + date.getDate()).slice(-2);
     return `${y}${m}${d}`;
+}
+
+// 作成されたdraft-conainerから画像を取得する
+async function getImagesFromDraftContainer() {
+    let imageBase64 = [];
+    const images = draftContainer.querySelectorAll('.image');
+    for (let image of images) {
+        if (image.files && image.files[0]) {
+            const file = image.files[0];
+            const Base64 = await new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = e => resolve(e.target.result);
+                reader.onerror = e => reject(e.target.error);
+                reader.readAsDataURL(file);
+            });
+            imageBase64.push(Base64);
+        } else {
+            console.log('No file associated with this image element');
+        }
+    }  
+    console.log(imageBase64);
+    return imageBase64;
 }
