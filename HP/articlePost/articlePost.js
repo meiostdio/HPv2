@@ -220,7 +220,11 @@ submitBtn.addEventListener('click', async () => {
     const jsonArea = document.getElementById('json-area');
     jsonArea.textContent = json;
 
-    await postArticleContent(json);
+    const respons = await postArticleContent(draftData);
+    if(respons) {
+        alert('記事の投稿が完了しました');
+    }
+    console.log(draftData);
 });
 
 function formatDate(date) {
