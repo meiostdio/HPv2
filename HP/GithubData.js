@@ -32,3 +32,21 @@ export async function getArticleList(){
         return null
     }
 }
+
+// 記事データをVercelサーバーレス関数を使用してGitHubに保存する
+export async function postArticleContent(jsonData){
+    try{
+        const response = await fetch('/api/postArticle', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(jsonData),
+        });
+        const data = await response.json();
+        return data.success
+    } catch (error) {
+        console.error('記事データ保存エラー: ', error);
+        return null
+    }
+}

@@ -1,17 +1,19 @@
 const { Octokit } = require("@octokit/rest");
-const fs = require('fs');
 
 module.exports = async (req, res) => {
-    const githubToken = process.env.GITHUB_TOKEN;
+    const token = process.env.GITHUB_API_KEY;
     const owner = 'meiostdio';
     const repo = 'HPv2';
-    const path = 'article';
-    const commitMessage = '';
+    const path = 'articles';
+    let commitMessage = '';
+    let sha = '';
 
     const octokit = new Octokit({
-        auth: githubToken,
+        auth: `token ${token}`,
     });
-
+    
+    //console.log(req.body);
+    console.log("-------------------");
     try {
         const { data: files } = await octokit.repos.getContent({
             owner: owner,
@@ -20,15 +22,23 @@ module.exports = async (req, res) => {
         });
 
         const fileNames = files.map(file => file.name);
-        const nextFileName = `article${fileNames.length + 1}.json`;
+        const nextFileName = `article${fileNames.length}.json`;
+        console.log(nextFileName);
 
         commitMessage = `create ${nextFileName} from vercel serverless function`;
 
-        const filePath = `${dirPath}/${nextFileName}`;
-        const fileContent = JSON.stringify({ key: 'value' }); // Replace with your JSON content
+        // 既存のファイルがある場合はshaを取得する
+        const { data } = await octokit.repos.getContent({
+            owner: owner,
+            repo: repo,
+            path: path,
+        });
+
+        const filePath = `${path}/${nextFileName}`;
+        const fileContent = JSON.stringify(req.body, null, 2);
         const content = Buffer.from(fileContent).toString('base64');
 
-        const response = await octokit.repos.createOrUpdateFileContents({
+        await octokit.repos.createOrUpdateFileContents({
             owner: owner,
             repo: repo,
             path: filePath,
@@ -36,8 +46,9 @@ module.exports = async (req, res) => {
             content: content,
         });
 
-        res.status(200).send(response.data);
+        res.status(200).send({ success: true, message: '記事データを保存しました' });
     } catch (error) {
-        res.status(500).send(error.message);
+        console.log(error);
+        res.status(500).send({ success: false, message: '記事データの保存に失敗しました', error: error});
     }
 };

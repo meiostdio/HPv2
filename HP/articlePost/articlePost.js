@@ -1,3 +1,5 @@
+import { postArticleContent } from "../GithubData.js";
+
 //もとになるjsonデータ
 const draftData = {
     title: "",
@@ -196,7 +198,7 @@ const tag = document.getElementById('tag');
 const section = document.getElementById('section');
 const submitBtn = document.getElementById('submit-button');
 
-submitBtn.addEventListener('click', () => {
+submitBtn.addEventListener('click', async () => {
     draftData.title = title.value;
     draftData.tag = [];
     draftData.date = formatDate(new Date());
@@ -247,7 +249,6 @@ submitBtn.addEventListener('click', () => {
     const json = JSON.stringify(draftData);
     const jsonArea = document.getElementById('json-area');
     jsonArea.textContent = json;
-    console.log(json);
 });
 
 function formatDate(date) {
