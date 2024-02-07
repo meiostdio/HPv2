@@ -1,4 +1,4 @@
-import { loginWithAuth0,logout,checkAuthState } from "./auth.js";
+import { loginWithAuth0,logout,checkAuthState,getAuth0Client } from "./auth.js";
 import { findAnchorElementId,getArticleContentElement } from "./articleViewer.js";
 import { getArticleListElement } from "./articleIndex.js";
 import { checkCachesExpire, getCache, removeExpiredCache, saveContainerElementWithExpire, saveURLState } from "./cache.js";
@@ -19,6 +19,7 @@ window.onload = async function() {
   // 古いキャッシュを削除
   removeExpiredCache();
   console.log("古いキャッシュを削除しました");
+  
   // ユーザー情報を格納する
   let user = await checkAuthState();
   // ユーザー情報が取得できている場合、ログインボタンをアイコンに変更

@@ -193,7 +193,6 @@ export function getLastURLState() {
     return previousURL
   } catch (e) {
     console.log('セッションストレージにURLがありません');
-    console.log('Error:', e);
     return null
   }
 }
