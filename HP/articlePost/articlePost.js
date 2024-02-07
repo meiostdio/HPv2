@@ -249,6 +249,13 @@ submitBtn.addEventListener('click', async () => {
     const json = JSON.stringify(draftData);
     const jsonArea = document.getElementById('json-area');
     jsonArea.textContent = json;
+
+    const response = await postArticleContent(draftData);
+    if (response) {
+        alert('記事を投稿しました');
+    } else {
+        alert('記事の投稿に失敗しました');
+    }
 });
 
 function formatDate(date) {
