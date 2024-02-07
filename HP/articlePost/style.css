@@ -28,6 +28,8 @@
 }
 
 #tag-container {
+    display: flex;
+    flex-wrap: wrap;
 }
 
 #addTag {
@@ -102,7 +104,7 @@
     fill: whitesmoke;
 }
 
-.subtitle {
+input .subtitle {
     border-style: dashed;
 }
 

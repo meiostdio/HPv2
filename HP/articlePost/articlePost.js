@@ -33,26 +33,29 @@ const addElement = document.getElementById('addElement');
 const addElementBtn = addElement.querySelectorAll('button');
 
 addElementBtn.forEach((button) => {
-    
+
     button.addEventListener('click', () => {
         //テキストコンテントの追加
         if (button.classList.contains('text')) {
-            const cell = creatCellAndGrip();
+            const cell = creatCellAndGrip(button.classList[0]);
             const remove = createRemoveElement(cell);
             const inputTag = button.classList.contains('input') ? 'input' : 'textarea';
             const input = document.createElement(inputTag);
             input.className = button.id;
+            input.placeholder = button.id;
             cell.appendChild(input);
             cell.appendChild(remove);
         }
         else if (button.id === 'link') {
-            const cell = creatCellAndGrip();
+            const cell = creatCellAndGrip(button.classList[0]);
             const remove = createRemoveElement(cell);
             const inputField = document.createElement('div');
             const linkedTextInput = document.createElement('input');
             linkedTextInput.className = 'linked-text';
+            linkedTextInput.placeholder = 'linked-text';
             const linkedUrlInput = document.createElement('input');
             linkedUrlInput.className = 'linked-url';
+            linkedUrlInput.placeholder = 'linked-url';
 
             cell.appendChild(inputField);
             inputField.appendChild(linkedTextInput);
@@ -96,7 +99,7 @@ addElementBtn.forEach((button) => {
                     reader.readAsDataURL(input.files[0]);
                     img.style.width = '100px';
                     img.style.height = 'auto';
-                    const cell = creatCellAndGrip();
+                    const cell = creatCellAndGrip(button.classList[0]);
                     const remove = createRemoveElement(cell);
                     cell.appendChild(img);
                     cell.appendChild(input);
@@ -122,9 +125,9 @@ addElementBtn.forEach((button) => {
     });
 });
 
-function creatCellAndGrip() {
+function creatCellAndGrip(buttonClass) {
     const cell = document.createElement('div');
-    cell.className = 'cell';
+    cell.className = 'cell ' + buttonClass;
     cell.draggable = false;
     cell.style.cursor = 'move';
     cell.style.backgroundColor = 'tarquoise';
@@ -205,18 +208,46 @@ submitBtn.addEventListener('click', () => {
     });
     draftData.section = [];
     const cells = draftContainer.querySelectorAll('.cell');
+    let imageNumber = 1;
     cells.forEach((cell) => {
-        const input = cell.querySelector('input, textarea');
-        const type = input.className;
-        const value = input.value;
-        draftData.section.push({
-            type: type,
-            value: value
-        });
+        if (cell.classList.contains('text')) {
+            const input = cell.querySelector('input, textarea');
+            const type = input.className;
+            const value = input.value;
+            draftData.section.push({
+                type: type,
+                value: value
+            });
+        }
+        else if (cell.classList.contains('link')) {
+            const linkedText = cell.querySelector('.linked-text').value;
+            const linkedUrl = cell.querySelector('.linked-url').value;
+            draftData.section.push({
+                type: 'link',
+                value: linkedText,
+                url: linkedUrl
+            });
+        }
+        else if (cell.classList.contains('image')) {
+            const input = cell.querySelector('input');
+            // 画像名をarticle{number}の形式で与える
+            const imageName = `article${imageNumber++}`;
+            const imageExtension = input.value.split('.').pop();
+            const imageFullName = `${imageName}.${imageExtension}`;
+
+            const type = input.className;
+            const value = imageFullName;
+
+            draftData.section.push({
+                type: type,
+                value: value
+            });
+        }
     });
     const json = JSON.stringify(draftData);
     const jsonArea = document.getElementById('json-area');
     jsonArea.textContent = json;
+    console.log(json);
 });
 
 function formatDate(date) {
