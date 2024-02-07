@@ -417,3 +417,7 @@ footer p{
     color: #A4E0D1;
     text-decoration: underline;
 }
+
+#header > header > div.test-articlePost > a{
+    color: #ffffff;
+}
