@@ -15,30 +15,16 @@ module.exports = async (req, res) => {
     //console.log(req.body);
     console.log("-------------------");
     try {
-        // 既存のファイル名を取得し、次のファイル名を決定する
-        const { data: files } = await octokit.repos.getContent({
-            owner: owner,
-            repo: repo,
-            path: path,
-        });
-
         const fileNames = files.map(file => file.name);
         const nextFileName = `article${fileNames.length}.json`;
-        console.log(nextFileName);
 
         commitMessage = `create ${nextFileName} from vercel serverless function`;
-
-        const { data } = await octokit.repos.getContent({
-            owner: owner,
-            repo: repo,
-            path: path,
-        });
 
         const filePath = `${path}/${nextFileName}`;
         const fileContent = JSON.stringify(req.body, null, 2);
         const content = Buffer.from(fileContent).toString('base64');
 
-        // ファイルを新規作成する
+        // ファイルを新規作成してJSONデータを保存する
         await octokit.repos.createOrUpdateFileContents({
             owner: owner,
             repo: repo,
