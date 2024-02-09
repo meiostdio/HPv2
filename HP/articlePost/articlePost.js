@@ -250,6 +250,12 @@ submitBtn.addEventListener('click', async () => {
     const jsonArea = document.getElementById('json-area');
     jsonArea.textContent = json;
 
+    document.getElementById('thumbnail-dialog').style.display = 'block';
+    //  *** ここで画像を圧縮する ***
+    // const imagesBase64 = await getImagesFromDraftContainer();
+    // let compressedImagesPromises = imagesBase64.map(compressImage);
+    // let compressedImagesBase64 = await Promise.all(compressedImagesPromises);
+    
     // *** ここで記事データをGitHubに保存する ***
     // const response = await postArticleContent(draftData);
     // if (response) {
@@ -259,10 +265,9 @@ submitBtn.addEventListener('click', async () => {
     // }
     
     // *** ここで記事に使用する画像をGitHubに保存する ***
-    // const testBase64 = await getImagesFromDraftContainer();
-    // testBase64.forEach(async (base64, index) => {
+    // const imagesBase64 = await getImagesFromDraftContainer();
+    // imagesBase64.forEach(async (base64, index) => {
     //     //const resposnse = await postArticleImage('article11', `article${index+1}.png`, base64);
-    //     const resposnse = await postArticleImage('article11', `article3.png`, base64);
     //     console.log(resposnse);
     // });
 });
@@ -274,7 +279,41 @@ function formatDate(date) {
     return `${y}${m}${d}`;
 }
 
-// 作成されたdraft-conainerから画像を取得する
+// サムネイルのダイアログで選択ボタンを押したとき
+// サムネイルのダイアログで選択ボタンを押したとき
+document.getElementById('selent-thumbnail').addEventListener('click', function() {
+    // 非表示のinput要素をクリックする
+    document.getElementById('thumbnail-dialog-input').click();
+});
+
+// 非表示のinput要素でファイルが選択されたとき
+document.getElementById('thumbnail-dialog-input').addEventListener('change', async function(e) {
+    const file = e.target.files[0];
+    const base64 = await toBase64(file);
+    console.log('圧縮前の画像:',base64);
+    const compressedImageBase64 = await compressImage(base64);
+    console.log('圧縮後の画像:',compressedImageBase64);
+});
+
+
+// サムネイルのダイアログを閉じる
+document.getElementById('close-thumbnail-dialog').addEventListener('click', () => {
+    document.getElementById('thumbnail-dialog').style.display = 'none';
+});
+
+// fileをbase64に変換する
+function toBase64(file) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onloadend = function() {
+            resolve(reader.result);
+        };
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+    });
+}
+
+// 作成されたdraft-conainerから画像を取得してbase64形式で返す
 async function getImagesFromDraftContainer() {
     let imageBase64 = [];
     const images = draftContainer.querySelectorAll('.image');
@@ -292,6 +331,44 @@ async function getImagesFromDraftContainer() {
             console.log('No file associated with this image element');
         }
     }  
-    console.log(imageBase64);
+    console.log('圧縮前の画像:',imageBase64);
     return imageBase64;
+}
+
+// 画像を圧縮してbase64形式で返す
+async function compressImage(base64) {
+    const maxWidth = 800; // Maximum width
+    const maxHeight = 800; // Maximum height
+
+    // Load the image into a new Image object
+    const img = new Image();
+    img.src = base64;
+    await new Promise(resolve => img.onload = resolve);
+
+    // Determine if the image needs to be resized
+    let width = img.width;
+    let height = img.height;
+
+    if (width > height) {
+        if (width > maxWidth) {
+            height *= maxWidth / width;
+            width = maxWidth;
+        }
+    } else {
+        if (height > maxHeight) {
+            width *= maxHeight / height;
+            height = maxHeight;
+        }
+    }
+
+    // Create a canvas and draw the resized image onto it
+    const canvas = document.createElement('canvas');
+    canvas.width = width;
+    canvas.height = height;
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(img, 0, 0, width, height);
+
+    // Get the result as a base64 string
+    const resizedBase64 = canvas.toDataURL('image/png');
+    return resizedBase64;
 }
