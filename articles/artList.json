@@ -90,15 +90,5 @@
     ],
     "date": "20230613",
     "thumbnail": "article10.jpg"
-  },
-  "article11": {
-    "title": "これはテスト記事です",
-    "tag": [
-      "testTag1",
-      "testTag2",
-      "testTag3"
-    ],
-    "date": "20240208",
-    "thumbnail": "article12.txt"
   }
 }
