@@ -319,6 +319,12 @@ document.getElementById('close-thumbnail-dialog').addEventListener('click', () =
     document.getElementById('upload').style.display = 'none';
 });
 
+// アップロードボタンを押したとき
+document.getElementById('upload').addEventListener('click', async () => {
+    document.getElementById('thumbnail-dialog').style.display = 'none';
+    document.getElementById('complete-dialog').style.display = 'block';
+});
+
 // fileをbase64に変換する
 function toBase64(file) {
     return new Promise((resolve, reject) => {
@@ -410,3 +416,17 @@ function createPreviewElement(json, thumbImageBase64) {
     `
     return preview.innerHTML;
 }
+
+// 投稿完了ダイアログボックスの閉じるボタンを押したとき
+document.getElementById('close-complete-dialog').addEventListener('click', (e) => {
+    document.getElementById('complete-dialog').style.display = 'none';
+    document.getElementById('json-area').textContent = '';
+    document.getElementById('draft-container').innerHTML = '';
+    document.getElementById('title').value = '';
+    document.getElementById('tag-container').innerHTML = '';
+    document.getElementById('thumbnail-dialog-input').value = '';
+    document.getElementById('preview').innerHTML = '';
+    document.getElementById('upload').style.display = 'none';
+    e.preventDefault();
+    location.href = '/';
+});
