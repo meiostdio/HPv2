@@ -1,4 +1,4 @@
-import { postArticleContent, postArticleImage } from "../GithubData.js";
+import { postArticleContent, postArticleImage,getArticleList,postArticleThumbnail } from "../GithubData.js";
 
 //もとになるjsonデータ
 const draftData = {
@@ -7,6 +7,12 @@ const draftData = {
     date: "",
     section: []
 }
+// サムネと記事ない画像のbase64データ
+let compressedArticleImagesBase64 = [];
+let compressedThumbnailBase64 = '';
+
+//新しい記事のナンバー
+let newArticleNumber;
 
 const addTag = document.getElementById('addTag');
 const tagContainer = document.getElementById('tag-container');
@@ -260,25 +266,15 @@ submitBtn.addEventListener('click', async () => {
     jsonArea.textContent = json;
 
     document.getElementById('thumbnail-dialog').style.display = 'block';
-    //  *** ここで画像を圧縮する ***
-    // const imagesBase64 = await getImagesFromDraftContainer();
-    // let compressedImagesPromises = imagesBase64.map(compressImage);
-    // let compressedImagesBase64 = await Promise.all(compressedImagesPromises);
-    
-    // *** ここで記事データをGitHubに保存する ***
-    // const response = await postArticleContent(draftData);
-    // if (response) {
-    //     alert('記事を投稿しました');
-    // } else {
-    //     alert('記事の投稿に失敗しました');
-    // }
-    
-    // *** ここで記事に使用する画像をGitHubに保存する ***
-    // const imagesBase64 = await getImagesFromDraftContainer();
-    // imagesBase64.forEach(async (base64, index) => {
-    //     //const resposnse = await postArticleImage('article11', `article${index+1}.png`, base64);
-    //     console.log(resposnse);
-    // });
+    // 最新の記事リストを取得して新しい記事のナンバーを取得
+    const articleList = await getArticleList();
+    newArticleNumber = Object.keys(articleList.data.articles.items).length + 1;
+
+    // 記事内の画像を圧縮してbase64形式で取得
+    const imagesBase64 = await getImagesFromDraftContainer();
+    let compressedImagesPromises = imagesBase64.map(compressImage);
+    let compressedImagesBase64 = await Promise.all(compressedImagesPromises);
+    compressedArticleImagesBase64 = compressedImagesBase64;
 });
 
 function formatDate(date) {
@@ -305,9 +301,9 @@ document.getElementById('thumbnail-dialog-input').addEventListener('change', asy
         const previewArea = document.getElementById('preview');
         previewArea.innerHTML = previewElement;
 
+        compressedThumbnailBase64 = compressedImageBase64;
         document.getElementById('upload').style.display = 'block';
-    } 
-    console.log('draftData:',draftData);
+    }
 });
 
 
@@ -321,8 +317,22 @@ document.getElementById('close-thumbnail-dialog').addEventListener('click', () =
 
 // アップロードボタンを押したとき
 document.getElementById('upload').addEventListener('click', async () => {
-    document.getElementById('thumbnail-dialog').style.display = 'none';
-    document.getElementById('complete-dialog').style.display = 'block';
+    // ↓はサムネ選択のダイアログボックスを非表示にして、投稿完了のダイアログボックスを表示する
+    // document.getElementById('thumbnail-dialog').style.display = 'none';
+    // document.getElementById('complete-dialog').style.display = 'block';
+    
+    // *** ここで記事データをGitHubに保存する ***
+    // const response = await postArticleContent(draftData);
+    
+    // *** ここで記事に使用する画像をGitHubに保存する ***
+    // const imagesBase64 = await getImagesFromDraftContainer();
+    // const compressedImages = await Promise.all(imagesBase64.map(compressImage));
+    // const resposnse = await postArticleImage(`article${newArticleNumber}`, compressedImages);
+
+    console.log('compressedThumbnailBase64:', compressedThumbnailBase64);
+    // *** ここでサムネイルをGitHubに保存する ***
+    const response = await postArticleThumbnail(`article${newArticleNumber}`, compressedThumbnailBase64);
+
 });
 
 // fileをbase64に変換する
@@ -354,12 +364,11 @@ async function getImagesFromDraftContainer() {
         } else {
             console.log('No file associated with this image element');
         }
-    }  
-    console.log('圧縮前の画像:',imageBase64);
+    }
     return imageBase64;
 }
 
-// 画像を圧縮してbase64形式で返す
+// 画像を圧縮してpngのbase64形式で返す
 async function compressImage(base64) {
     const maxWidth = 800; // Maximum width
     const maxHeight = 800; // Maximum height

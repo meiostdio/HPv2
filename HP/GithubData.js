@@ -36,7 +36,7 @@ export async function getArticleList(){
 // 記事データをVercelサーバーレス関数を使用してGitHubに保存する
 export async function postArticleContent(jsonData){
     try{
-        const response = await fetch('/api/postArticleC', {
+        const response = await fetch('/api/postArticleContent', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -52,19 +52,37 @@ export async function postArticleContent(jsonData){
 }
 
 // 記事に使用する画像をVercelサーバーレス関数を使用してGitHubに保存する
-export async function postArticleImage(articleNumber, imageName, imageBase64){
+export async function postArticleImage(articleNumber, imagesBase64){
     try{
-        const response = await fetch('/api/postArticleImage', {
+        const response = await fetch('/api/postArticleImages', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ articleNumber, imageName, imageBase64 }),
+            body: JSON.stringify({ articleNumber, imagesBase64 }),
         });
         const data = await response.json();
         return data.success
     } catch (error) {
         console.error('画像データ保存エラー: ', error);
+        return null
+    }
+}
+
+// 記事サムネイルをVercelサーバーレス関数を使用してGitHubに保存する
+export async function postArticleThumbnail(articleNumber, thumbnailBase64){
+    try{
+        const response = await fetch('/api/postArticleThumbnail', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ articleNumber, thumbnailBase64 }),
+        });
+        const data = await response.json();
+        return data.success
+    } catch (error) {
+        console.error('サムネイルデータ保存エラー: ', error);
         return null
     }
 }
