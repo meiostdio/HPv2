@@ -1,0 +1,79 @@
+{
+	"title": "Github Copiotを使ってみた",
+	"tag": [
+		"Copilot",
+		"AI"
+	],
+	"date": "20240211",
+	"section": [
+		{
+			"type": "subtitle",
+			"value": "Github Copilotとは？"
+		},
+		{
+			"type": "content",
+			"value": "プログラマー専用のAIアシスタントです。\nコーディング作業用に訓練されているため、提案内容がChat-GPT4よりもよくなっている印象です。\n価格もChat-GPTが月20ドルなのがGithub Copilotは月10ドルで半額なので断然お勧めです。"
+		},
+		{
+			"type": "subtitle",
+			"value": "簡単な使い方"
+		},
+		{
+			"type": "content",
+			"value": "コメントアウトで実装したいコードを書くことで予測して関数を生成してくれます。\n以下の関数は上のheaderのロゴクリックで記事リストを表示しか書いていません。"
+		},
+		{
+			"type": "code",
+			"value": "// headerのロゴクリックで記事リストを表示\nasync function showArticleList() {\n // URLの末尾のidを削除\n const currentUrl = new URL(window.location.href);\n currentUrl.searchParams.delete('id');\n window.history.pushState({}, '', currentUrl);\n \n // カスタムイベントを発火\n const urlChangeEvent = new CustomEvent('urlChange', { detail: currentUrl });\n window.dispatchEvent(urlChangeEvent);\n \n // 記事リストを表示\n const articleListElement = await getArticleListElement();\n container.innerHTML = '';\n container.appendChild(articleListElement.card);\n container.appendChild(articleListElement.main);\n \n // 記事リストの要素をlocalStorageに保存\n saveContainerElementWithExpire('articleList', container, 10);\n}"
+		},
+		{
+			"type": "content",
+			"value": "コメントアウトして開業すると下の画像のように予測が表示され、Tabキーで適用します。\nすごい！"
+		},
+		{
+			"type": "image",
+			"value": "article1.png"
+		},
+		{
+			"type": "subtitle",
+			"value": "変数の命名規則に従ってくれる"
+		},
+		{
+			"type": "content",
+			"value": "現在開発しているサイトでは変数名にキャメルケースを使用していますが、もちろんそこに合わせて変数を生成してくれます。"
+		},
+		{
+			"type": "link",
+			"value": "キャメルケース(Wiki)",
+			"url": "https://ja.wikipedia.org/wiki/%E3%82%AD%E3%83%A3%E3%83%A1%E3%83%AB%E3%82%B1%E3%83%BC%E3%82%B9"
+		},
+		{
+			"type": "content",
+			"value": "また、私が書いた他の変数の命名規則を見ながら提案してくれる印象を受けます。"
+		},
+		{
+			"type": "subtitle",
+			"value": "使ってみてよかったこと"
+		},
+		{
+			"type": "content",
+			"value": "・コードを書いて実装するまでのスピードが誇張抜きに10倍くらいになる。\n・自分の書いているコードの悪い癖や、新しいテクニックを知ることができる。\n・他の人がGithub Copilotを使っていればきれいなコードになりやすいため、すらすら読める。\n・ライブラリのバージョンアップで実装方法が変わっていても教えてくれる。(Chat-GPT4やBingAIは精度がちょっと怪しい)"
+		},
+		{
+			"type": "subtitle",
+			"value": "微妙な点"
+		},
+		{
+			"type": "content",
+			"value": "・自分がすごい開発者であると錯覚してしまう。\n・理解しないまま開発を続け、システムが大きくなるとバグが発生したときにどの部分で起きたか理解しにくい。\n・精度が高く、理解しないまま動いているからという認識で開発していくと危険。\n・プログラミング以外の質問に答えてくれない。"
+		},
+		{
+			"type": "subtitle",
+			"value": "感想"
+		},
+		{
+			"type": "content",
+			"value": "個人的にプロジェクトメンバー全員がCopilotを使用すれば最も威力を発揮すると思います。\n他の人が書いたコードが読みやすいというのは生産性を挙げるうえで最も重要だと思うからです。\nこれから一人一人の生産性が大幅に上がれば、開発者を多く抱えて派遣するような業務形態の会社は必要なくなってくるのかなーと感じました。"
+		}
+	]
+}

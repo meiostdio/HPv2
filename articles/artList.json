@@ -90,5 +90,14 @@
     ],
     "date": "20230613",
     "thumbnail": "article10.jpg"
+  },
+  "article11": {
+    "title": "Github Copilotを使ってみた",
+    "tag": [
+      "Copilot",
+      "AI"
+    ],
+    "date": "20240211",
+    "thumbnail": "article11.png"
   }
 }
