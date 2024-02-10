@@ -15,6 +15,12 @@ module.exports = async (req, res) => {
     //console.log(req.body);
     console.log("-------------------");
     try {
+        // 既存のファイル名を取得し、次のファイル名を決定する
+        const { data: files } = await octokit.repos.getContent({
+            owner: owner,
+            repo: repo,
+            path: path,
+        });
         const fileNames = files.map(file => file.name);
         const nextFileName = `article${fileNames.length}.json`;
 
