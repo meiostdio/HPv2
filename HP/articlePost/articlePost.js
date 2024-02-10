@@ -287,10 +287,7 @@ function formatDate(date) {
     const d = ("00" + date.getDate()).slice(-2);
     return `${y}${m}${d}`;
 }
-<<<<<<< HEAD
-=======
 
-// サムネイルのダイアログで選択ボタンを押したとき
 // サムネイルのダイアログで選択ボタンを押したとき
 document.getElementById('selent-thumbnail').addEventListener('click', function() {
     // 非表示のinput要素をクリックする
@@ -301,15 +298,25 @@ document.getElementById('selent-thumbnail').addEventListener('click', function()
 document.getElementById('thumbnail-dialog-input').addEventListener('change', async function(e) {
     const file = e.target.files[0];
     const base64 = await toBase64(file);
-    console.log('圧縮前の画像:',base64);
-    const compressedImageBase64 = await compressImage(base64);
-    console.log('圧縮後の画像:',compressedImageBase64);
+    if(base64) {
+        const compressedImageBase64 = await compressImage(base64);
+
+        const previewElement = createPreviewElement(draftData, compressedImageBase64);
+        const previewArea = document.getElementById('preview');
+        previewArea.innerHTML = previewElement;
+
+        document.getElementById('upload').style.display = 'block';
+    } 
+    console.log('draftData:',draftData);
 });
 
 
 // サムネイルのダイアログを閉じる
 document.getElementById('close-thumbnail-dialog').addEventListener('click', () => {
     document.getElementById('thumbnail-dialog').style.display = 'none';
+    document.getElementById('thumbnail-dialog-input').value = '';
+    document.getElementById('preview').innerHTML = '';
+    document.getElementById('upload').style.display = 'none';
 });
 
 // fileをbase64に変換する
@@ -383,4 +390,23 @@ async function compressImage(base64) {
     const resizedBase64 = canvas.toDataURL('image/png');
     return resizedBase64;
 }
->>>>>>> 2d9edbe58dec9959407aa28655e22f097893f309
+
+// JSONとサムネを元にプレビューを作成
+function createPreviewElement(json, thumbImageBase64) {
+    const title = json.title;
+    const date = json.date;
+    const tag = json.tag.join(', ');
+    const image = thumbImageBase64;
+    const preview = document.createElement('div');
+    preview.innerHTML = `
+        <a class="preview-article" >    
+            <img class="thumbnail" src="${image}">
+            <div class="preview-text">
+                <h1>${title}</h1>
+                <p>投稿日: ${date}</p>
+                <p>タグ: ${tag}</p>
+            </div>
+        </a>
+    `
+    return preview.innerHTML;
+}

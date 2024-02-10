@@ -40,7 +40,7 @@ export async function getArticleListElement() {
                 <h1>${title}</h1>
                 <p>投稿日: ${date}</p>
                 <p>タグ: ${tag}</p>
-            </a>
+                </a>
             </div>
         `;
         // main要素に記事を追加

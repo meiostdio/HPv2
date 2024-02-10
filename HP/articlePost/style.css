@@ -187,6 +187,14 @@ input .subtitle {
     width: 100%;
 }
 
+#thumbnail-dialog-button button {
+    margin: 0 10px;
+}
+
+#upload {
+    display: none;
+}
+
 #thumbnail-dialog-container button{
     outline: #A4E0D1 4px solid;
     outline-offset: -3px;
@@ -210,4 +218,39 @@ input .subtitle {
 
 #thumbnail-dialog-button button {
     width: 45%;
+}
+
+/* サムネ選択後のプレビュー */
+.preview-article {
+    display: flex;
+}
+
+.preview-article img{
+    height: 180px;
+    width: 180px;
+    background-size: cover;
+    float: left;
+    margin: 10px 20px 10px 10px;
+}
+
+.preview-text h1 {
+    padding-top: 10px;
+    font-size: 30px;
+    padding-right: 3%;
+    width: 97%;
+}
+
+.preview-text p {
+    padding-top: 5px;
+    color: #617b7c;
+}
+
+.preview-text {
+    margin-bottom: 20px;
+    text-decoration: none;
+    color: #2f3f3c;
+}
+
+.preview-text:visited {
+    color: #2f3f3c;
 }
