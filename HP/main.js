@@ -157,6 +157,12 @@ async function CallLogout(){
 };
 window.logout = CallLogout;
 
+// 投稿ボタンクリックで記事投稿画面を表示
+function showArticlePost(){
+  window.location.href = './articlePost/articlePost.html';
+}
+window.showArticlePost = showArticlePost;
+
 // サブメニュー開閉
 function subMenu(){
   const subMenu = document.querySelector('.subMenu');

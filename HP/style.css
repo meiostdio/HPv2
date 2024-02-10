@@ -45,6 +45,7 @@ header {
     justify-content: center;
     align-items: center;
     padding: 10px 15px;
+    margin-right: 10px;
     gap: 15px;
     background-color: #007ACC;
     outline: 3px #007ACC solid;
