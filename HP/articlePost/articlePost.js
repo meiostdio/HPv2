@@ -317,22 +317,26 @@ document.getElementById('close-thumbnail-dialog').addEventListener('click', () =
 
 // アップロードボタンを押したとき
 document.getElementById('upload').addEventListener('click', async () => {
-    // ↓はサムネ選択のダイアログボックスを非表示にして、投稿完了のダイアログボックスを表示する
-    // document.getElementById('thumbnail-dialog').style.display = 'none';
-    // document.getElementById('complete-dialog').style.display = 'block';
+    // // *** ここで記事データをGitHubに保存する ***
+    const ArticlecontentResponse = await postArticleContent(draftData);
     
-    // *** ここで記事データをGitHubに保存する ***
-    // const response = await postArticleContent(draftData);
+    // // *** ここで記事に使用する画像をGitHubに保存する ***
+    const imagesBase64 = await getImagesFromDraftContainer();
+    const compressedImages = await Promise.all(imagesBase64.map(compressImage));
+    const articleImagesResponse = await postArticleImage(`article${newArticleNumber}`, compressedImages);
+
+    // // *** ここでサムネイルをGitHubに保存する ***
+    const Thumbnailresponse = await postArticleThumbnail(`article${newArticleNumber}`, compressedThumbnailBase64);
+
     
-    // *** ここで記事に使用する画像をGitHubに保存する ***
-    // const imagesBase64 = await getImagesFromDraftContainer();
-    // const compressedImages = await Promise.all(imagesBase64.map(compressImage));
-    // const resposnse = await postArticleImage(`article${newArticleNumber}`, compressedImages);
-
-    console.log('compressedThumbnailBase64:', compressedThumbnailBase64);
-    // *** ここでサムネイルをGitHubに保存する ***
-    const response = await postArticleThumbnail(`article${newArticleNumber}`, compressedThumbnailBase64);
-
+    document.getElementById('loading').style.display = 'block';
+    document.getElementById('thumbnail-dialog').style.display = 'none';
+    document.getElementById('upload').style.display = 'none';
+    if(ArticlecontentResponse && articleImagesResponse && Thumbnailresponse) {
+        document.getElementById('loading').style.display = 'none';
+        document.getElementById('thumbnail-dialog').style.display = 'none';
+        document.getElementById('complete-dialog').style.display = 'block';
+    }
 });
 
 // fileをbase64に変換する
