@@ -12,7 +12,7 @@
     position: relative;
 }
 
-#draft-title {
+#title {
     width: 100%;
     height: 10vw;
     margin-top: 2vw;
@@ -80,11 +80,11 @@
     margin: 1vw;
 }
 
-#addElement {
+#addBtn {
     display: flex;
 }
 
-#addElement button {
+#addBtn button {
     margin-top: 1vw;
     margin-bottom: 1vw;
     margin-right: 1vw;
@@ -97,7 +97,7 @@
     justify-content: center;
 }
 
-#addElement button:hover{
+#addBtn button:hover{
     cursor: pointer;
     background-color: #a1a1a1;
     color: whitesmoke;

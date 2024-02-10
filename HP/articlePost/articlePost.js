@@ -23,18 +23,25 @@ addTag.addEventListener('click', () => {
     remove.addEventListener('click', () => {
         tagCell.remove();
     });
+    remove.addEventListener('mouseover', () => {
+        tagCell.style.backgroundColor = '#a1a1a1';
+        input.style.backgroundColor = '#e3e3e3';
+    });
+    remove.addEventListener('mouseout', () => {
+        tagCell.style.backgroundColor = '';
+        input.style.backgroundColor = '';
+    });
     tagCell.appendChild(input);
     tagCell.appendChild(remove);
 });
 
 //ボタンと表示領域の取得
-const addSubtitle = document.getElementById('addSubtitle');
+
 const draftContainer = document.getElementById('draft-container');
+const addBtns = document.getElementById('addBtn');
+const addBtn = addBtns.querySelectorAll('button');
 
-const addElement = document.getElementById('addElement');
-const addElementBtn = addElement.querySelectorAll('button');
-
-addElementBtn.forEach((button) => {
+addBtn.forEach((button) => {
 
     button.addEventListener('click', () => {
         //テキストコンテントの追加
@@ -90,7 +97,6 @@ addElementBtn.forEach((button) => {
                     input.files = dt.files;
                 } else if (!inputFileData[input]) {
                     // そのinput要素にまだファイルが選択されていない場合
-
                     inputFileData[input] = input.files;
 
                     // 選択した画像のプレビュー
@@ -132,7 +138,6 @@ function creatCellAndGrip(buttonClass) {
     cell.className = 'cell ' + buttonClass;
     cell.draggable = false;
     cell.style.cursor = 'move';
-    cell.style.backgroundColor = 'tarquoise';
     cell.style.display = 'flex';
     cell.style.alignItems = 'center';
     draftContainer.appendChild(cell);
@@ -154,6 +159,12 @@ function createRemoveElement(cell) {
     remove.addEventListener('click', () => {
         cell.remove();
     });
+    remove.addEventListener('mouseover', () => {
+        cell.style.backgroundColor = '#e3e3e3';
+    });
+    remove.addEventListener('mouseout', () => {
+        cell.style.backgroundColor = '';
+    });
     return remove;
 }
 
@@ -163,7 +174,7 @@ let dragTarget;
 draftContainer.addEventListener('dragstart', (e) => {
     dragTarget = e.target.closest('.cell');
     dragTarget.draggable = true;
-    dragTarget.style.backgroundColor = 'lightgreen';
+    dragTarget.style.backgroundColor = '#e3e3e3';
     e.dataTransfer.effectAllowed = 'move';
 });
 
@@ -193,9 +204,7 @@ draftContainer.addEventListener('dragend', (e) => {
 });
 
 //追加されたcellをもとにdraftDataを更新する
-const title = document.getElementById('draft-title');
-const tag = document.getElementById('tag');
-const section = document.getElementById('section');
+const title = document.getElementById('title');
 const submitBtn = document.getElementById('submit-button');
 
 submitBtn.addEventListener('click', async () => {
