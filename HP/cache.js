@@ -83,8 +83,9 @@ export function getCache(isList, key){
   // 記事リストの場合は記事リストの要素とサムネを全て取得してreturn
   if(isList) {
     const listElement = JSON.parse(localStorage.getItem('articleList'));
+    const listLength = Object.keys(localStorage).length - 1;
     let thumbBase64 = {};
-    for(let i = 1; i <= 10; i ++) {
+    for(let i = 1; i <= listLength; i ++) {
       let item = JSON.parse(localStorage.getItem(i));
       thumbBase64[i] = item.imageBase64;
     } 
