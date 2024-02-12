@@ -318,15 +318,17 @@ document.getElementById('close-thumbnail-dialog').addEventListener('click', () =
 // アップロードボタンを押したとき
 document.getElementById('upload').addEventListener('click', async () => {
     // // *** ここで記事データをGitHubに保存する ***
-    const ArticlecontentResponse = await postArticleContent(draftData);
+    // const ArticlecontentResponse = await postArticleContent(draftData);
     
     // // *** ここで記事に使用する画像をGitHubに保存する ***
     const imagesBase64 = await getImagesFromDraftContainer();
     const compressedImages = await Promise.all(imagesBase64.map(compressImage));
-    const articleImagesResponse = await postArticleImage(`article${newArticleNumber}`, compressedImages);
+
+    console.log(compressedImages);
+    // const articleImagesResponse = await postArticleImage(`article${newArticleNumber}`, compressedImages);
 
     // // *** ここでサムネイルをGitHubに保存する ***
-    const Thumbnailresponse = await postArticleThumbnail(`article${newArticleNumber}`, compressedThumbnailBase64);
+    // const Thumbnailresponse = await postArticleThumbnail(`article${newArticleNumber}`, compressedThumbnailBase64);
 
     
     document.getElementById('loading').style.display = 'block';
