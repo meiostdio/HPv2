@@ -318,27 +318,39 @@ document.getElementById('close-thumbnail-dialog').addEventListener('click', () =
 // アップロードボタンを押したとき
 document.getElementById('upload').addEventListener('click', async () => {
     // // *** ここで記事データをGitHubに保存する ***
-    // const ArticlecontentResponse = await postArticleContent(draftData);
+    const ArticlecontentResponse = await postArticleContent(draftData);
     
     // // *** ここで記事に使用する画像をGitHubに保存する ***
     const imagesBase64 = await getImagesFromDraftContainer();
     const compressedImages = await Promise.all(imagesBase64.map(compressImage));
 
-    console.log(compressedImages);
-    // const articleImagesResponse = await postArticleImage(`article${newArticleNumber}`, compressedImages);
+    let articleImagesResponse;
+    // 画像が存在するかどうかbooleanで格納する
+    const isImagesExist = compressedImages.length > 0;
+    if(isImagesExist) {
+        articleImagesResponse = await postArticleImage(`article${newArticleNumber}`, compressedImages);
+    }
 
     // // *** ここでサムネイルをGitHubに保存する ***
-    // const Thumbnailresponse = await postArticleThumbnail(`article${newArticleNumber}`, compressedThumbnailBase64);
-
+    const Thumbnailresponse = await postArticleThumbnail(`article${newArticleNumber}`, compressedThumbnailBase64);
     
     document.getElementById('loading').style.display = 'block';
     document.getElementById('thumbnail-dialog').style.display = 'none';
     document.getElementById('upload').style.display = 'none';
-    if(ArticlecontentResponse && articleImagesResponse && Thumbnailresponse) {
-        document.getElementById('loading').style.display = 'none';
-        document.getElementById('thumbnail-dialog').style.display = 'none';
-        document.getElementById('complete-dialog').style.display = 'block';
-    }
+    
+    if (isImagesExist) {
+        if(ArticlecontentResponse && articleImagesResponse && Thumbnailresponse) {
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('thumbnail-dialog').style.display = 'none';
+            document.getElementById('complete-dialog').style.display = 'block';
+        }
+    } else {
+        if(ArticlecontentResponse && Thumbnailresponse) {
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('thumbnail-dialog').style.display = 'none';
+            document.getElementById('complete-dialog').style.display = 'block';
+        }
+    } 
 });
 
 // fileをbase64に変換する
