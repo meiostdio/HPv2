@@ -1,0 +1,112 @@
+{
+  "title": "ソースコードを気軽に解析",
+  "tag": [
+    "JavaScript",
+    "ソースコード解析"
+  ],
+  "date": "20240212",
+  "section": [
+    {
+      "type": "subtitle",
+      "value": "はじめに"
+    },
+    {
+      "type": "content",
+      "value": "卒論で次のようなソースコードファイルを編集するプログラムを作る工程がありました。"
+    },
+    {
+      "type": "code",
+      "value": "const hoge1 = new hoge({\n    property1: 0,\n    property2: 0,\n    property3: 0\n});"
+    },
+    {
+      "type": "content",
+      "value": "このとき、このコードを実行せずに　ーソースコードファイルの内容を文字列として扱って　hoge1のプロパティにアクセスしたいのですが、まず最初に思いつくのが正規表現を使った探索です。"
+    },
+    {
+      "type": "code",
+      "value": "const pattern = /\\b(hoge1)\\b/g;\n\nconst matches = sourceCode.match(pattern);\n\nif (matches) {\n  console.log(`変数\"${matches[0]}\"が見つかりました。`);\n} else {\n  console.log('変数\"hoge1\"は見つかりませんでした。');\n"
+    },
+    {
+      "type": "content",
+      "value": "しかしこの方法では、正規表現にヒットしたhoge1がどのタイミングで使われているのかという文脈がわからないし、探索の対象にそれぞれ検索文字列を設定する必要があります。これは結構場当たり的なやり方で、あまり賢くないです。そこでコード解析ツールが役に立ちます。"
+    },
+    {
+      "type": "content",
+      "value": "ソースコードを解析することで、ソースコード中の検索したい変数を変数名(文字列)などによってではなく、コードの構造(文脈)をとらえて指定することができます。"
+    },
+    {
+      "type": "subtitle",
+      "value": "意外と簡単に実装できるコード解析"
+    },
+    {
+      "type": "content",
+      "value": "今回はコード解析ツールとしてesprimaというJavaScriptライブラリを紹介します。esprimaは対象となるJavaScriptコードを取得してAST(抽象構文木)というJSONデータを返してくれます。このASTなるものが非常に便利。導入方法は次のリンクを参照してください。"
+    },
+    {
+      "type": "link",
+      "value": "npm のインストール",
+      "url": "https://qiita.com/mk185/items/7ad004bf202f400daea1"
+    },
+    {
+      "type": "link",
+      "value": "esprimaのインストール",
+      "url": "https://blog.kuniwak.com/entry/2013/06/19/013040"
+    },
+    {
+      "type": "content",
+      "value": "これでコード解析の準備が整いました。実際に次のように使用することができます。"
+    },
+    {
+      "type": "code",
+      "value": "const esprima = require('esprima');\nconst fs = require('fs');\n\nconst sourceCode = fs.readFileSync(filePath, 'utf-8');\nconst ast = esprima.parseModule(sourceCode);"
+    },
+    {
+      "type": "content",
+      "value": "解析対象のソースコードが次のような中身だった場合、"
+    },
+    {
+      "type": "code",
+      "value": "const greeting = 'hello';\nconsole.log(greenting);"
+    },
+    {
+      "type": "content",
+      "value": "返ってくるASTのJSONデータは、、"
+    },
+    {
+      "type": "code",
+      "value": "{\n    \"type\": \"Program\",\n    \"body\": [\n        {\n            \"type\": \"VariableDeclaration\",\n            \"declarations\": [\n                {\n                    \"type\": \"VariableDeclarator\",\n                    \"id\": {\n                        \"type\": \"Identifier\",\n                        \"name\": \"greeting\"\n                    },\n                    \"init\": {\n                        \"type\": \"Literal\",\n                        \"value\": \"hello\",\n                        \"raw\": \"'hello'\"\n                    }\n                }\n            ],\n            \"kind\": \"const\"\n        },\n        {\n            \"type\": \"ExpressionStatement\",\n            \"expression\": {\n                \"type\": \"CallExpression\",\n                \"callee\": {\n                    \"type\": \"MemberExpression\",\n                    \"computed\": false,\n                    \"object\": {\n                        \"type\": \"Identifier\",\n                        \"name\": \"console\"\n                    },\n                    \"property\": {\n                        \"type\": \"Identifier\",\n                        \"name\": \"log\"\n                    }\n                },\n                \"arguments\": [\n                    {\n                        \"type\": \"Identifier\",\n                        \"name\": \"greeting\"\n                    }\n                ]\n            }\n        }\n    ],\n    \"sourceType\": \"script\"\n}\n"
+    },
+    {
+      "type": "content",
+      "value": "このようになります。"
+    },
+    {
+      "type": "content",
+      "value": "ASTはツリーの形をしたデータで、この場合ソースコードを文節ごとに分解し、文節を構成する単語の意味をさらに深いノードで明示してくれます。それぞれの単語はtypeやnameといったプロパティを有しています。"
+    },
+    {
+      "type": "content",
+      "value": "ここで、最初の例に挙げたコードを解析してみます。"
+    },
+    {
+      "type": "code",
+      "value": "{\n    \"type\": \"Program\",\n    \"body\": [\n        {\n            \"type\": \"VariableDeclaration\",\n            \"declarations\": [\n                {\n                    \"type\": \"VariableDeclarator\",\n                    \"id\": {\n                        \"type\": \"Identifier\",\n                        \"name\": \"hoge1\"\n                    },\n                    \"init\": {\n                        \"type\": \"NewExpression\",\n                        \"callee\": {\n                            \"type\": \"Identifier\",\n                            \"name\": \"hoge\"\n                        },\n                        \"arguments\": [\n                            {\n                                \"type\": \"ObjectExpression\",\n                                \"properties\": [\n                                    {\n                                        \"type\": \"Property\",\n                                        \"key\": {\n                                            \"type\": \"Identifier\",\n                                            \"name\": \"property1\"\n                                        },\n                                        \"computed\": false,\n                                        \"value\": {\n                                            \"type\": \"Literal\",\n                                            \"value\": 0,\n                                            \"raw\": \"0\"\n                                        },\n                                        \"kind\": \"init\",\n                                        \"method\": false,\n                                        \"shorthand\": false\n                                    },\n                                    {\n                                        \"type\": \"Property\",\n                                        \"key\": {\n                                            \"type\": \"Identifier\",\n                                            \"name\": \"property2\"\n                                        },\n                                        \"computed\": false,\n                                        \"value\": {\n                                            \"type\": \"Literal\",\n                                            \"value\": 0,\n                                            \"raw\": \"0\"\n                                        },\n                                        \"kind\": \"init\",\n                                        \"method\": false,\n                                        \"shorthand\": false\n                                    },\n                                    {\n                                        \"type\": \"Property\",\n                                        \"key\": {\n                                            \"type\": \"Identifier\",\n                                            \"name\": \"property3\"\n                                        },\n                                        \"computed\": false,\n                                        \"value\": {\n                                            \"type\": \"Literal\",\n                                            \"value\": 0,\n                                            \"raw\": \"0\"\n                                        },\n                                        \"kind\": \"init\",\n                                        \"method\": false,\n                                        \"shorthand\": false\n                                    }\n                                ]\n                            }\n                        ]\n                    }\n                }\n            ],\n            \"kind\": \"const\"\n        }\n    ],\n    \"sourceType\": \"script\"\n}"
+    },
+    {
+      "type": "content",
+      "value": "hoge1のproperty1にアクセスする場合、"
+    },
+    {
+      "type": "code",
+      "value": "const property1Value = ast.body[0].declarations[0].init.arguments[0].properties[0].value.value;\n"
+    },
+    {
+      "type": "content",
+      "value": "このようにかくといけます。"
+    },
+    {
+      "type": "content",
+      "value": "esprimaと併せて、estraverseやescodegenというライブラリを使うとほかにも面白いことができますが、長くなるので今回はここまでにしておきます。"
+    }
+  ]
+}
