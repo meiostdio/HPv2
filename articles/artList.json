@@ -99,5 +99,14 @@
     ],
     "date": "20240211",
     "thumbnail": "article11.png"
+  },
+  "article12": {
+    "title": "ソースコードを気軽に解析",
+    "tag": [
+      "JavaScript",
+      "ソースコード解析"
+    ],
+    "date": "20240212",
+    "thumbnail": "article12.txt"
   }
 }
