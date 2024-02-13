@@ -174,6 +174,14 @@ function createRemoveElement(cell) {
     return remove;
 }
 
+// 入力された量に応じてtextareaの高さを変更する
+draftContainer.addEventListener('input', (e) => {
+    if (e.target.tagName === 'TEXTAREA') {
+        e.target.style.height = 'auto';
+        e.target.style.height = e.target.scrollHeight + 'px';
+    }
+});
+
 let dragTarget;
 
 //grip要素を掴ませて、cellが動くようにする
