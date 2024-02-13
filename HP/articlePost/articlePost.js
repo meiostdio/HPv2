@@ -52,14 +52,30 @@ addBtn.forEach((button) => {
     button.addEventListener('click', () => {
         //テキストコンテントの追加
         if (button.classList.contains('text')) {
-            const cell = creatCellAndGrip(button.classList[0]);
-            const remove = createRemoveElement(cell);
-            const inputTag = button.classList.contains('input') ? 'input' : 'textarea';
-            const input = document.createElement(inputTag);
-            input.className = button.id;
-            input.placeholder = button.id;
-            cell.appendChild(input);
-            cell.appendChild(remove);
+            // if(button.id === 'code') {
+            //     const cell = creatCellAndGrip(button.classList[0]);
+            //     const remove = createRemoveElement(cell);
+            //     const inputTag = button.classList.contains('input') ? 'input' : 'textarea';
+            //     const input = document.createElement(inputTag);
+            //     input.className = button.id;
+            //     input.placeholder = button.id;
+            //     const pre = document.createElement('pre');
+            //     const code = document.createElement('code');
+            //     code.className = 'prettyprint linenums';
+            //     pre.appendChild(code);
+            //     cell.appendChild(pre);
+            //     cell.appendChild(remove);
+            //     console.log('code');
+            // } else {
+                const cell = creatCellAndGrip(button.classList[0]);
+                const remove = createRemoveElement(cell);
+                const inputTag = button.classList.contains('input') ? 'input' : 'textarea';
+                const input = document.createElement(inputTag);
+                input.className = button.id;
+                input.placeholder = button.id;
+                cell.appendChild(input);
+                cell.appendChild(remove);
+            // }
         }
         else if (button.id === 'link') {
             const cell = creatCellAndGrip(button.classList[0]);
