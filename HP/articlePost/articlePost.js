@@ -1,4 +1,4 @@
-import { postArticleContent, postArticleImage,getArticleList,postArticleThumbnail } from "../GithubData.js";
+import { postArticleContent, postArticleImage, getArticleList, postArticleThumbnail } from "../GithubData.js";
 
 //もとになるjsonデータ
 const draftData = {
@@ -45,7 +45,9 @@ addTag.addEventListener('click', () => {
 
 const draftContainer = document.getElementById('draft-container');
 const addBtns = document.getElementById('addBtn');
-const addBtn = addBtns .querySelectorAll('button');
+const addBtn = addBtns.querySelectorAll('button');
+
+//addBtn.classList[0]はcellのクラスに、addBtn.idはcell内input(テキストエリア、画像含む)のidになる
 
 addBtn.forEach((button) => {
 
@@ -67,14 +69,14 @@ addBtn.forEach((button) => {
             //     cell.appendChild(remove);
             //     console.log('code');
             // } else {
-                const cell = creatCellAndGrip(button.classList[0]);
-                const remove = createRemoveElement(cell);
-                const inputTag = button.classList.contains('input') ? 'input' : 'textarea';
-                const input = document.createElement(inputTag);
-                input.className = button.id;
-                input.placeholder = button.id;
-                cell.appendChild(input);
-                cell.appendChild(remove);
+            const cell = creatCellAndGrip(button.classList[0]);
+            const remove = createRemoveElement(cell);
+            const inputTag = button.classList.contains('input') ? 'input' : 'textarea';
+            const input = document.createElement(inputTag);
+            input.className = button.id;
+            input.placeholder = button.id;
+            cell.appendChild(input);
+            cell.appendChild(remove);
             // }
         }
         else if (button.id === 'link') {
@@ -253,13 +255,25 @@ submitBtn.addEventListener('click', async () => {
     cells.forEach((cell) => {
         if (cell.classList.contains('text')) {
             const input = cell.querySelector('input, textarea');
-            const type = input.className;
-            const value = input.value;
-            draftData.section.push({
-                type: type,
-                value: value
-            });
+            if (input.tagName === 'textarea') {
+                // textareaの中身を改行ごとに改行コードを挿入する
+                const formattedContent = input.value.replace(/\n/g, '\\n');
+                const type = input.className;
+                const value = formattedContent;
+                draftData.section.push({
+                    type: type,
+                    value: value
+                });
+            } else {
+                const type = input.className;
+                const value = input.value;
+                draftData.section.push({
+                    type: type,
+                    value: value
+                });
+            }
         }
+
         else if (cell.classList.contains('link')) {
             const linkedText = cell.querySelector('.linked-text').value;
             const linkedUrl = cell.querySelector('.linked-url').value;
@@ -309,16 +323,16 @@ function formatDate(date) {
 }
 
 // サムネイルのダイアログで選択ボタンを押したとき
-document.getElementById('selent-thumbnail').addEventListener('click', function() {
+document.getElementById('selent-thumbnail').addEventListener('click', function () {
     // 非表示のinput要素をクリックする
     document.getElementById('thumbnail-dialog-input').click();
 });
 
 // 非表示のinput要素でファイルが選択されたとき
-document.getElementById('thumbnail-dialog-input').addEventListener('change', async function(e) {
+document.getElementById('thumbnail-dialog-input').addEventListener('change', async function (e) {
     const file = e.target.files[0];
     const base64 = await toBase64(file);
-    if(base64) {
+    if (base64) {
         const compressedImageBase64 = await compressImage(base64);
 
         const previewElement = createPreviewElement(draftData, compressedImageBase64);
@@ -343,7 +357,7 @@ document.getElementById('close-thumbnail-dialog').addEventListener('click', () =
 document.getElementById('upload').addEventListener('click', async () => {
     // // *** ここで記事データをGitHubに保存する ***
     const ArticlecontentResponse = await postArticleContent(draftData);
-    
+
     // // *** ここで記事に使用する画像をGitHubに保存する ***
     const imagesBase64 = await getImagesFromDraftContainer();
     const compressedImages = await Promise.all(imagesBase64.map(compressImage));
@@ -351,37 +365,37 @@ document.getElementById('upload').addEventListener('click', async () => {
     let articleImagesResponse;
     // 画像が存在するかどうかbooleanで格納する
     const isImagesExist = compressedImages.length > 0;
-    if(isImagesExist) {
+    if (isImagesExist) {
         articleImagesResponse = await postArticleImage(`article${newArticleNumber}`, compressedImages);
     }
 
     // // *** ここでサムネイルをGitHubに保存する ***
     const Thumbnailresponse = await postArticleThumbnail(`article${newArticleNumber}`, compressedThumbnailBase64);
-    
+
     document.getElementById('loading').style.display = 'block';
     document.getElementById('thumbnail-dialog').style.display = 'none';
     document.getElementById('upload').style.display = 'none';
-    
+
     if (isImagesExist) {
-        if(ArticlecontentResponse && articleImagesResponse && Thumbnailresponse) {
+        if (ArticlecontentResponse && articleImagesResponse && Thumbnailresponse) {
             document.getElementById('loading').style.display = 'none';
             document.getElementById('thumbnail-dialog').style.display = 'none';
             document.getElementById('complete-dialog').style.display = 'block';
         }
     } else {
-        if(ArticlecontentResponse && Thumbnailresponse) {
+        if (ArticlecontentResponse && Thumbnailresponse) {
             document.getElementById('loading').style.display = 'none';
             document.getElementById('thumbnail-dialog').style.display = 'none';
             document.getElementById('complete-dialog').style.display = 'block';
         }
-    } 
+    }
 });
 
 // fileをbase64に変換する
 function toBase64(file) {
     return new Promise((resolve, reject) => {
         const reader = new FileReader();
-        reader.onloadend = function() {
+        reader.onloadend = function () {
             resolve(reader.result);
         };
         reader.onerror = reject;
