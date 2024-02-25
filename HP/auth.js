@@ -35,14 +35,24 @@ async function getUser(client){
 
 async function checkAuthState() {
   console.log('checkAuthState');
+  // sessionStrageに保存されているisAuthenticatedの状態を取得
+  let isAuthenticated = sessionStorage.getItem('isAuthenticated');
+  console.log('isAuthenticated', isAuthenticated);
+  
   const shouldParseResult = window.location.search.includes("code=") && window.location.search.includes("state=");
-  let user;
-  if(shouldParseResult){
-    await auth0Client.handleRedirectCallback();
-    user = await getUser(auth0Client);
-    console.log('user', user);
+  // isAuthenticatedがtrue
+  if(isAuthenticated === 'true' && shouldParseResult){
+    console.log('isAuthenticated is true');
+    return await getUser(auth0Client);
   }
-  return user;
+  // isAuthenticatedがfalse
+  if((isAuthenticated === 'false' || isAuthenticated === null) && shouldParseResult){
+    console.log('isAuthenticated is false');
+    await auth0Client.handleRedirectCallback();
+    const isAuthenticated = await auth0Client.isAuthenticated();
+    sessionStorage.setItem('isAuthenticated', isAuthenticated);
+    return await getUser(auth0Client);
+  }
 }
 
 // ログアウト
