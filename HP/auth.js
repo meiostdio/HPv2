@@ -23,12 +23,6 @@ async function loginWithAuth0(e){
   });
 }
 
-async function loginWithPopupAuth0(){
-  await auth0Client.loginWithPopup();
-  const user = await getUser(auth0Client);
-  return user;
-}
-
 // ユーザー情報を取得してreturn
 async function getUser(client){
     const auth0Client = client;
@@ -82,4 +76,4 @@ async function logout(){
 
 
 // 関数をエクスポート
-export { getUser,loginWithAuth0,getAuth0Client,logout,checkAuthState,loginWithPopupAuth0 };
+export { getUser,loginWithAuth0,getAuth0Client,logout,checkAuthState };

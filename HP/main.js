@@ -1,4 +1,4 @@
-import { loginWithAuth0,logout,checkAuthState,getAuth0Client, loginWithPopupAuth0 } from "./auth.js";
+import { loginWithAuth0,logout,checkAuthState } from "./auth.js";
 import { findAnchorElementId,getArticleContentElement } from "./articleViewer.js";
 import { getArticleListElement } from "./articleIndex.js";
 import { checkCachesExpire, getCache, removeExpiredCache, saveContainerElementWithExpire, saveURLState } from "./cache.js";
