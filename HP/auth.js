@@ -5,7 +5,7 @@ async function getAuth0Client(){
     const auth0Client = await auth0.createAuth0Client({
         domain: 'mieiostdio.jp.auth0.com',
         clientId: '3NKELeme13IvWgricfnixqOjIzt23KD5',
-        useRefreshTokens: true
+        cacheLocation: 'localstorage'
     });
     return auth0Client
 }
@@ -23,6 +23,12 @@ async function loginWithAuth0(e){
   });
 }
 
+async function loginWithPopupAuth0(){
+  await auth0Client.loginWithPopup();
+  const user = await getUser(auth0Client);
+  return user;
+}
+
 // ユーザー情報を取得してreturn
 async function getUser(client){
     const auth0Client = client;
@@ -35,23 +41,29 @@ async function getUser(client){
 
 async function checkAuthState() {
   console.log('checkAuthState');
-  // sessionStrageに保存されているisAuthenticatedの状態を取得
-  let isAuthenticated = sessionStorage.getItem('isAuthenticated');
-  console.log('isAuthenticated', isAuthenticated);
+  // let isAuthenticated = auth0Client.isAuthenticated();
   
-  const shouldParseResult = window.location.search.includes("code=") && window.location.search.includes("state=");
-  // isAuthenticatedがtrue
-  if(isAuthenticated === 'true' && shouldParseResult){
-    console.log('isAuthenticated is true');
+  // const shouldParseResult = window.location.search.includes("code=") && window.location.search.includes("state=");
+
+  // if(isAuthenticated){
+  //   if(shouldParseResult){
+  //     console.log('shouldParseResult is true');
+  //     await auth0Client.handleRedirectCallback();
+  //     isAuthenticated = await auth0Client.isAuthenticated();
+  //     return await getUser(auth0Client);
+  //   } else {
+  //     console.log('isAuthenticated is false');
+  //     return null;
+  //   }
+  // }
+  try {
+    const token = await auth0Client.getTokenSilently();
+    console.log('User is authenticated');
+
     return await getUser(auth0Client);
-  }
-  // isAuthenticatedがfalse
-  if((isAuthenticated === 'false' || isAuthenticated === null) && shouldParseResult){
-    console.log('isAuthenticated is false');
-    await auth0Client.handleRedirectCallback();
-    const isAuthenticated = await auth0Client.isAuthenticated();
-    sessionStorage.setItem('isAuthenticated', isAuthenticated);
-    return await getUser(auth0Client);
+  } catch (error) {
+    console.log('User is not authenticated');
+    return null;
   }
 }
 
@@ -70,4 +82,4 @@ async function logout(){
 
 
 // 関数をエクスポート
-export { getUser,loginWithAuth0,getAuth0Client,logout,checkAuthState };
+export { getUser,loginWithAuth0,getAuth0Client,logout,checkAuthState,loginWithPopupAuth0 };

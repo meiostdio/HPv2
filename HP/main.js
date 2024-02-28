@@ -1,4 +1,4 @@
-import { loginWithAuth0,logout,checkAuthState,getAuth0Client } from "./auth.js";
+import { loginWithAuth0,logout,checkAuthState,getAuth0Client, loginWithPopupAuth0 } from "./auth.js";
 import { findAnchorElementId,getArticleContentElement } from "./articleViewer.js";
 import { getArticleListElement } from "./articleIndex.js";
 import { checkCachesExpire, getCache, removeExpiredCache, saveContainerElementWithExpire, saveURLState } from "./cache.js";
@@ -20,14 +20,29 @@ window.onload = async function() {
   removeExpiredCache();
   console.log("古いキャッシュを削除しました");
   
-  // ユーザー情報を格納する
-  let user = await checkAuthState();
-  // ユーザー情報が取得できている場合、ログインボタンをアイコンに変更
-  if (user) {
-    loginBtn.style.display = "none";
-    userIcon.style.display = "block";
-    userIcon.src = user.picture;
-  }
+  // MutationObserverのインスタンスを作成,ログインボタンとユーザーアイコンの監視
+  const observer = new MutationObserver(async function(mutations) {
+    // 変更が発生したときに実行されるコールバック
+    loginBtn = document.getElementById('login');
+    userIcon = document.getElementById('userIcon');
+    if (loginBtn && userIcon) {
+      // loginBtnとuserIconが存在する場合、監視を終了
+      observer.disconnect();
+
+      // ユーザー情報を格納する
+      let user = await checkAuthState();
+      // ユーザー情報が取得できている場合、ログインボタンをアイコンに変更
+      if (user) {
+        console.log(loginBtn, userIcon)
+        loginBtn.style.display =  "none";
+        userIcon.style.display = "block";
+        userIcon.src = user.picture;
+      }
+    }
+  });
+
+  // body要素の子要素の変更を監視開始
+  observer.observe(document.body, { childList: true, subtree: true });
 
   // URLにidがある場合、記事本文を取得
   const urlParams = new URLSearchParams(window.location.search);
@@ -151,6 +166,7 @@ window.showArticleList = showArticleList;
 // auth.jsからログイン機能を呼び出す
 async function login(e){
   await loginWithAuth0(e);
+  // await loginWithPopupAuth0();
 }
 window.login = login;
 
@@ -194,17 +210,6 @@ export async function fetchInclude(){
     console.error('フッターファイルの読み込みに失敗しました', error);
   });;
 }
-
-// DOM読み込み完了後にリスナーの設定
-window.addEventListener('DOMContentLoaded', async function() {
-  let checkExist = setInterval(function() {
-    if (document.getElementById('login')) {
-      loginBtn = document.getElementById('login');
-      userIcon = document.getElementById('userIcon');
-      clearInterval(checkExist);
-    }
-  }, 50);  
-})
 
 // ブラウザバックの禁止
 // history.pushState(null, null, location.href);
