@@ -31,9 +31,9 @@ window.onload = async function() {
 
       // ユーザー情報を格納する
       let user = await checkAuthState();
+      console.log('user', user);
       // ユーザー情報が取得できている場合、ログインボタンをアイコンに変更
       if (user) {
-        console.log(loginBtn, userIcon)
         loginBtn.style.display =  "none";
         userIcon.style.display = "block";
         userIcon.src = user.picture;

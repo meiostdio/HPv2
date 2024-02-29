@@ -35,29 +35,23 @@ async function getUser(client){
 
 async function checkAuthState() {
   console.log('checkAuthState');
-  // let isAuthenticated = auth0Client.isAuthenticated();
+  let isAuthenticated = auth0Client.isAuthenticated();
   
-  // const shouldParseResult = window.location.search.includes("code=") && window.location.search.includes("state=");
+  const shouldParseResult = window.location.search.includes("code=") && window.location.search.includes("state=");
 
-  // if(isAuthenticated){
-  //   if(shouldParseResult){
-  //     console.log('shouldParseResult is true');
-  //     await auth0Client.handleRedirectCallback();
-  //     isAuthenticated = await auth0Client.isAuthenticated();
-  //     return await getUser(auth0Client);
-  //   } else {
-  //     console.log('isAuthenticated is false');
-  //     return null;
-  //   }
-  // }
-  try {
-    const token = await auth0Client.getTokenSilently();
-    console.log('User is authenticated');
-
+  if(isAuthenticated){
+    await auth0Client.getTokenSilently();
     return await getUser(auth0Client);
-  } catch (error) {
-    console.log('User is not authenticated');
-    return null;
+  } else {
+    if(shouldParseResult){
+      console.log('shouldParseResult is true');
+      await auth0Client.handleRedirectCallback();
+      isAuthenticated = await auth0Client.isAuthenticated();
+      return await getUser(auth0Client);
+    } else {
+      console.log('shouldParseResult is false');
+      return null;
+    }
   }
 }
 
