@@ -1,7 +1,7 @@
-import { loginWithAuth0,logout,checkAuthState } from "./auth.js";
+import { checkAuthState } from "./auth.js";
 import { findAnchorElementId,getArticleContentElement } from "./articleViewer.js";
 import { getArticleListElement } from "./articleIndex.js";
-import { checkCachesExpire, getCache, removeExpiredCache, saveContainerElementWithExpire, saveURLState } from "./cache.js";
+import { checkCachesExpire, getCache, removeExpiredCache, saveContainerElementWithExpire } from "./cache.js";
 
 let loginBtn;
 let userIcon;
@@ -12,9 +12,6 @@ let container = document.querySelector(".container");
 window.onload = async function() {
   //ヘッダー、フッターを読み込んで表示
   await fetchInclude();
-
-  // セッションストレージに履歴を保存
-  saveURLState();
 
   // 古いキャッシュを削除
   removeExpiredCache();
@@ -43,7 +40,7 @@ window.onload = async function() {
 
   // body要素の子要素の変更を監視開始
   observer.observe(document.body, { childList: true, subtree: true });
-  
+
   // URLにidがある場合、記事本文を取得
   const urlParams = new URLSearchParams(window.location.search);
   const articleId = urlParams.get('id');
@@ -89,11 +86,6 @@ window.onload = async function() {
   // 期限切れのキャッシュを削除する
   removeExpiredCache();
 };
-
-// URLが変更されたときに発火するイベント
-window.addEventListener('urlChange', function(e) {
-  saveURLState();
-});
 
 // 記事クリックで記事本文を表示
 async function showArticleContent(e) {
@@ -179,14 +171,3 @@ export async function fetchInclude(){
     console.error('フッターファイルの読み込みに失敗しました', error);
   });;
 }
-
-// ブラウザバックの禁止
-// history.pushState(null, null, location.href);
-window.addEventListener('popstate', (e) => {
-  // 戻るボタンが押された場合
-  if(e.state) { 
-
-  } else {
-    // 進むボタンが押された場合
-  }
-});

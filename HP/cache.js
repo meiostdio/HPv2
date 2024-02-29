@@ -116,8 +116,6 @@ export function getCache(isList, key){
 
 // 履歴の古いキャッシュを削除する
 export function removeOldArticleCache() {
-  // 'history'キーから履歴を取得
-  let history = JSON.parse(sessionStorage.getItem('history') || '[]');
   // 履歴の長さを制限
   const historyRenge = 7;
   // 履歴が存在し、5つ以上のエントリがある場合にのみ削除を行う
@@ -158,54 +156,4 @@ export function removeExpiredCache() {
       localStorage.removeItem(key);
     }
   });
-}
-
-// URLをセッションストレージに保存
-// 履歴内の古すぎるキャッシュは削除する
-export function saveURLState() {
-  try {
-    const Url =  new URL(window.location.href);
-    const currentUrl = Url.toString();
-    const lastURL = getLastURLState();
-    if (lastURL === currentUrl) {
-      return
-    }
-    // セッションストレージにURLを格納
-    const storedURLs = sessionStorage.getItem('history') || '[]';
-    const urlArray = JSON.parse(storedURLs);
-    
-    // 新しいURLが既に存在するか確認
-    urlArray.push(currentUrl);
-    sessionStorage.setItem('history', JSON.stringify(urlArray));
-    
-    removeOldArticleCache();
-  } catch (e) {
-    console.log(e);
-  }
-}
-
-// セッションストレージから最後のURLを取得
-export function getLastURLState() {
-  try {
-    const storedURLs = sessionStorage.getItem('history');
-    const urlArray = JSON.parse(storedURLs);
-    const previousURL = urlArray.pop();
-    //sessionStorage.setItem('history', JSON.stringify(urlArray));
-    return previousURL
-  } catch (e) {
-    console.log('セッションストレージにURLがありません');
-    return null
-  }
-}
-
-// セッションストレージから最後のURLを削除
-export function removeLastURLState() {
-  try {
-    const storedURLs = sessionStorage.getItem('history');
-    const urlArray = JSON.parse(storedURLs);
-    urlArray.pop();
-    sessionStorage.setItem('history', JSON.stringify(urlArray));
-  } catch (e) {
-    console.log(e);
-  }
 }
