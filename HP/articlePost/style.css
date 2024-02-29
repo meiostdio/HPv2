@@ -319,6 +319,80 @@ input .subtitle {
     color: #A4E0D1;
 }
 
+/* ログインしていない状態で画面遷移された場合のポップアップ */
+#login-required-dialog {
+    display: none; /* 初期状態では非表示 */
+    position: fixed; /* 画面中央に表示 */
+    z-index: 1; /* 他の要素の上に表示 */
+    left: 0;
+    top: 0;
+    width: 100%; /* 画面全体の幅 */
+    height: 100%; /* 画面全体の高さ */
+    overflow: auto; /* 必要に応じてスクロール */
+    background-color: rgba(0,0,0,0.4); /* 半透明の背景　*/
+}
+
+#login-required-dialog-content {
+    background-color: #fefefe;
+    margin: 15% auto; /* 画面中央に配置 */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; /* ダイアログの幅 */
+}
+
+#login-required-dialog-title {
+    text-align: center;
+    font-size: 20px;
+    margin-bottom: 20px;
+}
+
+#login-required-dialog-button {
+    /* 水平ににボタンを配置 */
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+#login-required-dialog-button {
+    text-align: center;
+}
+
+#close-login-required-dialog {
+    outline: #A4E0D1 4px solid;
+    outline-offset: -3px;
+    border: 1px solid #A4E0D1;
+    background-color: #A4E0D1;
+    border-radius: 3px;
+    padding: 1vw 1vw 1.5vw;
+    color: whitesmoke;
+}
+
+#close-login-required-dialog:hover {
+    cursor: pointer;
+    background-color: transparent;
+    color: #A4E0D1;
+}
+
+#login-from-dialog-button {
+    outline: #007ACC 4px solid;
+    outline-offset: -3px;
+    border: 1px solid #007ACC;
+    background-color: #007ACC;
+    border-radius: 3px;
+    padding: 1vw 1vw 1.5vw;
+    color: whitesmoke;
+}
+
+#login-from-dialog-button:hover {
+    cursor: pointer;
+    background-color: transparent;
+    
+}
+
+#login-from-dialog-button:hover p{
+    color: #007ACC;
+}
+
 /* アップロード中のローディング表示 */
 #loading {
     display: none; /* 初期状態では非表示 */

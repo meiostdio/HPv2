@@ -51,7 +51,7 @@ const draftData = {
     date: "",
     section: []
 }
-// サムネと記事ない画像のbase64データ
+// サムネと記事内画像のbase64データ
 let compressedArticleImagesBase64 = [];
 let compressedThumbnailBase64 = '';
 
@@ -537,5 +537,12 @@ document.getElementById('close-complete-dialog').addEventListener('click', (e) =
     document.getElementById('preview').innerHTML = '';
     document.getElementById('upload').style.display = 'none';
     e.preventDefault();
+    location.href = '/';
+});
+
+// ログイン要求ダイアログの閉じるボタンを押したとき
+document.getElementById('close-login-required-dialog').addEventListener('click', () => {
+    document.getElementById('login-required-dialog').style.display = 'none';
+    // トップページに戻る
     location.href = '/';
 });

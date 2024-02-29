@@ -145,6 +145,27 @@
         </div>
     </div>
 
+    <!-- ログインしていない状態で画面遷移された場合のポップアップ -->
+    <div id="login-required-dialog">
+        <div id="login-required-dialog-content">
+            <div id="login-required-dialog-title">
+                <p>記事の投稿にはログインが必要です</p>
+            </div>
+            <div id="login-required-dialog-button">
+                <div id="login-from-dialog">
+                    <button onclick="window.login(event)" id="login-from-dialog-button" type="button">
+                        <p>ログイン</p>
+                    </button>
+                </div>
+                <div id="login-required-dialog-button">
+                    <button id="close-login-required-dialog" type="button">
+                        <p>トップに戻る</p>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
     <!-- <pre>
         <code class="prettyprint linenums">
