@@ -33,6 +33,7 @@ async function getUser(client){
     return null;
 }
 
+// ログイン状態を確認,認証済みの場合はユーザー情報を取得してreturn
 async function checkAuthState() {
   console.log('checkAuthState');
   let isAuthenticated = auth0Client.isAuthenticated();
@@ -41,6 +42,7 @@ async function checkAuthState() {
 
   if(isAuthenticated){
     await auth0Client.getTokenSilently();
+    console.log('isAuthenticated is true');
     return await getUser(auth0Client);
   } else {
     if(shouldParseResult){

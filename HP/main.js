@@ -43,7 +43,7 @@ window.onload = async function() {
 
   // body要素の子要素の変更を監視開始
   observer.observe(document.body, { childList: true, subtree: true });
-
+  
   // URLにidがある場合、記事本文を取得
   const urlParams = new URLSearchParams(window.location.search);
   const articleId = urlParams.get('id');
@@ -161,37 +161,6 @@ async function showArticleList() {
   saveContainerElementWithExpire('articleList', container, 10);
 }
 window.showArticleList = showArticleList;
-
-
-// auth.jsからログイン機能を呼び出す
-async function login(e){
-  await loginWithAuth0(e);
-  // await loginWithPopupAuth0();
-}
-window.login = login;
-
-// ログアウト機能
-async function CallLogout(){
-  await logout();
-};
-window.logout = CallLogout;
-
-// 投稿ボタンクリックで記事投稿画面を表示
-function showArticlePost(){
-  window.location.href = './articlePost/articlePost.html';
-}
-window.showArticlePost = showArticlePost;
-
-// サブメニュー開閉
-function subMenu(){
-  const subMenu = document.querySelector('.subMenu');
-  if (subMenu.style.display === "none"){
-    subMenu.style.display = "block";
-  } else {
-    subMenu.style.display = "none";
-  }
-}
-window.subMenu = subMenu;
 
 //　ヘッダー、フッター読み込み
 export async function fetchInclude(){

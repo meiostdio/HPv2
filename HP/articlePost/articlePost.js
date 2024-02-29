@@ -1,5 +1,49 @@
 import { postArticleContent, postArticleImage, getArticleList, postArticleThumbnail } from "../GithubData.js";
+import { checkAuthState } from "../auth.js";
 
+let loginBtn;
+let userIcon;
+window.onload = async function () {
+    //ヘッダー、フッターを読み込んで表示
+    //　ヘッダー、フッター読み込み
+    fetch('../includes/header.html')
+    .then((response) => response.text())
+    .then((data) => document.querySelector('#header').innerHTML = data)
+    .catch((error) => {
+      console.error('ヘッダーファイルの読み込みに失敗しました', error);
+    });
+  
+    fetch('../includes/footer.html')
+    .then((response) => response.text())
+    .then((data) => document.querySelector('#footer').innerHTML = data)
+    .catch((error) => {
+      console.error('フッターファイルの読み込みに失敗しました', error);
+    });;
+
+    // MutationObserverのインスタンスを作成,ログインボタンとユーザーアイコンの監視
+    const observer = new MutationObserver(async function(mutations) {
+    // 変更が発生したときに実行されるコールバック
+    loginBtn = document.getElementById('login');
+    userIcon = document.getElementById('userIcon');
+    if (loginBtn && userIcon) {
+      // loginBtnとuserIconが存在する場合、監視を終了
+      observer.disconnect();
+
+      // ユーザー情報を格納する
+      let user = await checkAuthState();
+      console.log('user', user);
+      // ユーザー情報が取得できている場合、ログインボタンをアイコンに変更
+      if (user) {
+        loginBtn.style.display =  "none";
+        userIcon.style.display = "block";
+        userIcon.src = user.picture;
+      }
+    }
+  });
+  // body要素の子要素の変更を監視開始
+  observer.observe(document.body, { childList: true, subtree: true });
+}
+  
 //もとになるjsonデータ
 const draftData = {
     title: "",
