@@ -59,10 +59,8 @@ window.onload = async function() {
       const item = getCache(true);
       container.innerHTML = item.listElement.containerHTML;
 
-      const imgs = container.querySelectorAll('img');
+      const imgs = container.querySelectorAll('.thumbnail');
       const imgsLength = imgs.length;
-      console.log("サムネイルの数は", imgsLength);
-      console.log('item[11]', item.thumbBase64[11])
       imgs.forEach((img, index) => {
         console.log(imgsLength - index);
         img.src = item.thumbBase64[imgsLength - index];

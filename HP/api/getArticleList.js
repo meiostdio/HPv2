@@ -37,7 +37,12 @@ const query = gql`
     const data = await graphQLClient.request(query);
 
     const jsonText = data.repository.articleJson.text;
-    const articleListData = JSON.parse(jsonText);
+    let articleListData;
+    try {
+        articleListData = JSON.parse(jsonText);
+    } catch (e) {
+        console.log(e);
+    }
 
     const images = {};
     data.repository.thumbnailImages.entries.forEach(entry => {

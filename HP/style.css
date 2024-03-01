@@ -199,6 +199,24 @@ main {
     margin-bottom: 20px;
 }
 
+.author {
+    display: flex;
+    align-items: center;
+}
+
+.author-picture {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: none;
+    margin-right: 10px;
+    margin-left: 0px;
+}
+
+.author p {
+    padding: 0px;
+}
+
 /* 記事タイトル */
 main h2 {
     font-size: 32px;
