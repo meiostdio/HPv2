@@ -40,15 +40,37 @@ export async function getArticleContentElement(id) {
     let main = document.createElement('main');
     main.id = 'main';
 
-    // タイトル、タグ、日付を取得して表示
+    // タイトル、タグ、日付、ユーザー情報を取得して表示
     const title = formattedData.title;
     const tag = formattedData.tag;
     const date = formattedData.date;
-    main.innerHTML = `
-        <h2 class="articleTitle">${title}</h2>
-        <p class="date">作成日時：${date}<p>
-        <p class="tag">${tag}</p>
-    `;
+    let user;
+    let picture;
+    if(formattedData.user && formattedData.picture){ 
+        user = formattedData.user;
+        picture = formattedData.picture;
+        main.innerHTML = `
+            <h2 class="articleTitle">${title}</h2>
+            <div class="article-info">
+                <img src=${picture} alt="ユーザー画像" class="user-picture">
+                <div class="name-date-tag">
+                    <p class="user-name">${user}</p>
+                    <div class="date-tag">
+                        <p class="date">${date}<p>
+                        <p class="tag">${tag}</p>
+                    </div>
+                </div>
+            </div>
+        `;
+    } else {
+        main.innerHTML = `    
+            <h2 class="articleTitle">${title}</h2>
+            <div class="article-info">
+                <p class="date">作成日時：${date}<p>
+                <p class="tag">${tag}</p>
+            </div>
+        `;
+    }
 
     // JSONのセクション分繰り返し、動的に表示
     formattedData.section.forEach(async (sec) => {
@@ -72,6 +94,7 @@ export async function getArticleContentElement(id) {
             `;
         } else if(type == "image"){
             const img = document.createElement('img');
+            img.className = "article-image";
             main.appendChild(img);
             let image = await getImage(articleId, value);
             img.src = `data:image/;base64,${image}`;

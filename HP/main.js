@@ -116,7 +116,7 @@ async function showArticleContent(e) {
   if(isCacheValid){
     const articleContent = getCache(false, articleId);
     container.innerHTML = articleContent.articleElement.containerHTML;
-    const imgs = container.querySelectorAll('img');
+    const imgs = container.querySelectorAll('article-image');
     const imgsLength = imgs.length;
     imgs.forEach((img, index) => {
       img.src = articleContent.images[index + 1];
