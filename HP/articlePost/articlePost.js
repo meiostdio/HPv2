@@ -3,6 +3,10 @@ import { checkAuthState } from "../auth.js";
 
 let loginBtn;
 let userIcon;
+
+let userName;
+let userPicture;
+let user;
 window.onload = async function () {
     //ヘッダー、フッターを読み込んで表示
     //　ヘッダー、フッター読み込み
@@ -30,13 +34,15 @@ window.onload = async function () {
       observer.disconnect();
 
       // ユーザー情報を格納する
-      let user = await checkAuthState();
+      user = await checkAuthState();
       console.log('user', user);
       // ユーザー情報が取得できている場合、ログインボタンをアイコンに変更
       if (user) {
         loginBtn.style.display =  "none";
         userIcon.style.display = "block";
         userIcon.src = user.picture;
+        userPicture = user.picture;
+        userName = user.name;
       }
     }
   });
@@ -45,12 +51,25 @@ window.onload = async function () {
 }
   
 //もとになるjsonデータ
-const draftData = {
-    title: "",
-    tag: [],
-    date: "",
-    section: []
+const draftData = {}
+if(user){
+    draftData = {
+        title: "",
+        tag: [],
+        date: "",
+        user: "",
+        picture: "",
+        section: []
+    }
+} else {
+    draftData = {
+        title: "",
+        tag: [],
+        date: "",
+        section: []
+    }
 }
+
 // サムネと記事内画像のbase64データ
 let compressedArticleImagesBase64 = [];
 let compressedThumbnailBase64 = '';
@@ -293,6 +312,12 @@ submitBtn.addEventListener('click', async () => {
         const value = tag.value;
         draftData.tag.push(value);
     });
+
+    if(user){
+        draftData.user = userName;
+        draftData.picture = userPicture;
+    }
+
     draftData.section = [];
     const cells = draftContainer.querySelectorAll('.cell');
     let imageNumber = 1;
