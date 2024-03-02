@@ -114,27 +114,18 @@ export function getCache(isList, key){
   }
 }
 
-// 履歴の古いキャッシュを削除する
+// 保存されているキャッシュが多い場合は記事本文のキャッシュを削除する
 export function removeOldArticleCache() {
   // 履歴の長さを制限
-  const historyRenge = 7;
-  // 履歴が存在し、5つ以上のエントリがある場合にのみ削除を行う
-  if (history && history.length > historyRenge) {
-    const oldArticleIds = history.slice(0, history.length - 5);
-    let oldArticleId;
-    oldArticleIds.forEach(id => {
-      if(id.includes('/?id=')){
-        oldArticleId = id.split('/?id=').pop();
-      } else {
-        return null
-      }
-    });
-    const aritcleKeys = Object.keys(localStorage);
-    // 削除対象の記事IDを含むキーを削除
-    aritcleKeys.forEach(key => {
-      if(key.includes(oldArticleId)) {
-        localStorage.removeItem(key);
-      }
+  const historyRenge = 1;
+  const history = Object.keys(localStorage);
+
+  // 履歴の長さが制限を超えている場合、古い記事本文のキャッシュを削除する
+  if (history.length > historyRenge) {
+    // article+ 数字のキーを取得
+    const keys = Object.keys(localStorage).filter(key => key.match(/article\d+/));
+    keys.forEach(key => {
+      localStorage.removeItem(key);
     });
   }
 }
@@ -156,4 +147,18 @@ export function removeExpiredCache() {
       localStorage.removeItem(key);
     }
   });
+}
+
+// ユーザーの画像をlocalStorageに保存
+export function saveUserImageWithExpire (key, imageBase64, expirationInMinutes) {
+  // 期限を計算
+  const now = new Date();
+  const expiry = new Date(now.getTime() + expirationInMinutes * 60 * 1000);
+
+  const item = {
+    imageBase64,
+    expiry
+  };
+
+  localStorage.setItem(key, JSON.stringify(item));
 }

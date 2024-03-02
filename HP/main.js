@@ -1,7 +1,7 @@
 import { checkAuthState } from "./auth.js";
 import { findAnchorElementId,getArticleContentElement } from "./articleViewer.js";
 import { getArticleListElement } from "./articleIndex.js";
-import { checkCachesExpire, getCache, removeExpiredCache, saveContainerElementWithExpire } from "./cache.js";
+import { checkCachesExpire, getCache, removeExpiredCache, saveContainerElementWithExpire,removeOldArticleCache } from "./cache.js";
 
 let loginBtn;
 let userIcon;
@@ -15,7 +15,8 @@ window.onload = async function() {
 
   // 古いキャッシュを削除
   removeExpiredCache();
-  console.log("古いキャッシュを削除しました");
+  // キャッシュが多すぎる場合は記事本文のキャッシュを削除
+  removeOldArticleCache();
   
   // MutationObserverのインスタンスを作成,ログインボタンとユーザーアイコンの監視
   const observer = new MutationObserver(async function(mutations) {

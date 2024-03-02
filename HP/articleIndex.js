@@ -22,7 +22,6 @@ export async function getArticleListElement() {
 
         articleList_asc.forEach((article, index) => {
         //記事No、タイトル、投稿日、タグ、サムネデータを変数に格納
-        console.log(article);
         const articleNo = articleList_asc.length - (index);
         const title = article.title;
         const date = article.date;
