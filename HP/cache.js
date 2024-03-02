@@ -84,6 +84,14 @@ export function getCache(isList, key){
   if(isList) {
     const listElement = JSON.parse(localStorage.getItem('articleList'));
     const listLength = Object.keys(localStorage).filter(key => !isNaN(key)).length ;
+    let userPictures = {};
+    for (let i = 0; i < localStorage.length; i++) {
+        let key = localStorage.key(i);
+        if (key.startsWith('user:')) {
+            userPictures[key] = JSON.parse(localStorage.getItem(key));
+        }
+    }
+    console.log(userPictures);
     let thumbBase64 = {};
     for(let i = 1; i <= listLength; i ++) {
       let item = JSON.parse(localStorage.getItem(i));
@@ -91,7 +99,8 @@ export function getCache(isList, key){
     } 
     const item = {
       listElement,
-      thumbBase64
+      thumbBase64,
+      userPictures
     };
     return item
   } else {
@@ -117,7 +126,7 @@ export function getCache(isList, key){
 // 保存されているキャッシュが多い場合は記事本文のキャッシュを削除する
 export function removeOldArticleCache() {
   // 履歴の長さを制限
-  const historyRenge = 1;
+  const historyRenge = 30;
   const history = Object.keys(localStorage);
 
   // 履歴の長さが制限を超えている場合、古い記事本文のキャッシュを削除する

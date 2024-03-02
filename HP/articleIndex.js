@@ -33,6 +33,7 @@ export async function getArticleListElement() {
             user = article.user;
             console.log(picture);
             console.log(user);
+            saveThumbImageWithExpire(`user:${user}`, picture, 10);
         }
         const thumbImageBase64 = articleList.data.images.items[`article${articleNo}.txt`];
         

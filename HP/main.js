@@ -60,6 +60,17 @@ window.onload = async function() {
       const item = getCache(true);
       container.innerHTML = item.listElement.containerHTML;
 
+      const userPictures = container.querySelectorAll('.author-picture');
+      const userName = container.querySelectorAll('.author p');
+      userPictures.forEach((img, index) => {
+        const userNamelength = userName.length;
+        for(let i = 0; i < userNamelength; i++){
+          if(item.userPictures[`user:${userName[i].textContent}`]){
+            img.src = item.userPictures[`user:${userName[i].textContent}`].imageBase64;
+          }
+        }
+      });
+
       const imgs = container.querySelectorAll('.thumbnail');
       const imgsLength = imgs.length;
       imgs.forEach((img, index) => {
