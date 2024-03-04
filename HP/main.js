@@ -142,28 +142,6 @@ async function showArticleContent(e) {
 }
 window.showArticleContent = showArticleContent;
 
-// headerのロゴクリックで記事リストを表示
-async function showArticleList() {
-  // URLの末尾のidを削除
-  const currentUrl = new URL(window.location.href);
-  currentUrl.searchParams.delete('id');
-  window.history.pushState({}, '', currentUrl);
-
-  // カスタムイベントを発火
-  const urlChangeEvent = new CustomEvent('urlChange', { detail: currentUrl });
-  window.dispatchEvent(urlChangeEvent);
-
-  const articleListElement = await getArticleListElement();
-  // ローディング表示を削除
-  container.innerHTML = '';
-  container.appendChild(articleListElement.card);
-  container.appendChild(articleListElement.main);
-  
-  // 記事リストの要素をlocalStorageに保存
-  saveContainerElementWithExpire('articleList', container, 10);
-}
-window.showArticleList = showArticleList;
-
 //　ヘッダー、フッター読み込み
 export async function fetchInclude(){
 
