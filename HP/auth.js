@@ -1,5 +1,5 @@
 let auth0Client = await getAuth0Client();
-
+let token;
 // Auth0のセットアップ(初期状態)
 export async function getAuth0Client(){
     const auth0Client = await auth0.createAuth0Client({
@@ -42,6 +42,8 @@ export async function checkAuthState() {
 
   if(isAuthenticated){
     await auth0Client.getTokenSilently();
+    token = await auth0Client.getTokenSilently();
+    console.log('token:', token);
     console.log('isAuthenticated is true');
     return await getUser(auth0Client);
   } else {
@@ -49,6 +51,8 @@ export async function checkAuthState() {
       console.log('shouldParseResult is true');
       await auth0Client.handleRedirectCallback();
       isAuthenticated = await auth0Client.isAuthenticated();
+      token = await auth0Client.getTokenSilently();
+      console.log('token', token);
       return await getUser(auth0Client);
     } else {
       console.log('shouldParseResult is false');
