@@ -24,7 +24,7 @@ export async function getArticleListElement() {
         //記事No、タイトル、投稿日、タグ、サムネデータを変数に格納
         const articleNo = articleList_asc.length - (index);
         const title = article.title;
-        const date = article.date;
+        const date = formatDate(article.date);
         const tag = article.tag;
         let picture;
         let user;
@@ -49,11 +49,13 @@ export async function getArticleListElement() {
                 <a class="article" id="article${articleNo}" onclick="showArticleContent(event)">       
                 <img class="thumbnail" src="${thumbImageBase64}">
                 <h1>${title}</h1>
-                <p>投稿日: ${date}</p>
-                <p>タグ: ${tag}</p>
                 <div class="author">
                     <img class="author-picture" src="${picture}">
-                    <p>${user}</p>
+                    <div class="article-index-info">
+                        <p>${user}</p>
+                        <p> ${date}</p>
+                        <p>タグ: ${tag}</p>
+                    </div>
                 </div>
                 </a>
             </div>
@@ -64,7 +66,7 @@ export async function getArticleListElement() {
                     <a class="article" id="article${articleNo}" onclick="showArticleContent(event)">       
                     <img class="thumbnail" src="${thumbImageBase64}">
                     <h1>${title}</h1>
-                    <p>投稿日: ${date}</p>
+                    <p>${date}</p>
                     <p>タグ: ${tag}</p>
                     </a>
                 </div>
@@ -79,4 +81,12 @@ export async function getArticleListElement() {
     } catch (error) {
         console.error("Error fetching or processing data:", error);
     }
+}
+
+function formatDate(dateString) {
+    const year = dateString.slice(0, 4);
+    const month = dateString.slice(4, 6);
+    const day = dateString.slice(6, 8);
+
+    return `${year}/${month}/${day}`;
 }

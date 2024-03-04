@@ -71,7 +71,7 @@ export function checkCachesExpire(isList, key) {
       return false;
     }
   } else {
-    item = JSON.parse(localStorage.getItem(key + "-article1"));
+    item = JSON.parse(localStorage.getItem(key));
     if (!item || Date.now() > new Date(item.expiry)) {
       return false;
     }
@@ -133,6 +133,7 @@ export function removeOldArticleCache() {
   if (history.length > historyRenge) {
     // article+ 数字のキーを取得
     const keys = Object.keys(localStorage).filter(key => key.match(/article\d+/));
+    console.log("remove cache too many");
     keys.forEach(key => {
       localStorage.removeItem(key);
     });

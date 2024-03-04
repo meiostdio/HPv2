@@ -43,7 +43,7 @@ export async function getArticleContentElement(id) {
     // タイトル、タグ、日付、ユーザー情報を取得して表示
     const title = formattedData.title;
     const tag = formattedData.tag;
-    const date = formattedData.date;
+    const date = formatDate(formattedData.date);
     let user;
     let picture;
     if(formattedData.user && formattedData.picture){ 
@@ -118,3 +118,11 @@ export async function getArticleContentElement(id) {
     article_main.appendChild(main);
     return article_main
 };
+
+function formatDate(dateString) {
+    const year = dateString.slice(0, 4);
+    const month = dateString.slice(4, 6);
+    const day = dateString.slice(6, 8);
+
+    return `${year}/${month}/${day}`;
+}
