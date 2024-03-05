@@ -42,7 +42,10 @@ export async function checkAuthState() {
 
   if(isAuthenticated){
     await auth0Client.getTokenSilently();
-    token = await auth0Client.getTokenSilently();
+    token = await auth0Client.getTokenSilently({
+      audience: 'https://meiostdio.vercel.app/api/',
+      scope: 'read:user',
+    });
     console.log('token:', token);
     console.log('isAuthenticated is true');
     return { user: await getUser(auth0Client), token: token };
@@ -51,7 +54,10 @@ export async function checkAuthState() {
       console.log('shouldParseResult is true');
       await auth0Client.handleRedirectCallback();
       isAuthenticated = await auth0Client.isAuthenticated();
-      token = await auth0Client.getTokenSilently();
+      token = await auth0Client.getTokenSilently({
+        audience: 'https://meiostdio.vercel.app/api/',
+        scope: 'read:user',
+      });
       console.log('token', token);
       return { user: await getUser(auth0Client), token: token };
     } else {

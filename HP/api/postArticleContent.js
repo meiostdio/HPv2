@@ -11,7 +11,7 @@ module.exports = async (req, res) => {
     let commitMessage = '';
     let sha = '';
 
-    const pem = jwkToPem(process.env.AUTH0_PEM);
+    const pem = process.env.AUTH0_PEM;
     const secret = process.env.AUTH0_CLIENT_SECRET;
     const authToken = req.headers.authorization.split(' ')[1];
     
