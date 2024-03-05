@@ -4,6 +4,7 @@ import { checkAuthState } from "../auth.js";
 let loginBtn;
 let userIcon;
 
+let authState;
 let userName;
 let userPicture;
 let user;
@@ -34,7 +35,8 @@ window.onload = async function () {
       observer.disconnect();
 
       // ユーザー情報を格納する
-      user = await checkAuthState();
+      authState = await checkAuthState();
+      user = authState.user;
       console.log('user', user);
       // ユーザー情報が取得できている場合、ログインボタンをアイコンに変更
       if (user) {
@@ -44,6 +46,8 @@ window.onload = async function () {
         userPicture = user.picture;
         userName = user.name;
       }
+
+      await postArticleContent(draftData, authState.token);
     }
   });
   // body要素の子要素の変更を監視開始
@@ -51,7 +55,7 @@ window.onload = async function () {
 }
   
 //もとになるjsonデータ
-const draftData = {}
+let draftData = {}
 if(user){
     draftData = {
         title: "",

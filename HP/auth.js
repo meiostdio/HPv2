@@ -45,7 +45,7 @@ export async function checkAuthState() {
     token = await auth0Client.getTokenSilently();
     console.log('token:', token);
     console.log('isAuthenticated is true');
-    return await getUser(auth0Client);
+    return { user: await getUser(auth0Client), token: token };
   } else {
     if(shouldParseResult){
       console.log('shouldParseResult is true');
@@ -53,7 +53,7 @@ export async function checkAuthState() {
       isAuthenticated = await auth0Client.isAuthenticated();
       token = await auth0Client.getTokenSilently();
       console.log('token', token);
-      return await getUser(auth0Client);
+      return { user: await getUser(auth0Client), token: token };
     } else {
       console.log('shouldParseResult is false');
       return null;

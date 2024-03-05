@@ -28,7 +28,8 @@ window.onload = async function() {
       observer.disconnect();
 
       // ユーザー情報を格納する
-      let user = await checkAuthState();
+      let authState = await checkAuthState();
+      let user = authState.user;
       console.log('user', user);
       // ユーザー情報が取得できている場合、ログインボタンをアイコンに変更
       if (user) {
