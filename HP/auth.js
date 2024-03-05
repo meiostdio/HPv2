@@ -2,12 +2,13 @@ let auth0Client = await getAuth0Client();
 let token;
 // Auth0のセットアップ(初期状態)
 export async function getAuth0Client(){
-    const auth0Client = await auth0.createAuth0Client({
-        domain: 'mieiostdio.jp.auth0.com',
-        clientId: '3NKELeme13IvWgricfnixqOjIzt23KD5',
-        cacheLocation: 'localstorage'
-    });
-    return auth0Client
+  const auth0Client = await auth0.createAuth0Client({
+    domain: 'mieiostdio.jp.auth0.com',
+    clientId: '3NKELeme13IvWgricfnixqOjIzt23KD5',
+    cacheLocation: 'localstorage',
+    audience: 'https://meiostdio.vercel.app/api/',
+  });
+  return auth0Client
 }
 
 // ログイン画面を開きAuth0認証機能を呼び出す
@@ -43,8 +44,7 @@ export async function checkAuthState() {
   if(isAuthenticated){
     await auth0Client.getTokenSilently();
     token = await auth0Client.getTokenSilently({
-      audience: 'https://meiostdio.vercel.app/api/',
-      scope: 'read:user',
+      //scope: 'read:user',
     });
     console.log('token:', token);
     console.log('isAuthenticated is true');
@@ -55,8 +55,7 @@ export async function checkAuthState() {
       await auth0Client.handleRedirectCallback();
       isAuthenticated = await auth0Client.isAuthenticated();
       token = await auth0Client.getTokenSilently({
-        audience: 'https://meiostdio.vercel.app/api/',
-        scope: 'read:user',
+        //scope: 'read:user',
       });
       console.log('token', token);
       return { user: await getUser(auth0Client), token: token };
