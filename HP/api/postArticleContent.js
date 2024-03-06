@@ -80,7 +80,9 @@ module.exports = async (req, res) => {
                 title: req.body.title,
                 tag: req.body.tag,
                 date: req.body.date,
-                thumbnail: nextFileName.replace('.json', '.txt')
+                thumbnail: nextFileName.replace('.json', '.txt'),
+                picture: req.body.picture,
+                user: req.body.user,
             };
             // 作成した追加用のnewArtListを追加する
             const newArticleKey = 'article' + (Object.keys(artListContent).length + 1);

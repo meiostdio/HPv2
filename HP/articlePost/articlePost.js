@@ -46,8 +46,6 @@ window.onload = async function () {
         userPicture = user.picture;
         userName = user.name;
       }
-
-      await postArticleThumbnail(`article${newArticleNumber}`, compressedThumbnailBase64, authState.token);
     }
   });
   // body要素の子要素の変更を監視開始
