@@ -9,6 +9,7 @@
     "graphql-request": "^6.1.0",
     "jsonwebtoken": "^9.0.2",
     "jwk-to-pem": "^2.0.5",
+    "node-jose": "^2.2.0",
     "tmp-promise": "^3.0.3"
   },
   "devDependencies": {

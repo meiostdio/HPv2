@@ -2,6 +2,7 @@ const { Octokit } = require("@octokit/rest");
 const jwt = require('jsonwebtoken');
 const jwkToPem = require('jwk-to-pem');
 const fs = require('fs');
+const jose = require('node-jose');
 
 module.exports = async (req, res) => {
     const token = process.env.GITHUB_API_KEY;
@@ -16,22 +17,10 @@ module.exports = async (req, res) => {
     const authToken = req.headers.authorization.split(' ')[1];
     
     try {
-        if(!authToken) {
-            throw new Error('No token provided');
-        }
-        console.log(authToken);
-        console.log("-------------------");
-        const decoded = await new Promise((resolve, reject) => {
-            jwt.verify(authToken, pem, { algorithms: ['RS256'] }, (err, decoded) => {
-                if (err) {
-                    reject(err);
-                } else {
-                    resolve(decoded);
-                }
-            });
-        });
-    
-        console.log(decoded);
+        const key = await jose.JWK.asKey(secret, 'utf8');
+        const decrypted = await jose.JWE.createDecrypt(key).decrypt(authToken);
+        const payload = JSON.parse(decrypted.plaintext.toString());
+        console.log(payload);
         res.status(200).send({ success: true, message: '記事データを保存しました' });
     } catch (error) {
         console.log(error);
