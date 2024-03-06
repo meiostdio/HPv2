@@ -73,6 +73,25 @@ header {
     color: #007ACC;
 }
 
+/* ログイン要求ダイアログ */
+.login-required-dialog {
+    display: none;
+    position: absolute;
+    top: 60px;
+    right: 100px;
+    width: 200px;
+    background-color: #A4E0D1;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px 5px 5px 10px;
+    box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.14);
+}
+
+body > div.login-required-dialog > div > p{
+    color: #f5f5f5;
+    margin-bottom: 10px;
+}
+
 /* プロフィール等サブメニュー */
 .subMenu {
     display: none;

@@ -31,21 +31,24 @@ window.onload = async function () {
     loginBtn = document.getElementById('login');
     userIcon = document.getElementById('userIcon');
     if (loginBtn && userIcon) {
-      // loginBtnとuserIconが存在する場合、監視を終了
-      observer.disconnect();
+        // loginBtnとuserIconが存在する場合、監視を終了
+        observer.disconnect();
 
-      // ユーザー情報を格納する
-      authState = await checkAuthState();
-      user = authState.user;
-      console.log('user', user);
-      // ユーザー情報が取得できている場合、ログインボタンをアイコンに変更
-      if (user) {
-        loginBtn.style.display =  "none";
-        userIcon.style.display = "block";
-        userIcon.src = user.picture;
-        userPicture = user.picture;
-        userName = user.name;
-      }
+        // ユーザー情報を格納する
+        try {
+            authState = await checkAuthState();
+        } catch (error) {
+            document.getElementById('login-required-dialog').style.display = 'block';
+        }
+        if (authState) {
+            user = authState.user;
+            // ユーザー情報が取得できている場合、ログインボタンをアイコンに変更
+            loginBtn.style.display =  "none";
+            userIcon.style.display = "block";
+            userIcon.src = user.picture;
+            userPicture = user.picture;
+            userName = user.name;
+        }  
     }
   });
   // body要素の子要素の変更を監視開始

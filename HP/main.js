@@ -28,14 +28,18 @@ window.onload = async function() {
       observer.disconnect();
 
       // ユーザー情報を格納する
-      let authState = await checkAuthState();
-      let user = authState.user;
-      console.log('user', user);
-      // ユーザー情報が取得できている場合、ログインボタンをアイコンに変更
-      if (user) {
-        loginBtn.style.display =  "none";
-        userIcon.style.display = "block";
-        userIcon.src = user.picture;
+      try {
+        let authState = await checkAuthState();
+        let user = authState.user;
+        console.log('user', user);
+        // ユーザー情報が取得できている場合、ログインボタンをアイコンに変更
+        if (user) {
+          loginBtn.style.display =  "none";
+          userIcon.style.display = "block";
+          userIcon.src = user.picture;
+        }
+      } catch (error) {
+        document.querySelector('.login-required-dialog').style.display = 'block';
       }
     }
   });
@@ -160,3 +164,9 @@ export async function fetchInclude(){
     console.error('フッターファイルの読み込みに失敗しました', error);
   });;
 }
+
+// ログイン要求ダイアログのイベントリスナー 
+document.getElementById('dialog-close').addEventListener('click', function(e){
+  console.log(document.getElementsByClassName('login-required-dialog'));
+  document.querySelector('.login-required-dialog').style.display = 'none';
+});
