@@ -1,4 +1,5 @@
 const { Octokit } = require("@octokit/rest");
+const jwt = require('jsonwebtoken');
 
 // GitHubのAPIキーを環境変数から取得
 const token = process.env.GITHUB_API_KEY;
@@ -9,6 +10,28 @@ const octokit = new Octokit({ auth: token });
 module.exports = async (req, res) => {
     // リクエストのボディから必要な情報を取得
     const { articleNumber, thumbnailBase64 } = req.body;
+
+    // 認証に使用する変数
+    let isAuthenticated;
+    const pem = process.env.AUTH0_PEM;
+    const authToken = req.headers.authorization.split(' ')[1];
+
+    // ユーザーの検証
+    const decoded = await new Promise((resolve, reject) => {
+        jwt.verify(authToken, pem, { algorithms: ['RS256'] }, (err, decoded) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(decoded);
+                isAuthenticated = true;
+            }
+        });
+    });
+
+    if (!isAuthenticated) {
+        // 認証エラーのレスポンスを返す
+        res.status(401).send({ success: false, message: '認証されたユーザーではありません。' });
+    }
 
     // ファイルパスを作成
     const filePath = `images/thumbnails/${articleNumber}.txt`;

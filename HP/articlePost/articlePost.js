@@ -47,7 +47,7 @@ window.onload = async function () {
         userName = user.name;
       }
 
-      await postArticleImage('', ['base64data1', 'base64data2'], authState.token);
+      await postArticleThumbnail(`article${newArticleNumber}`, compressedThumbnailBase64, authState.token);
     }
   });
   // body要素の子要素の変更を監視開始
@@ -443,7 +443,7 @@ document.getElementById('upload').addEventListener('click', async () => {
     }
 
     // // *** ここでサムネイルをGitHubに保存する ***
-    const Thumbnailresponse = await postArticleThumbnail(`article${newArticleNumber}`, compressedThumbnailBase64);
+    const Thumbnailresponse = await postArticleThumbnail(`article${newArticleNumber}`, compressedThumbnailBase64, authState.token);
 
     document.getElementById('loading').style.display = 'block';
     document.getElementById('thumbnail-dialog').style.display = 'none';

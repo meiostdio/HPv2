@@ -72,12 +72,13 @@ export async function postArticleImage(articleNumber, imagesBase64, token){
 }
 
 // 記事サムネイルをVercelサーバーレス関数を使用してGitHubに保存する
-export async function postArticleThumbnail(articleNumber, thumbnailBase64){
+export async function postArticleThumbnail(articleNumber, thumbnailBase64, token){
     try{
         const response = await fetch('/api/postArticleThumbnail', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                'authorization': 'Bearer ' + token
             },
             body: JSON.stringify({ articleNumber, thumbnailBase64 }),
         });
