@@ -47,7 +47,7 @@ window.onload = async function () {
         userName = user.name;
       }
 
-      await postArticleContent(draftData, authState.token);
+      await postArticleImage('', ['base64data1', 'base64data2'], authState.token);
     }
   });
   // body要素の子要素の変更を監視開始
@@ -429,7 +429,7 @@ document.getElementById('close-thumbnail-dialog').addEventListener('click', () =
 // アップロードボタンを押したとき
 document.getElementById('upload').addEventListener('click', async () => {
     // // *** ここで記事データをGitHubに保存する ***
-    const ArticlecontentResponse = await postArticleContent(draftData);
+    const ArticlecontentResponse = await postArticleContent(draftData, authState.token);
 
     // // *** ここで記事に使用する画像をGitHubに保存する ***
     const imagesBase64 = await getImagesFromDraftContainer();
@@ -439,7 +439,7 @@ document.getElementById('upload').addEventListener('click', async () => {
     // 画像が存在するかどうかbooleanで格納する
     const isImagesExist = compressedImages.length > 0;
     if (isImagesExist) {
-        articleImagesResponse = await postArticleImage(`article${newArticleNumber}`, compressedImages);
+        articleImagesResponse = await postArticleImage(`article${newArticleNumber}`, compressedImages, authState.token);
     }
 
     // // *** ここでサムネイルをGitHubに保存する ***

@@ -1,5 +1,6 @@
 const { Octokit } = require("@octokit/rest");
 const fs = require("fs");
+const jwt = require('jsonwebtoken');
 
 // GitHubのAPIキーを環境変数から取得
 const token = process.env.GITHUB_API_KEY;
@@ -12,6 +13,33 @@ module.exports = async (req, res) => {
     // リクエストのボディから必要な情報を取得
     const { articleNumber, imagesBase64 } = req.body;
     console.log("articleNumber:", articleNumber);
+
+    // 認証に使用する変数
+    let isAuthenticated;
+    const pem = process.env.AUTH0_PEM;
+    const authToken = req.headers.authorization.split(' ')[1];
+
+    if(!authToken) {
+        // ヘッダーにAuthorizationがない場合はエラーを返す
+        res.status(401).send({ success: false, message: '認証されたユーザーではありません。' });
+    }
+    // ユーザーの検証
+    const decoded = await new Promise((resolve, reject) => {
+        jwt.verify(authToken, pem, { algorithms: ['RS256'] }, (err, decoded) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(decoded);
+                isAuthenticated = true;
+                console.log('postimage:' ,decoded);
+            }
+        });
+    });
+
+    if (!isAuthenticated) {
+        // 認証エラーのレスポンスを返す
+        res.status(401).send({ success: false, message: '認証されたユーザーではありません。' });
+    }
 
     // // 画像を一時的に保存するディレクトリを作成
     const directoryPath = `images/${articleNumber}`;

@@ -9,6 +9,7 @@ module.exports = async (req, res) => {
     let commitMessage = '';
     let sha = '';
 
+    // 認証に使用する変数
     let isAuthenticated;
     const pem = process.env.AUTH0_PEM;
     const authToken = req.headers.authorization.split(' ')[1];
@@ -18,8 +19,6 @@ module.exports = async (req, res) => {
             // ヘッダーにAuthorizationがない場合はエラーを返す
             res.status(401).send({ success: false, message: '認証されたユーザーではありません。' });
         }
-        console.log(authToken);
-        console.log("-------------------");
         const decoded = await new Promise((resolve, reject) => {
             jwt.verify(authToken, pem, { algorithms: ['RS256'] }, (err, decoded) => {
                 if (err) {

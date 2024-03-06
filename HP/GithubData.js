@@ -53,12 +53,13 @@ export async function postArticleContent(jsonData, token){
 }
 
 // 記事に使用する画像をVercelサーバーレス関数を使用してGitHubに保存する
-export async function postArticleImage(articleNumber, imagesBase64){
+export async function postArticleImage(articleNumber, imagesBase64, token){
     try{
         const response = await fetch('/api/postArticleImages', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                'authorization': 'Bearer ' + token
             },
             body: JSON.stringify({ articleNumber, imagesBase64 }),
         });
