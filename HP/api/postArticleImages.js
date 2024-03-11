@@ -1,5 +1,4 @@
 const { Octokit } = require("@octokit/rest");
-const fs = require("fs");
 const jwt = require('jsonwebtoken');
 
 // GitHubのAPIキーを環境変数から取得
@@ -43,7 +42,6 @@ module.exports = async (req, res) => {
 
     // // 画像を一時的に保存するディレクトリを作成
     const directoryPath = `images/${articleNumber}`;
-    fs.mkdirSync(directoryPath, { recursive: true });
     try {
         for (let i = 0; i < imagesBase64.length; i++) {
             let imageName = `article${i + 1}.png`;
@@ -57,17 +55,14 @@ module.exports = async (req, res) => {
                 throw new Error('Invalid image data');
             }
             const data = match[1];  // プレフィックスを削除したBase64データ
-
-            // 画像をバイナリ形式で保存
-            fs.writeFileSync(imagePath, Buffer.from(data, "base64"));
         
             // GitHubに画像をアップロード
             await octokit.rest.repos.createOrUpdateFileContents({
                 owner: "meiostdio",
                 repo: "HPv2",
-                path: imagePath,
+                path: `images/${articleNumber}/article${i + 1}.png`,
                 message: "Add image from Vercel serverless function",
-                content: fs.readFileSync(imagePath, "base64"),
+                content: data,
             });
         }
     // レスポンスを返す

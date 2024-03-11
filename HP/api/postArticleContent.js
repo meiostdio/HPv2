@@ -99,7 +99,6 @@ module.exports = async (req, res) => {
                 sha: artList.sha,
             });
 
-            res.status(200).send({ success: true, message: '記事データを保存しました' });
         } catch (error) {
             console.log(error);
             res.status(500).send({ success: false, message: '記事データの保存に失敗しました', error: error});
