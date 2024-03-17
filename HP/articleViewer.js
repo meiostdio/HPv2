@@ -33,6 +33,11 @@ export async function getArticleContentElement(id) {
     let utf8Decoder = new TextDecoder('utf-8');
     decodedData = utf8Decoder.decode(new Uint8Array(decodedData.split('').map(c => c.charCodeAt(0))));
     let formattedData = JSON.parse(decodedData);
+    formattedData.section.forEach((sec) => {
+        if(sec.type == "content"){
+            sec.value = sec.value.replace(/\r?\n/g, '<br>');
+        }
+    });
 
     // 表示領域を取得しローディング表示を削除
     article_main = document.createElement('div');
