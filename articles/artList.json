@@ -120,5 +120,16 @@
     "thumbnail": "article13.txt",
     "picture": "https://lh3.googleusercontent.com/a/ACg8ocKLdG1z_ioPRPqTayrp1zF9xjVX7A8sGplgr2F3QmuV=s96-c",
     "user": "Akamine"
+  },
+  "article14": {
+    "title": "meiostdioから学ぶ認証機能入門",
+    "tag": [
+      "セキュリティ",
+      "認証機能"
+    ],
+    "date": "20240317",
+    "thumbnail": "article14.txt",
+    "picture": "https://lh3.googleusercontent.com/a/ACg8ocKLdG1z_ioPRPqTayrp1zF9xjVX7A8sGplgr2F3QmuV=s96-c",
+    "user": "Akamine"
   }
 }
