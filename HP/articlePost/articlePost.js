@@ -373,9 +373,11 @@ submitBtn.addEventListener('click', async () => {
             });
         }
     });
-    const json = JSON.stringify(draftData);
-    const jsonArea = document.getElementById('json-area');
-    jsonArea.textContent = json;
+
+    // // デバッグ用
+    // const json = JSON.stringify(draftData);
+    // const jsonArea = document.getElementById('json-area');
+    // jsonArea.textContent = json;
 
     document.getElementById('thumbnail-dialog').style.display = 'block';
     // 最新の記事リストを取得して新しい記事のナンバーを取得
@@ -429,6 +431,11 @@ document.getElementById('close-thumbnail-dialog').addEventListener('click', () =
 
 // アップロードボタンを押したとき
 document.getElementById('upload').addEventListener('click', async () => {
+    // 投稿中を示すローディングを表示
+    document.getElementById('loading').style.display = 'block';
+    document.getElementById('thumbnail-dialog').style.display = 'none';
+    document.getElementById('upload').style.display = 'none';
+
     // // *** ここで記事データをGitHubに保存する ***
     const ArticlecontentResponse = await postArticleContent(draftData, authState.token);
 
@@ -444,11 +451,7 @@ document.getElementById('upload').addEventListener('click', async () => {
     }
 
     // // *** ここでサムネイルをGitHubに保存する ***
-    const Thumbnailresponse = await postArticleThumbnail(`article${newArticleNumber}`, compressedThumbnailBase64, authState.token);
-
-    document.getElementById('loading').style.display = 'block';
-    document.getElementById('thumbnail-dialog').style.display = 'none';
-    document.getElementById('upload').style.display = 'none';
+    const Thumbnailresponse = await postArticleThumbnail(`article${newArticleNumber}`, compressedThumbnailBase64, authState.token);    
 
     if (isImagesExist) {
         if (ArticlecontentResponse && articleImagesResponse && Thumbnailresponse) {
