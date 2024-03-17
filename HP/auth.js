@@ -37,7 +37,6 @@ export async function getUser(client){
 
 // ログイン状態を確認,認証済みの場合はユーザー情報を取得してreturn
 export async function checkAuthState() {
-  console.log('checkAuthState');
   let isAuthenticated = auth0Client.isAuthenticated();
   
   const shouldParseResult = window.location.search.includes("code=") && window.location.search.includes("state=");
@@ -45,19 +44,14 @@ export async function checkAuthState() {
   if(isAuthenticated){
     await auth0Client.getTokenSilently();
     token = await auth0Client.getTokenSilently();
-    console.log('token:', token);
-    console.log('isAuthenticated is true');
     return { user: await getUser(auth0Client), token: token };
   } else {
     if(shouldParseResult){
-      console.log('shouldParseResult is true');
       await auth0Client.handleRedirectCallback();
       isAuthenticated = await auth0Client.isAuthenticated();
       token = await auth0Client.getTokenSilently();
-      console.log('token', token);
       return { user: await getUser(auth0Client), token: token };
     } else {
-      console.log('shouldParseResult is false');
       return null;
     }
   }

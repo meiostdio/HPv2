@@ -31,7 +31,6 @@ window.onload = async function() {
       try {
         let authState = await checkAuthState();
         let user = authState.user;
-        console.log('user', user);
         // ユーザー情報が取得できている場合、ログインボタンをアイコンに変更
         if (user) {
           loginBtn.style.display =  "none";
@@ -79,7 +78,6 @@ window.onload = async function() {
       const imgs = container.querySelectorAll('.thumbnail');
       const imgsLength = imgs.length;
       imgs.forEach((img, index) => {
-        console.log(imgsLength - index);
         img.src = item.thumbBase64[imgsLength - index];
       });
 
@@ -167,6 +165,5 @@ export async function fetchInclude(){
 
 // ログイン要求ダイアログのイベントリスナー 
 document.getElementById('dialog-close').addEventListener('click', function(e){
-  console.log(document.getElementsByClassName('login-required-dialog'));
   document.querySelector('.login-required-dialog').style.display = 'none';
 });
