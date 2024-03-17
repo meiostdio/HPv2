@@ -1,0 +1,128 @@
+{
+  "title": "meiostdioから学ぶ認証機能入門",
+  "tag": [
+    "セキュリティ",
+    "認証機能"
+  ],
+  "date": "20240317",
+  "section": [
+    {
+      "type": "subtitle",
+      "value": "認証機能入門"
+    },
+    {
+      "type": "content",
+      "value": "meiostdioではGoogleアカウントを使用してmeiostdioにアカウントを作成しなければ記事の投稿が出来ないようになっています。\n投稿するまでにアカウントの作成や、ログインを挟むことで荒らしの防止にもなりますし、荒らしユーザーのバン機能や誰が記事を書いたかの特定もできるようになります。\nmeiostdioではAuth0というプラットフォームを使用して認証機能の実装を行いました。\n本記事ではログインするときの処理のみに注目してAuth0がどのようにして認証機能を提供しているのかを解説します。"
+    },
+    {
+      "type": "subtitle",
+      "value": "なぜAuth0を選んだか"
+    },
+    {
+      "type": "content",
+      "value": "Auth0は単純なアプリであればクライアント側で完結する認証プラットフォームです。\nしかも無料！\nログイン、ログアウトだけを行うのであればクライアント側のみで実装可能です。\nmeiostdioはサーバー側の機能を最小限に抑えたWebアプリを目指して作成していたので、ぴったりなサービスです。"
+    },
+    {
+      "type": "subtitle",
+      "value": "ログイン機能を細分化して考える"
+    },
+    {
+      "type": "content",
+      "value": "私自身meiostdioをつくりながらAuth0について勉強したため、ログインするだけでかなりの機能に分けることが出来ることに驚きました。\n以下の機能に分割すると分かりやすいと思います。\n・ログインボタンを押してAuth0にアクセスする\n・ユーザーがGoogleアカウントを選択する。(すでにユーザー情報がある場合はログイン、ない場合はアカウントを新規作成)\n・Auth0にアクセスする前のページにリダイレクト(移動)する\n\nまた、ログイン後にブラウザのウィンドウを消した後も短時間であればログイン状態を維持するような機能を実装したい場合は以下のような機能が追加で必要です。\n・Auth0からのリダイレクトを検知し、認証情報をブラウザのキャッシュに保存する\n・ブラウザに訪れた際にキャッシュに認証情報が格納されていないかチェックする(認証情報があれば再度ログインする)\n\n上記の機能のほとんどがAuth0によって提供されているライブラリを使用して実装することが出来るため、簡単に実装できます。"
+    },
+    {
+      "type": "subtitle",
+      "value": "①ログインする画面に移動する"
+    },
+    {
+      "type": "content",
+      "value": "ログインする画面もAuth0が提供しているため、ライブラリを使用して呼び出すだけです。\n↓ログイン画面に移動するコード"
+    },
+    {
+      "type": "code",
+      "value": "// ログイン画面を開きAuth0認証機能を呼び出す\nexport async function loginWithAuth0(e){\n  const baseURI = e.target.baseURI;\n  console.log(baseURI);\n  console.log(window.location.origin)\n  await auth0Client.loginWithRedirect({\n      authorizationParams: {\n          redirect_uri: baseURI,\n          scope: 'offline_access'\n        }\n  });\n}"
+    },
+    {
+      "type": "content",
+      "value": "実際に使用しているコードをコピペしました。\n6行目のawait auth0Client.loginWithRedirectからがAuth0提供のログイン画面に移動する関数です。\nloginWithRedirectのパラメータに付与しているbaseURIはログインから帰ってくる際のURLです。\nscopeはログイン時にもらってくる情報や権限を指します。"
+    },
+    {
+      "type": "subtitle",
+      "value": "②ログインから帰ってきたら"
+    },
+    {
+      "type": "content",
+      "value": "ログインから帰ってきた後に、認証情報をキャッシュに保存したりします。"
+    },
+    {
+      "type": "code",
+      "value": "// ログイン状態を確認,認証済みの場合はユーザー情報を取得してreturn\nexport async function checkAuthState() {\n  let isAuthenticated = auth0Client.isAuthenticated();\n  \n  const shouldParseResult = window.location.search.includes(\"code=\") && window.location.search.includes(\"state=\");\n\n  if(isAuthenticated){\n    await auth0Client.getTokenSilently();\n    token = await auth0Client.getTokenSilently();\n    return { user: await getUser(auth0Client), token: token };\n  } else {\n    if(shouldParseResult){\n      await auth0Client.handleRedirectCallback();\n      isAuthenticated = await auth0Client.isAuthenticated();\n      token = await auth0Client.getTokenSilently();\n      return { user: await getUser(auth0Client), token: token };\n    } else {\n      console.log('shouldParseResult is false');\n      return null;\n    }\n  }\n}"
+    },
+    {
+      "type": "content",
+      "value": "このコードもコピペです。長いですが、分割してみれば単純です。\nこのcheckAuthState関数はmeiostdioに訪れた際に初めに実行されます。\nAuth0のログイン画面から帰ってくるとURLの末尾にパラメータが付与されて帰ってくるはずです。\n↓こんな感じ"
+    },
+    {
+      "type": "image",
+      "value": "article1.png"
+    },
+    {
+      "type": "content",
+      "value": "URLパラメータは[変数名]=?????の形式で付与されます。\n画像を見てみるとcodeとstateというパラメータがあるかと思います。\nこのパラメータの使用してAuth0が認証情報を取得したりします。\n先ほど貼り付けたcheckAuthState関数では初めにURLにパラメータがあるかどうかの確認をします。"
+    },
+    {
+      "type": "code",
+      "value": "const shouldParseResult = window.location.search.includes(\"code=\") && window.location.search.includes(\"state=\");"
+    },
+    {
+      "type": "content",
+      "value": "また、すでにブラウザがAuth0によって認可されているクライアントかどうかのチェックも行います。"
+    },
+    {
+      "type": "code",
+      "value": "let isAuthenticated = auth0Client.isAuthenticated();\nif(isAuthenticated)"
+    },
+    {
+      "type": "content",
+      "value": "この部分で認可済みであれば再ログインの必要はないため、すぐにユーザー情報を取得するコードであるgetUserを実行できます。\nしかしログイン直後では認可済みではありません。つまり、if(isAuthenticated)のelseの部分が実行されます。"
+    },
+    {
+      "type": "code",
+      "value": " if(shouldParseResult){\n      await auth0Client.handleRedirectCallback();\n      isAuthenticated = await auth0Client.isAuthenticated();\n      token = await auth0Client.getTokenSilently();\n      return { user: await getUser(auth0Client), token: token };\n    } else {\n      console.log('shouldParseResult is false');\n      return null;\n    }"
+    },
+    {
+      "type": "content",
+      "value": "上のコードはelseの部分です。\nshouldParseResultがtrueの場合はURLにパラメータがあり、Auth0からのリダイレクト直後の状態です。\nその場合はhandleRedirectCallback関数でURLパラメータから認証情報をAuth0にもらいに行き、cookieやlocalStorageと呼ばれるブラウザのキャッシュに保存します。\n↓handleRedirectCallbackを実行すると以下のようにキャッシュに認証情報が格納されます。"
+    },
+    {
+      "type": "image",
+      "value": "article2.png"
+    },
+    {
+      "type": "image",
+      "value": "article3.png"
+    },
+    {
+      "type": "content",
+      "value": "その後はgetUser関数やgetTokenSilently関数でユーザー情報を取得してアイコンや名前を取得したり、記事を投稿する機能が実行されるサーバーで使用するTokenを取得します。\nもし、ログイン後に再度サイトを訪れると、短時間であればisAuthenticatedがtrueになるため、再ログインやユーザー情報の取得を行うことが出来ます。\nこの際にはキャッシュに保存した情報をもとに取得が行われます。"
+    },
+    {
+      "type": "subtitle",
+      "value": "サードパーティ製のクッキー禁止による弊害"
+    },
+    {
+      "type": "content",
+      "value": "cookieの画像では黄色の！マークがついているデータがあると思います。\nこれはAuth0からの認証情報でサードパーティ製のクッキーであることを示していて、本サイトのドメインである「meiostdio.vercel.app」以外からのデータではないということです。\n最近「クッキーを全て受け入れますか？」のようなポップアップが色々なサイトで表示されると思います。\nChromeでは2024年の後半にはサードパーティ製のクッキーを禁止する方針を発表しており、本サイトも影響を受けるでしょう。\nこれによりAuth0からの認証情報がクッキーに保存されなくなります。\n本来はターゲティング広告を禁止するためのルールですが、Auth0のような認証機能を提供するサービスも影響を受けてしまうんですねー。\nお金を払えば独自ドメインを設定できるため一発で解決可能なのですが、お金は払いたくない！\n別の解決方法を実装しなければなりません。貧乏暇なしですねー。"
+    },
+    {
+      "type": "subtitle",
+      "value": "終わりに"
+    },
+    {
+      "type": "content",
+      "value": "Auth0のすごいところは今までのコードを公開しても問題ないところです。\n認証部分の実装を行ってくれているため、クライアント側では数行で実装が出来てしまいます。\nまた、公式ページのQ&Aやサンプルコードも豊富なのでエンジニアに優しいサービスだと思います。\n本記事ではAuth0の管理者ページで行う設定は省いています。自分で認証機能を実装してみたい！という人はググるか私に連絡してください。"
+    }
+  ],
+  "user": "Akamine",
+  "picture": "https://lh3.googleusercontent.com/a/ACg8ocKLdG1z_ioPRPqTayrp1zF9xjVX7A8sGplgr2F3QmuV=s96-c"
+}
